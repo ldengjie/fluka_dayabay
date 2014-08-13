@@ -33,22 +33,21 @@ PLA pla3       100. 100. 0.0 -507. -500. 0.0
 PLA pla4       -100. 100. 0.0 507. -500. 0.0
 XYP h5xyp      500.
 RPP hall6      -700. 700. -400. 400. -400. 510.
-XYP h5xyp1     500.
 PLA pla5       -1. -1. 0.0 465.6 400. 0.0
 PLA pla6       1. -1. 0.0 -465.6 400. 0.0
 PLA pla7       1. 1. 0.0 -465.6 -400. 0.0
 PLA pla8       -1. 1. 0.0 465.6 -400. 0.0
 RCC ad1rcc6    300. 0.0 -250. 0.0 0.0 500. 250.
-RCC ad1rcc5    300. 0.0 -248.8 0.0 0.0 497.6 248.8
-RCC ad1rcc4    300. 0.0 -200. 0.0 0.0 400. 200.
-RCC ad1rcc3    300. 0.0 -198.5 0.0 0.0 397. 198.5
-RCC ad1rcc2    300. 0.0 -156. 0.0 0.0 312. 156.
+RCC ad1rcc5    300. 0.0 -248. 0.0 0.0 497.6 248.8
+RCC ad1rcc4    300. 0.0 -200.5 0.0 0.0 400. 203.
+RCC ad1rcc3    300. 0.0 -199. 0.0 0.0 397. 201.5
+RCC ad1rcc2    300. 0.0 -156.5 0.0 0.0 312. 156.
 RCC ad1rcc1    300. 0.0 -155. 0.0 0.0 310. 155.
 RCC ad2rcc6    -300. 0.0 -250. 0.0 0.0 500. 250.
-RCC ad2rcc5    -300. 0.0 -248.8 0.0 0.0 497.6 248.8
-RCC ad2rcc4    -300. 0.0 -200. 0.0 0.0 400. 200.
-RCC ad2rcc3    -300. 0.0 -198.5 0.0 0.0 397. 198.5
-RCC ad2rcc2    -300. 0.0 -156. 0.0 0.0 312. 156.
+RCC ad2rcc5    -300. 0.0 -248. 0.0 0.0 497.6 248.8
+RCC ad2rcc4    -300. 0.0 -200.5 0.0 0.0 400. 203.
+RCC ad2rcc3    -300. 0.0 -199. 0.0 0.0 397. 201.5
+RCC ad2rcc2    -300. 0.0 -156.5 0.0 0.0 312. 156.
 RCC ad2rcc1    -300. 0.0 -155. 0.0 0.0 310. 155.
 RPP stone1     -3100. -766. -1100. 1000. 200. 1200.
 RPP stone2     -1368. 1910. -1100. 1000. 200. 3300.
@@ -75,29 +74,94 @@ STONE        5 (+stone1 |+stone2|+stone3 |+stone4 |+stone5 )  -( | +hall1 | +hal
 #if 0
 DETECTO1     5 +hall6 +h5xyp1 -pla5 -pla6 -pla7 -pla8
 #endif
-OWS          5 (+hall5 +h5xyp -pla1 -pla2 -pla3 -pla4)-(+hall6 +h5xyp1 -pla5 -pla6 -pla7 -pla8 )
+OWS          5 (+hall5 +h5xyp -pla1 -pla2 -pla3 -pla4)-(+hall6 +h5xyp -pla5 -pla6 -pla7 -pla8 )
 SST          5 +ad1rcc6 -ad1rcc5 |+ad2rcc6 -ad2rcc5
 MO           5 +ad1rcc5 -ad1rcc4 |+ad2rcc5 -ad2rcc4
-OAV          5 +ad1rcc4 -ad1rcc3 |+ad2rcc4 -ad2rcc3
+OAT          5 +ad1rcc4 -ad1rcc3 |+ad2rcc4 -ad2rcc3
 LS           5 +ad1rcc3 -ad1rcc2 |+ad2rcc3 -ad2rcc2
-IAV          5 +ad1rcc2 -ad1rcc1 |+ad2rcc2 -ad2rcc1
+IAT          5 +ad1rcc2 -ad1rcc1 |+ad2rcc2 -ad2rcc1
 GDLS         5 +ad1rcc1 |+ad2rcc1
-IWS          5 +hall6 +h5xyp1 -pla5 -pla6 -pla7 -pla8 -ad2rcc6 -ad1rcc6
+IWS          5 +hall6 +h5xyp -pla5 -pla6 -pla7 -pla8 -ad2rcc6 -ad1rcc6
 END
 GEOEND
-* 245 SiO2 (quartz)
-* The density of SiO2 may vary from 2.3 - 2.5 g/cm3 depending on the
-* method of preparation. Under ion bombardment, the surface density
-* will change towards an equilibrium value of about 2.37.
-MATERIAL  , , , 2.32,  , , ,SiO2
-COMPOUND  , 2.0, OXYGEN, 1.0, SILICON,  , ,SiO2
+* 104 Air dry (near sea level)
+*
+MATERIAL  , , , 0.00120484,  , , ,AIR
+COMPOUND  , -0.0001248, CARBON, -0.755267, NITROGEN, -0.231781, OXYGEN, AIR
+COMPOUND  , -0.012827, ARGON,  , , , ,AIR
+* 276 Water liquid H2O
+* Chemical Formula:  H -- O -- H
+MATERIAL  , , , 1.0,  , , ,WATER
+COMPOUND  , 2.0, HYDROGEN, 1.0, OXYGEN,  , ,WATER
+* Gd isotopes
+MATERIAL  , 64., 152., , , , 152., Gd152
+MATERIAL  , 64., 154., , , , 154., Gd154
+MATERIAL  , 64., 155., , , , 155., Gd155
+MATERIAL  , 64., 156., , , , 156., Gd156
+MATERIAL  , 64., 157., , , , 157., Gd157
+MATERIAL  , 64., 158., , , , 158., Gd158
+MATERIAL  , 64., 160., , , , 160., Gd160
+* Gd element
+MATERIAL   ,  ,  ,  ,  ,  ,  , Gd
+COMPOUND  , -0.002, Gd152, -0.022, Gd154, -0.149, Gd155, Gd
+COMPOUND  , -0.206, Gd156, -0.157, Gd157, -0.247, Gd158, Gd
+COMPOUND  , -0.217, Gd160,  , , , ,Gd
+* GdLiquidScintillator
+MATERIAL  , , , 0.855,  , , ,GdLs
+COMPOUND  , -0.8535, CARBON, -0.1288, HYDROGEN, -0.0003, NITROGEN, GdLs
+COMPOUND  , -0.0164, OXYGEN, -0.001, Gd,  , ,GdLs
+* Liquid Scintillator
+MATERIAL  , , , 0.855,  , , ,Ls
+COMPOUND  , -0.8544, CARBON, -0.1289, HYDROGEN, -0.0003, NITROGEN, Ls
+COMPOUND  , -0.0164, OXYGEN,  , , , ,Ls
+* Mineral Oil
+MATERIAL  , , , 0.838,  , , ,Mo
+COMPOUND  , -0.8514, CARBON, -0.1486, HYDROGEN,  , ,Mo
+* Plexiglas  Acrylic
+* Chemical             H   CH3
+* Formula              |   |
+*                ----- C - C -----
+*                      |   |
+*                      H   C - O - CH
+*  C  H  O                 ||        3
+*   5  8  2                O
+* Density variation is very narrow: 1.14-1.19 g/cm3.
+MATERIAL  , , , 1.17,  , , ,Acrylic
+COMPOUND  , 8.0, HYDROGEN, 5.0, CARBON, 2.0, OXYGEN, Acrylic
+* Steel
+MATERIAL  , , , 8.1,  , , ,Steel
+MATERIAL  , 26., 55.847,  , , , ,Fe
+MATERIAL  , 15., 30.9738,  , , , ,P
+MATERIAL  , 16., 32.066,  , , , ,S
+MATERIAL  , 24., 51.9961,  , , , ,Cr
+MATERIAL  , 25., 54.9381,  , , , ,Mn
+MATERIAL  , 28., 58.6934,  , , , ,Ni
+COMPOUND  , -0.70845, Fe, -0.0008, CARBON, -0.02, Mn, Steel
+COMPOUND  , -0.00045, P, -0.0003, S, -0.01, SILICON, Steel
+COMPOUND  , -0.18, Cr, -0.08, Ni,  , ,Steel
+* Granite Rock
+MATERIAL  , , , 2.7,  , , ,Rock
+MATERIAL  , 11., 22.9898,  , , , ,Na
+MATERIAL  , 12., 24.3050,  , , , ,Mg
+MATERIAL  , 13., 26.9815,  , , , ,Al
+MATERIAL  , 19., 39.0983,  , , , ,K
+MATERIAL  , 20., 40.078,  , , , ,Ca
+COMPOUND  , -0.485, OXYGEN, -0.343, SILICON, -0.08, Al, Rock
+COMPOUND  , -0.02, Fe, -0.001, Mg, -0.002, Ca, Rock
+COMPOUND  , -0.024, Na, -0.045, K,  , ,Rock
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 ASSIGNMA  , BLCKHOLE, BLKHOLE
 ASSIGNMA  , VACUUM, VACUUM
 ASSIGNMA  , AIR, AIR
-ASSIGNMA  , SiO2, STONE
+ASSIGNMA  , Rock, STONE
 ASSIGNMA  , WATER, OWS
 ASSIGNMA  , WATER, IWS
+ASSIGNMA  , Steel, SST
+ASSIGNMA  , Mo, MO
+ASSIGNMA  , Acrylic, OAT
+ASSIGNMA  , Ls, LS
+ASSIGNMA  , Acrylic, IAT
+ASSIGNMA  , GdLs, GDLS
 * Set the random number seed
 RANDOMIZ  , 1.
 * Set the number of primary histories to be simulated in the run
