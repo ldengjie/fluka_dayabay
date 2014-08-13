@@ -1,0 +1,107 @@
+#!/usr/local/flair/flair
+# FLUKA Project file
+Version: 2
+Title: Dayabay EH1 muon simulation
+Input: dayabay.inp
+Notes:
+Started this project at 10:30 Tuesday,Aug 12 2014
+Tabs: 0.1 0.32 0.56 0.81 1.0
+Page: Input
+DefMain: True
+LinkPrg: lfluka
+F77bound: True
+F77dline: False
+
+# Run information
+Run: <default>
+	Prev:     0
+	Last:     5
+	Status:   0
+	Pid:      0
+	StartRun: 0
+End
+
+# Material
+Material: SiO2
+	shine: 10.0
+	color: #60D0B0
+	ior: 1.0
+	specular: 0.0
+	alpha: 0
+	fuzz: 0.0
+End
+
+# Geometry Information
+Geometry:
+	Frame.bsplit: 0.5
+	Frame.tsplit: 0.5
+	Frame.vsplit: 0.5
+End
+
+# Pet
+Pet: pet
+End
+
+# Geometry plot "GeoViewer Red plot"
+Plot: Red
+	Format: .eps
+	Type:   Geometry
+	origin: 4687.84 -3704.81 2567.84
+	layer: 3D
+	title: GeoViewer Red plot
+	labels: 1
+	coord: U-V
+	boundaries: 1
+	subtype: Material
+	extends: 6624.7 3132.33
+	basisu: 0.543836 0.80403 0.24037
+	basisv: -0.342052 -0.0491794 0.938393
+End
+
+# Geometry plot "GeoViewer Green plot"
+Plot: Green
+	Format: .eps
+	Type:   Geometry
+	origin: 379.397 31.7662 1125.42
+	layer: Media
+	title: GeoViewer Green plot
+	labels: 1
+	coord: U-V
+	boundaries: 1
+	subtype: Material
+	extends: 6476.61 3062.31
+	basisu: 0.999272 0.0380006 0.0033357
+	basisv: -0.00385349 0.0135608 0.999901
+End
+
+# Geometry plot "GeoViewer Blue plot"
+Plot: Blue
+	Format: .eps
+	Type:   Geometry
+	origin: 0 -1011.86 1087.05
+	layer: Media
+	title: GeoViewer Blue plot
+	labels: 1
+	coord: Z-Y
+	boundaries: 1
+	subtype: Material
+	extends: 6024.45 2848.52
+	basisu: 0 0 1
+	basisv: 0 1 0
+End
+
+# Geometry plot "GeoViewer Magenta plot"
+Plot: Magenta
+	Format: .eps
+	Type:   Geometry
+	origin: -96.6205 -331.075 17.3729
+	layer: Media
+	title: GeoViewer Magenta plot
+	labels: 1
+	coord: U-V
+	boundaries: 1
+	subtype: Material
+	extends: 3652.16 1726.84
+	basisu: 0.999954 0.00871955 0.00395519
+	basisv: -0.00855101 0.999131 -0.0407954
+End

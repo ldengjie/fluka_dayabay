@@ -1,0 +1,105 @@
+TITLE
+Dayabay EH1 muon simulation
+* Set the defaults for precision simulations
+DEFAULTS                                                              NEW-DEFA
+GLOBAL         1000.       -1.       0.0        3.        1.
+* Define the beam characteristics
+*BEAM
+* Define the beam position
+*BEAMPOS
+GEOBEGIN   ,  ,  ,  ,  ,  ,  , COMBNAME
+0,0,
+* BlackHole,mandatory
+SPH blkHole    0.0 0.0 0.0 100000.0
+* Vacuum,beam from here
+SPH vacuum     0.0 0.0 0.0 10000.0
+#if 0
+* Cylindrical target
+RCC target     0.0 0.0 0.0 0.0 0.0 10.0 5.0
+#endif
+#if 0
+RPP stone      -3300. 3223. -3300. 1200. -1000. 3500.
+#endif
+RPP hall1      -2800. -1066. -800. 700. 500. 900.
+RPP hall2      -1068. 1610. -800. 700. 500. 3000.
+RPP hall3      1590. 2723. -800. 700. 500. 1210.
+RPP hall4      -1150. 1050. -2000. -790. 500. 900.
+RPP stone6     -750. -300. -1800. -800. 500. 900.
+RPP stone7     100. 350. -1800. -800. 500. 900.
+RPP hall5      -800. 800. -500. 500. -500. 510.
+PLA pla1       -100. -100. 0.0 507. 500. 0.0
+PLA pla2       100. -100. 0.0 -507. 500. 0.0
+PLA pla3       100. 100. 0.0 -507. -500. 0.0
+PLA pla4       -100. 100. 0.0 507. -500. 0.0
+XYP h5xyp      500.
+RPP hall6      -700. 700. -400. 400. -400. 510.
+XYP h5xyp1     500.
+PLA pla5       -1. -1. 0.0 465.6 400. 0.0
+PLA pla6       1. -1. 0.0 -465.6 400. 0.0
+PLA pla7       1. 1. 0.0 -465.6 -400. 0.0
+PLA pla8       -1. 1. 0.0 465.6 -400. 0.0
+RCC ad1rcc6    300. 0.0 -250. 0.0 0.0 500. 250.
+RCC ad1rcc5    300. 0.0 -248.8 0.0 0.0 497.6 248.8
+RCC ad1rcc4    300. 0.0 -200. 0.0 0.0 400. 200.
+RCC ad1rcc3    300. 0.0 -198.5 0.0 0.0 397. 198.5
+RCC ad1rcc2    300. 0.0 -156. 0.0 0.0 312. 156.
+RCC ad1rcc1    300. 0.0 -155. 0.0 0.0 310. 155.
+RCC ad2rcc6    -300. 0.0 -250. 0.0 0.0 500. 250.
+RCC ad2rcc5    -300. 0.0 -248.8 0.0 0.0 497.6 248.8
+RCC ad2rcc4    -300. 0.0 -200. 0.0 0.0 400. 200.
+RCC ad2rcc3    -300. 0.0 -198.5 0.0 0.0 397. 198.5
+RCC ad2rcc2    -300. 0.0 -156. 0.0 0.0 312. 156.
+RCC ad2rcc1    -300. 0.0 -155. 0.0 0.0 310. 155.
+RPP stone1     -3100. -766. -1100. 1000. 200. 1200.
+RPP stone2     -1368. 1910. -1100. 1000. 200. 3300.
+RPP stone3     1290. 3023. -1100. 1000. 200. 1510.
+RPP stone4     -1450. 1350. -2300. -490. 200. 1200.
+RPP stone5     -1100. 1100. -800. 800. -800. 810.
+END
+* Black hole
+BLKHOLE      5 +blkHole -vacuum
+* Vacuum around
+VACUUM       5 +vacuum -(+stone1 |+stone2|+stone3 |+stone4 |+stone5)
+* Target
+AIR          5 | +hall1 | +hall2 | +hall3 | +hall4 -stone6 -stone7 | +hall5-h5xyp
+#if 0
+DETECTOR     5 +hall5 +h5xyp -pla1 -pla2 -pla3 -pla4
+#endif
+#if 0
+STONE        5 +stone -( | +hall1 | +hall2 | +hall3 | +hall4 -stone6 -stone7 | +hall5-h5xyp)-( +hall5 +h5xyp
+               -pla1 -pla2 -pla3 -pla4 )
+#endif
+STONE        5 (+stone1 |+stone2|+stone3 |+stone4 |+stone5 )  -( | +hall1 | +hall2 | +hall3 | +hall4 -stone6
+               -stone7 | +hall5-h5xyp)-( +hall5 +h5xyp
+               -pla1 -pla2 -pla3 -pla4 )
+#if 0
+DETECTO1     5 +hall6 +h5xyp1 -pla5 -pla6 -pla7 -pla8
+#endif
+OWS          5 (+hall5 +h5xyp -pla1 -pla2 -pla3 -pla4)-(+hall6 +h5xyp1 -pla5 -pla6 -pla7 -pla8 )
+SST          5 +ad1rcc6 -ad1rcc5 |+ad2rcc6 -ad2rcc5
+MO           5 +ad1rcc5 -ad1rcc4 |+ad2rcc5 -ad2rcc4
+OAV          5 +ad1rcc4 -ad1rcc3 |+ad2rcc4 -ad2rcc3
+LS           5 +ad1rcc3 -ad1rcc2 |+ad2rcc3 -ad2rcc2
+IAV          5 +ad1rcc2 -ad1rcc1 |+ad2rcc2 -ad2rcc1
+GDLS         5 +ad1rcc1 |+ad2rcc1
+IWS          5 +hall6 +h5xyp1 -pla5 -pla6 -pla7 -pla8 -ad2rcc6 -ad1rcc6
+END
+GEOEND
+* 245 SiO2 (quartz)
+* The density of SiO2 may vary from 2.3 - 2.5 g/cm3 depending on the
+* method of preparation. Under ion bombardment, the surface density
+* will change towards an equilibrium value of about 2.37.
+MATERIAL  , , , 2.32,  , , ,SiO2
+COMPOUND  , 2.0, OXYGEN, 1.0, SILICON,  , ,SiO2
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
+ASSIGNMA  , BLCKHOLE, BLKHOLE
+ASSIGNMA  , VACUUM, VACUUM
+ASSIGNMA  , AIR, AIR
+ASSIGNMA  , SiO2, STONE
+ASSIGNMA  , WATER, OWS
+ASSIGNMA  , WATER, IWS
+* Set the random number seed
+RANDOMIZ  , 1.
+* Set the number of primary histories to be simulated in the run
+START
+STOP
