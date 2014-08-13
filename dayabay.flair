@@ -7,7 +7,7 @@ Submit: *Default
 Notes:
 Started this project at 10:30 Tuesday,Aug 12 2014
 Tabs: 0.1 0.32 0.56 0.81 1.0
-Page: Geometry
+Page: Flair
 DefMain: True
 LinkPrg: lfluka
 F77bound: True
@@ -213,9 +213,9 @@ Material: GADOLINI
 End
 
 # Material
-Material: K
+Material: Mo
 	shine: 10.0
-	color: #7010D0
+	color: #7030B0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -253,9 +253,9 @@ Material: Mg
 End
 
 # Material
-Material: Mn
+Material: SiO2
 	shine: 10.0
-	color: #409070
+	color: #60D0B0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -273,9 +273,9 @@ Material: Gd160
 End
 
 # Material
-Material: Mo
+Material: K
 	shine: 10.0
-	color: #7030B0
+	color: #7010D0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -283,9 +283,9 @@ Material: Mo
 End
 
 # Material
-Material: SiO2
+Material: Mn
 	shine: 10.0
-	color: #60D0B0
+	color: #409070
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -387,32 +387,64 @@ End
 Plot: Red
 	Format: .eps
 	Type:   Geometry
-	origin: 4711.05 -3215.37 3661.78
-	layer: 3D
-	title: GeoViewer Red plot
 	labels: 1
-	coord: U-V
-	boundaries: 1
-	subtype: Material
+	cbcolors: 0
+	title: GeoViewer Red plot
 	extends: 6624.7 3132.33
-	basisu: 0.58734 0.801293 0.11385
-	basisv: -0.402807 0.1674 0.899847
+	grid: 0
+	cbpalette: FLUKA
+	coord: U-V
+	x2log: 0
+	index: 0
+	subtype: Material
+	y2log: 0
+	boundaries: 1
+	ztics: 0
+	cblog: 0
+	origin: 4778.11 -3712.83 2638.63
+	cbround: 0
+	ylog: 0
+	zlog: 0
+	y2tics: 0
+	cbtics: 0
+	layer: 3D
+	xlog: 0
+	basisu: 0.682975 0.72881 -0.0487975
+	basisv: -0.162639 0.216858 0.96256
+	x2tics: 0
+	cpd: 0
 End
 
 # Geometry plot "GeoViewer Green plot"
 Plot: Green
 	Format: .eps
 	Type:   Geometry
-	origin: 141.944 138.392 1224.09
-	layer: Media
-	title: GeoViewer Green plot
 	labels: 1
+	cbcolors: 0
+	title: GeoViewer Green plot
+	extends: 5397.17 2551.92
+	grid: 0
+	cbpalette: FLUKA
 	coord: U-V
-	boundaries: 1
+	x2log: 0
+	index: 0
 	subtype: Material
-	extends: 5397.17 2551.93
+	y2log: 0
+	boundaries: 1
+	ztics: 0
+	cblog: 0
+	origin: 141.944 138.392 1224.09
+	cbround: 0
+	ylog: 0
+	zlog: 0
+	y2tics: 0
+	cbtics: 0
+	layer: Media
+	xlog: 0
 	basisu: 0.999906 -0.012159 0.00629402
 	basisv: -0.00624815 0.00380691 0.999973
+	x2tics: 0
+	cpd: 0
 End
 
 # Geometry plot "GeoViewer Blue plot"
