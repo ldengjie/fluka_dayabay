@@ -18,14 +18,31 @@
       INCLUDE '(PAPROP)'
       INCLUDE '(SOURCM)'
       INCLUDE '(SUMCOU)'
+********************************************************************
 *
+*  SVecN  : normal vector of each surface
+*  SPoMin : minimum point on the surface 
+*  SLen   : length of each border of the surface
+*  OPoMin : target origin's minimum point
+*  OPoMax : target origin's maximum point
+*  ProVec : incident particle's direction vector
+*  ValidS : valid area of this surface which is perpendicular to ProVec
+*  DIniPo : initial incident point
+*  SecTag : whether is valid surface (ValidS>0)
+*  PRVec  : random vector used for getting initial point
+*
+********************************************************************
       LOGICAL LFIRST
+      DATA LFIRST / .TRUE. /
 *
       PARAMETER(NLINES = 1000000,MaxP=5)
-      SAVE LFIRST,Enrgy(NLINES), Theta(NLINES), Phi(NLINES),
-     &     SVecN(MaxP,3),SPoMin(MaxP,3),
-     &     SLen(MaxP,3)!,OPoMin(3),OPoMax(3)
-      DATA LFIRST / .TRUE. /
+      DIMENSION Enrgy(NLINES), Theta(NLINES), Phi(NLINES),
+     &          SVecN(MaxP,3),SPoMin(MaxP,3),SLen(MaxP,3)
+      SAVE LFIRST, Enrgy, Theta, Phi, SVecN,SPoMin, SLen
+*
+      DIMENSION OPoMin(3),OPoMax(3),ProVec(3),ValidS(MaxP),
+     &          DIniPo(3),SecTag(MaxP),PRVec(3)
+*
 *======================================================================*
       NOMORE = 0
 *  +-------------------------------------------------------------------*
@@ -45,13 +62,11 @@
            END IF
         END DO
         CLOSE(88)
-
 * initial surface 
         OPoMin=[-11,-8,-8]
         OPoMax=[11,8,33]
         SVecN=0
         SLen=0
-
 * 1st plane        
         SVecN(1,1) = 1
         SPoMin(1,1) = OPoMax(1)
@@ -74,12 +89,12 @@
         SLen(3,2) = OPoMax(2) - OPoMin(2)
         SLen(3,3) = OPoMax(3) - OPoMin(3)
 * 4th plane        
-        SVecN(4,2) = -1
-        SPoMin(4,1) = OPoMin(1)
-        SPoMin(4,2) = OPoMin(2)
-        SPoMin(4,3) = OPoMin(3)
-        SLen(4,1) = OPoMax(1) - OPoMin(1)
-        SLen(4,3) = OPoMax(3) - OPoMin(3)
+      SVecN(4,2) = -1
+      SPoMin(4,1) = OPoMin(1)
+      SPoMin(4,2) = OPoMin(2)
+      SPoMin(4,3) = OPoMin(3)
+      SLen(4,1) = OPoMax(1) - OPoMin(1)
+      SLen(4,3) = OPoMax(3) - OPoMin(3)
 * 5th plane        
         SVecN(5,3) = 1
         SPoMin(5,1) = OPoMin(1)
@@ -105,7 +120,7 @@
 *  fraction of muonPlus,m+
       DMPCoe=0.5652
       IONID = IJBEAM
-      IF (FLRNDM .LT. DMPCoe) THEN
+      IF (FLRNDM(DUMMY) .LT. DMPCoe) THEN
           ILOFLK (NPFLKA) = 10 
       ELSE
           ILOFLK (NPFLKA) = 11 
@@ -147,49 +162,46 @@
 
 *==
 *  incident direction vector
-      ProVec(3)
       ProVec(1) = SIND ( Theta(NPFLKA) ) * COSD ( Phi(NPFLKA) )
       ProVec(2) = SIND ( Theta(NPFLKA) ) * SIND ( Phi(NPFLKA) )
       ProVec(3) = COSD ( Theta(NPFLKA) )
 
 *  total valid surface area
-      ValidS(MaxP)
-      LOGICAL SecTag(MaxP) = .FALSE.
       TVaiS = 0
       DO I = 1,MaxP
          TotS=1
          DO J=1,3
-            IF (SLen(J) .NOT. 0) THEN
-               LENTMP=SLen(J) 
+            IF ( SLen(I,J) .NE. 0 ) THEN
+               DLenT=SLen(I,J) 
             ELSE
-               LENTMP=1
+               DLenT=1
             END IF
-            TotS = TotS*LENTMP
+            TotS = TotS*DLenT
          END DO
          ValidS(I) = DOT_PRODUCT(SVecN(I,1:3),ProVec)/
      &               SQRT(DOT_PRODUCT(SVecN(I,1:3),SVecN(I,1:3))*
      &               DOT_PRODUCT(ProVec,ProVec)) * (-TotS)
          IF (ValidS(I) .GT. 0) THEN
-            SecTag(I) = .TRUE.
+            SecTag(I) = 1 
             TVaiS = TVaiS + ValidS(I)
          END IF
       END DO
 
 *  uniform sampling 
-      DIniPo(3)
       SR = FLRNDM(DUMMY)
+      SecTag = 0
       SRFlag = 0
       DO I = 1,MaxP
-         IF (SecTag(I)) THEN
+         IF ( SecTag(I) .EQ. 1 ) THEN
             SRFlag = SRFlag + ValidS(I)/TVaiS
             IF (SR .LT. SRFlag) THEN
 *  find right surface
-               PRVec(3)
                PRVec(1)=FLRNDM(DUMMY)
                PRVec(2)=FLRNDM(DUMMY)
                PRVec(3)=FLRNDM(DUMMY)
 *  !!! initial position
-               DIniPo=((SPoMin+PRVec*SLen)+(-100*ProVec))*100
+               DIniPo=((SPoMin(I,1:3)+PRVec*SLen(I,1:3))+(-100*ProVec))
+     &                *100
                EXIT 
             END IF
          END IF 
