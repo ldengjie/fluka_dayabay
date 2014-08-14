@@ -146,7 +146,7 @@
      &                       + TWOTWO * AM (ILOFLK(NPFLKA)) ) )
 
 *==
-*  incident direction
+*  incident direction vector
       ProVec(3)
       ProVec(1) = SIND ( Theta(NPFLKA) ) * COSD ( Phi(NPFLKA) )
       ProVec(2) = SIND ( Theta(NPFLKA) ) * SIND ( Phi(NPFLKA) )
