@@ -103,7 +103,7 @@
 * Particle type (1=proton.....). Ijbeam is the type set by the BEAM
 * card
 *  fraction of muonPlus,m+
-      DMPCoe=0.5
+      DMPCoe=0.5652
       IONID = IJBEAM
       IF (FLRNDM .LT. DMPCoe) THEN
           ILOFLK (NPFLKA) = 10 
