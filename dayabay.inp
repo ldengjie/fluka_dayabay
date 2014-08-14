@@ -75,30 +75,35 @@ COMPOUND  , -0.012827, ARGON,  , , , ,AIR
 * Chemical Formula:  H -- O -- H
 MATERIAL  , , , 1.0,  , , ,WATER
 COMPOUND  , 2.0, HYDROGEN, 1.0, OXYGEN,  , ,WATER
+MATERIAL  , 6., 12.0107,  , , , ,ICARBON
+LOW-MAT   , ICARBON, 6., -3., 296.,  , ,CARBON
+MATERIAL  , 1., 1.0079,  , , , ,IH
+LOW-MAT   , IH, 1., -3., 296.,  , ,HYDROGEN
 * Gd isotopes
-MATERIAL  , 64., 152., , , , 152., Gd152
-MATERIAL  , 64., 154., , , , 154., Gd154
-MATERIAL  , 64., 155., , , , 155., Gd155
-MATERIAL  , 64., 156., , , , 156., Gd156
-MATERIAL  , 64., 157., , , , 157., Gd157
-MATERIAL  , 64., 158., , , , 158., Gd158
-MATERIAL  , 64., 160., , , , 160., Gd160
+*MATERIAL  , 64., 152., , , , 152., Gd152
+*MATERIAL  , 64., 154., , , , 154., Gd154
+*MATERIAL  , 64., 155., , , , 155., Gd155
+*MATERIAL  , 64., 156., , , , 156., Gd156
+*MATERIAL  , 64., 157., , , , 157., Gd157
+*MATERIAL  , 64., 158., , , , 158., Gd158
+*MATERIAL  , 64., 160., , , , 160., Gd160
 * Gd element
-MATERIAL   ,  ,  ,  ,  ,  ,  , Gd
-COMPOUND  , -0.002, Gd152, -0.022, Gd154, -0.149, Gd155, Gd
-COMPOUND  , -0.206, Gd156, -0.157, Gd157, -0.247, Gd158, Gd
-COMPOUND  , -0.217, Gd160,  , , , ,Gd
+*MATERIAL   ,  ,  ,  ,  ,  ,  , Gd
+*COMPOUND  , -0.002, Gd152, -0.022, Gd154, -0.149, Gd155, Gd
+*COMPOUND  , -0.206, Gd156, -0.157, Gd157, -0.247, Gd158, Gd
+*COMPOUND  , -0.217, Gd160,  , , , ,Gd
+MATERIAL  , 64., , 7.9004,  , , ,GADOLINI
 * GdLiquidScintillator
 MATERIAL  , , , 0.855,  , , ,GdLs
-COMPOUND  , -0.8535, CARBON, -0.1288, HYDROGEN, -0.0003, NITROGEN, GdLs
-COMPOUND  , -0.0164, OXYGEN, -0.001, Gd,  , ,GdLs
+COMPOUND  , -0.8535, ICARBON, -0.1288, IH, -0.0003, NITROGEN, GdLs
+COMPOUND  , -0.0164, OXYGEN, -0.001, GADOLINI,  , ,GdLs
 * Liquid Scintillator
 MATERIAL  , , , 0.855,  , , ,Ls
-COMPOUND  , -0.8544, CARBON, -0.1289, HYDROGEN, -0.0003, NITROGEN, Ls
+COMPOUND  , -0.8544, ICARBON, -0.1289, IH, -0.0003, NITROGEN, Ls
 COMPOUND  , -0.0164, OXYGEN,  , , , ,Ls
 * Mineral Oil
 MATERIAL  , , , 0.838,  , , ,Mo
-COMPOUND  , -0.8514, CARBON, -0.1486, HYDROGEN,  , ,Mo
+COMPOUND  , -0.8514, ICARBON, -0.1486, IH,  , ,Mo
 * Plexiglas  Acrylic
 * Chemical             H   CH3
 * Formula              |   |
@@ -109,7 +114,7 @@ COMPOUND  , -0.8514, CARBON, -0.1486, HYDROGEN,  , ,Mo
 *   5  8  2                O
 * Density variation is very narrow: 1.14-1.19 g/cm3.
 MATERIAL  , , , 1.18,  , , ,Acrylic
-COMPOUND  , 8.0, HYDROGEN, 5.0, CARBON, 2.0, OXYGEN, Acrylic
+COMPOUND  , 8.0, IH, 5.0, ICARBON, 2.0, OXYGEN, Acrylic
 * Steel
 MATERIAL  , , , 8.1,  , , ,Steel
 MATERIAL  , 26., 55.847,  , , , ,Fe
@@ -118,7 +123,7 @@ MATERIAL  , 16., 32.066,  , , , ,S
 MATERIAL  , 24., 51.9961,  , , , ,Cr
 MATERIAL  , 25., 54.9381,  , , , ,Mn
 MATERIAL  , 28., 58.6934,  , , , ,Ni
-COMPOUND  , -0.70845, Fe, -0.0008, CARBON, -0.02, Mn, Steel
+COMPOUND  , -0.70845, Fe, -0.0008, ICARBON, -0.02, Mn, Steel
 COMPOUND  , -0.00045, P, -0.0003, S, -0.01, SILICON, Steel
 COMPOUND  , -0.18, Cr, -0.08, Ni,  , ,Steel
 * Granite Rock
@@ -144,6 +149,10 @@ ASSIGNMA  , Acrylic, OAT
 ASSIGNMA  , Ls, LS
 ASSIGNMA  , Acrylic, IAT
 ASSIGNMA  , GdLs, GDLS
+* muon NEW-DEFA : 10MeV ,change to 1KeV
+PART-THR  , -1E-06, MUON+, MUON-, , 0.0
+* proton NEW-DEFA : 10MeV ,change to 1KeV
+PART-THR  , -1E-06, PROTON, APROTON, , 0.0
 * Set the random number seed
 RANDOMIZ  , 1.
 * Set the number of primary histories to be simulated in the run

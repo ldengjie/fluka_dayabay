@@ -7,7 +7,7 @@ Submit: *Default
 Notes:
 Started this project at 10:30 Tuesday,Aug 12 2014
 Tabs: 0.1 0.32 0.56 0.81 1.0
-Page: Flair
+Page: Input
 DefMain: True
 LinkPrg: lfluka
 F77bound: True
@@ -143,6 +143,16 @@ Material: Acrylic
 End
 
 # Material
+Material: ICARBON
+	shine: 10.0
+	color: #A0D0B0
+	ior: 1.0
+	specular: 0.0
+	alpha: 0
+	fuzz: 0.0
+End
+
+# Material
 Material: IRON1
 	shine: 10.0
 	color: #B03010
@@ -213,9 +223,9 @@ Material: GADOLINI
 End
 
 # Material
-Material: K
+Material: Mo
 	shine: 10.0
-	color: #7010D0
+	color: #7030B0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -253,9 +263,9 @@ Material: Mg
 End
 
 # Material
-Material: Mn
+Material: SiO2
 	shine: 10.0
-	color: #409070
+	color: #60D0B0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -273,9 +283,9 @@ Material: Gd160
 End
 
 # Material
-Material: Mo
+Material: K
 	shine: 10.0
-	color: #7030B0
+	color: #7010D0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -283,9 +293,9 @@ Material: Mo
 End
 
 # Material
-Material: SiO2
+Material: Mn
 	shine: 10.0
-	color: #60D0B0
+	color: #409070
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -316,6 +326,16 @@ End
 Material: Rock
 	shine: 10.0
 	color: #20D030
+	ior: 1.0
+	specular: 0.0
+	alpha: 0
+	fuzz: 0.0
+End
+
+# Material
+Material: IH
+	shine: 10.0
+	color: #E0D0D0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -400,7 +420,7 @@ Plot: Red
 	title: GeoViewer Red plot
 	y2log: 0
 	boundaries: 1
-	extends: 6624.7 452136
+	extends: 6624.7 719442
 	ylog: 0
 	grid: 0
 	cbtics: 0
@@ -432,7 +452,7 @@ Plot: Green
 	title: GeoViewer Green plot
 	y2log: 0
 	boundaries: 1
-	extends: 13429.9 7025.69
+	extends: 13429.9 10072.4
 	ylog: 0
 	grid: 0
 	cbtics: 0
@@ -458,7 +478,7 @@ Plot: Blue
 	coord: Z-Y
 	boundaries: 1
 	subtype: Material
-	extends: 6024.45 3145.3
+	extends: 6024.45 4518.34
 	basisu: 0 0 1
 	basisv: 0 1 0
 End
@@ -474,7 +494,7 @@ Plot: Magenta
 	coord: U-V
 	boundaries: 1
 	subtype: Material
-	extends: 3043.47 1592.16
+	extends: 3043.47 2282.6
 	basisu: 0.999954 0.00871955 0.00395519
 	basisv: -0.00855101 0.999131 -0.0407954
 End
