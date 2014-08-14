@@ -3,23 +3,15 @@ Dayabay EH1 muon simulation
 * Set the defaults for precision simulations
 DEFAULTS                                                              NEW-DEFA
 GLOBAL         1000.       -1.       0.0        3.        1.
-* Define the beam characteristics
-*BEAM
-* Define the beam position
-*BEAMPOS
+* Maxmium energy of muon is 8764.80967
+BEAM      , -8888.0,  , , , , ,MUON+
+SOURCE
 GEOBEGIN   ,  ,  ,  ,  ,  ,  , COMBNAME
 0,0,
 * BlackHole,mandatory
 SPH blkHole    0.0 0.0 0.0 100000.0
 * Vacuum,beam from here
-SPH vacuum     0.0 0.0 0.0 10000.0
-#if 0
-* Cylindrical target
-RCC target     0.0 0.0 0.0 0.0 0.0 10.0 5.0
-#endif
-#if 0
-RPP stone      -3300. 3223. -3300. 1200. -1000. 3500.
-#endif
+SPH vacuum     0.0 0.0 0.0 30000.0
 RPP hall1      -2800. -1066. -800. 700. 500. 900.
 RPP hall2      -1068. 1610. -800. 700. 500. 3000.
 RPP hall3      1590. 2723. -800. 700. 500. 1210.
@@ -61,19 +53,9 @@ BLKHOLE      5 +blkHole -vacuum
 VACUUM       5 +vacuum -(+stone1 |+stone2|+stone3 |+stone4 |+stone5)
 * Target
 AIR          5 | +hall1 | +hall2 | +hall3 | +hall4 -stone6 -stone7 | +hall5-h5xyp
-#if 0
-DETECTOR     5 +hall5 +h5xyp -pla1 -pla2 -pla3 -pla4
-#endif
-#if 0
-STONE        5 +stone -( | +hall1 | +hall2 | +hall3 | +hall4 -stone6 -stone7 | +hall5-h5xyp)-( +hall5 +h5xyp
-               -pla1 -pla2 -pla3 -pla4 )
-#endif
 STONE        5 (+stone1 |+stone2|+stone3 |+stone4 |+stone5 )  -( | +hall1 | +hall2 | +hall3 | +hall4 -stone6
                -stone7 | +hall5-h5xyp)-( +hall5 +h5xyp
                -pla1 -pla2 -pla3 -pla4 )
-#if 0
-DETECTO1     5 +hall6 +h5xyp1 -pla5 -pla6 -pla7 -pla8
-#endif
 OWS          5 (+hall5 +h5xyp -pla1 -pla2 -pla3 -pla4)-(+hall6 +h5xyp -pla5 -pla6 -pla7 -pla8 )
 SST          5 +ad1rcc6 -ad1rcc5 |+ad2rcc6 -ad2rcc5
 MO           5 +ad1rcc5 -ad1rcc4 |+ad2rcc5 -ad2rcc4
@@ -165,5 +147,5 @@ ASSIGNMA  , GdLs, GDLS
 * Set the random number seed
 RANDOMIZ  , 1.
 * Set the number of primary histories to be simulated in the run
-START
+START     , 1000000.
 STOP
