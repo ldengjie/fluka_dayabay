@@ -66,6 +66,7 @@ GDLS         5 +ad1rcc1 |+ad2rcc1
 IWS          5 +hall6 +h5xyp -pla5 -pla6 -pla7 -pla8 -ad2rcc6 -ad1rcc6
 END
 GEOEND
+STOP
 * 104 Air dry (near sea level)
 *
 MATERIAL  , , , 0.00120484,  , , ,AIR
@@ -149,12 +150,18 @@ ASSIGNMA  , Acrylic, OAT
 ASSIGNMA  , Ls, LS
 ASSIGNMA  , Acrylic, IAT
 ASSIGNMA  , GdLs, GDLS
+* e+e- photo don't be transported,just deposited at the point of production
+EMF        ,  ,  ,  ,  ,  ,  , EMF-OFF
 * muon NEW-DEFA : 10MeV ,change to 1KeV
 PART-THR  , -1E-06, MUON+, MUON-, , 0.0
 * proton NEW-DEFA : 10MeV ,change to 1KeV
 PART-THR  , -1E-06, PROTON, APROTON, , 0.0
 * Set the random number seed
-RANDOMIZ  , 1.
+*RANDOMIZ  , 1.
+* muon photonuclear reaction:produce hadrons(n/p) istopes; maybe pi0 -> 2gamma
+MUPHOTON  , 1., , , HYDROGEN, @LASTMAT
+* Direct electron pair production && Bremsstrahlung : activated by NEW-DEFA defaultly,override (2)(3) from 0,0.001 to -1,-1 here for continuous energy losses
+PAIRBREM  , 3., -1., -1., HYDROGEN, @LASTMAT
 * Set the number of primary histories to be simulated in the run
 START     , 1000000.
 STOP
