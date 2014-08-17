@@ -164,6 +164,10 @@ MUPHOTON  , 1., , , HYDROGEN, @LASTMAT
 PAIRBREM  , 3., -1., -1., HYDROGEN, @LASTMAT
 * Delta ray: actived by NEW-DEFA defaultly,(1)=0.0001 ,override (1)=-1
 DELTARAY  , -1., , , HYDROGEN, @LASTMAT
+* set 5 single scattering at boundary,be useful to classify which region fn prompt signal belong to,and not only for this.
+MULSOPT   , , , , 1., , 5., GLOBHAD
+* activate muon decay
+PHYSICS   , 1., , , MUON+, MUON-,  ,DECAYS
 * Set the number of primary histories to be simulated in the run
 START     , 1000000.
 STOP

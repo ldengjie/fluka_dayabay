@@ -7,7 +7,7 @@ Submit: *Default
 Notes:
 Started this project at 10:30 Tuesday,Aug 12 2014
 Tabs: 0.1 0.32 0.56 0.81 1.0
-Page: Flair
+Page: Input
 DefMain: True
 LinkPrg: lfluka
 F77bound: True
@@ -143,9 +143,9 @@ Material: Acrylic
 End
 
 # Material
-Material: Gd160
+Material: ICARBON
 	shine: 10.0
-	color: #C030D0
+	color: #A0D0B0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -223,9 +223,9 @@ Material: GADOLINI
 End
 
 # Material
-Material: K
+Material: Mo
 	shine: 10.0
-	color: #7010D0
+	color: #7030B0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -263,39 +263,39 @@ Material: Mg
 End
 
 # Material
-Material: Mn
-	shine: 10.0
-	color: #409070
-	ior: 1.0
-	specular: 0.0
-	alpha: 0
-	fuzz: 0.0
-End
-
-# Material
-Material: ICARBON
-	shine: 10.0
-	color: #A0D0B0
-	ior: 1.0
-	specular: 0.0
-	alpha: 0
-	fuzz: 0.0
-End
-
-# Material
-Material: Mo
-	shine: 10.0
-	color: #7030B0
-	ior: 1.0
-	specular: 0.0
-	alpha: 0
-	fuzz: 0.0
-End
-
-# Material
 Material: SiO2
 	shine: 10.0
 	color: #60D0B0
+	ior: 1.0
+	specular: 0.0
+	alpha: 0
+	fuzz: 0.0
+End
+
+# Material
+Material: Gd160
+	shine: 10.0
+	color: #C030D0
+	ior: 1.0
+	specular: 0.0
+	alpha: 0
+	fuzz: 0.0
+End
+
+# Material
+Material: K
+	shine: 10.0
+	color: #7010D0
+	ior: 1.0
+	specular: 0.0
+	alpha: 0
+	fuzz: 0.0
+End
+
+# Material
+Material: Mn
+	shine: 10.0
+	color: #409070
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
