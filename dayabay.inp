@@ -160,8 +160,10 @@ PART-THR  , -1E-06, PROTON, APROTON, , 0.0
 *RANDOMIZ  , 1.
 * muon photonuclear reaction:produce hadrons(n/p) istopes; maybe pi0 -> 2gamma
 MUPHOTON  , 1., , , HYDROGEN, @LASTMAT
-* Direct electron pair production && Bremsstrahlung : activated by NEW-DEFA defaultly,override (2)(3) from 0,0.001 to -1,-1 here for continuous energy losses
+* Direct electron pair production && Bremsstrahlung : activated by NEW-DEFA (2)(3) = 0,0.001 by default,override (2)(3) = -1,-1 here for continuous energy losses
 PAIRBREM  , 3., -1., -1., HYDROGEN, @LASTMAT
+* Delta ray: actived by NEW-DEFA defaultly,(1)=0.0001 ,override (1)=-1
+DELTARAY  , -1., , , HYDROGEN, @LASTMAT
 * Set the number of primary histories to be simulated in the run
 START     , 1000000.
 STOP
