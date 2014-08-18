@@ -3,8 +3,9 @@ Dayabay EH1 muon simulation
 * Set the defaults for precision simulations
 DEFAULTS                                                              NEW-DEFA
 GLOBAL         1000.       -1.       0.0        3.        1.
-* Maxmium energy of muon is 8764.80967
+* Maxmium energy of muon is 8764.80967GeV
 BEAM      , -8888.0,  , , , , ,MUON+
+* call source.f
 SOURCE
 GEOBEGIN   ,  ,  ,  ,  ,  ,  , COMBNAME
 0,0,
@@ -168,6 +169,23 @@ DELTARAY  , -1., , , HYDROGEN, @LASTMAT
 MULSOPT   , , , , 1., , 5., GLOBHAD
 * activate muon decay
 PHYSICS   , 1., , , MUON+, MUON-,  ,DECAYS
+* In order to achieve reasonable results for residual nuclei production the new evaporation module must be
+* activated and heavy fragment evaporation should also be activated,Coalescence should also be activated
+PHYSICS   , 3.,  , , , , ,EVAPORAT
+PHYSICS    ,  ,  ,  ,  ,  ,  , COALESCE
+* use PEANUT model at all energies
+PHYSICS   , 1000., 1000., 1000., 1000., 1000., 1000., PEATHRES
+* need to link Dpmjet and Rqmd:
+* case 1:just link them
+* 1)link:$FLUPRO/flutil/ldpmqmd,generates "flukadpm3"
+* 2)run :$FLUPRO/flutil/rfluka -e flukadpm3 -N0 -M5 example
+* case 2:link Dpmjet/Rqmd and my own routine
+* 1)make:$FLUPRO/flutil/fff yyy.f
+* 2)link:$FLUPRO/flutil/ldpmqmd yyy.o -o myyyy,generates"myyyy"
+* 3)run :$FLUPRO/flutil/rfluka -e myyyy -N0 -M5 example
+* here IONTRANS   need  to  think  about  isotopes  transport
+IONTRANS  , HEAVYION
+RADDECAY  , 2., -1., 1., 0.0, 9999999999, 1.
 * Set the number of primary histories to be simulated in the run
 START     , 1000000.
 STOP

@@ -143,9 +143,9 @@ Material: Acrylic
 End
 
 # Material
-Material: ICARBON
+Material: Gd160
 	shine: 10.0
-	color: #A0D0B0
+	color: #C030D0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -223,9 +223,9 @@ Material: GADOLINI
 End
 
 # Material
-Material: Mo
+Material: K
 	shine: 10.0
-	color: #7030B0
+	color: #7010D0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -263,39 +263,39 @@ Material: Mg
 End
 
 # Material
-Material: SiO2
-	shine: 10.0
-	color: #60D0B0
-	ior: 1.0
-	specular: 0.0
-	alpha: 0
-	fuzz: 0.0
-End
-
-# Material
-Material: Gd160
-	shine: 10.0
-	color: #C030D0
-	ior: 1.0
-	specular: 0.0
-	alpha: 0
-	fuzz: 0.0
-End
-
-# Material
-Material: K
-	shine: 10.0
-	color: #7010D0
-	ior: 1.0
-	specular: 0.0
-	alpha: 0
-	fuzz: 0.0
-End
-
-# Material
 Material: Mn
 	shine: 10.0
 	color: #409070
+	ior: 1.0
+	specular: 0.0
+	alpha: 0
+	fuzz: 0.0
+End
+
+# Material
+Material: ICARBON
+	shine: 10.0
+	color: #A0D0B0
+	ior: 1.0
+	specular: 0.0
+	alpha: 0
+	fuzz: 0.0
+End
+
+# Material
+Material: Mo
+	shine: 10.0
+	color: #7030B0
+	ior: 1.0
+	specular: 0.0
+	alpha: 0
+	fuzz: 0.0
+End
+
+# Material
+Material: SiO2
+	shine: 10.0
+	color: #60D0B0
 	ior: 1.0
 	specular: 0.0
 	alpha: 0
@@ -395,8 +395,22 @@ End
 # Geometry Information
 Geometry:
 	Frame.bsplit: 0.5
-	Frame.tsplit: 0.5
-	Frame.vsplit: 0.5
+	Frame.tsplit: 0.01
+	Frame.vsplit: 0.99
+
+	# Layer
+	Layer: 3D 01
+		3D._visible: True
+		layer: 3D
+		_order: 2
+		Show.voxel: 1
+		Show.lattice: 1
+		deflights: 1
+		Options.shortcut: F4
+		Options.viewport: 0
+		Show: 0
+		3D: True
+	End
 End
 
 # Pet
@@ -407,32 +421,32 @@ End
 Plot: Red
 	Format: .eps
 	Type:   Geometry
-	origin: 4778.11 -3712.83 2638.63
-	cbround: 0
-	xlog: 0
 	labels: 1
-	layer: 3D
-	basisu: 0.682975 0.72881 -0.0487969
-	basisv: -0.162639 0.216858 0.96256
-	zlog: 0
 	cbcolors: 0
-	index: 0
 	title: GeoViewer Red plot
-	y2log: 0
-	boundaries: 1
-	extends: 6624.7 719442
-	ylog: 0
+	extends: 6624.7 191380
 	grid: 0
-	cbtics: 0
-	x2tics: 0
-	y2tics: 0
-	cpd: 0
 	cbpalette: FLUKA
 	coord: U-V
-	subtype: Material
-	ztics: 0
 	x2log: 0
+	index: 0
+	subtype: Material
+	y2log: 0
+	boundaries: 1
+	ztics: 0
 	cblog: 0
+	origin: 4778.11 -3712.83 2638.63
+	cbround: 0
+	ylog: 0
+	zlog: 0
+	y2tics: 0
+	cbtics: 0
+	layer: 3D 01
+	cpd: 0
+	xlog: 0
+	basisu: 0.682975 0.72881 -0.0487969
+	basisv: -0.162639 0.216858 0.96256
+	x2tics: 0
 End
 
 # Geometry plot "GeoViewer Green plot"
@@ -443,7 +457,7 @@ Plot: Green
 	cbround: 0
 	xlog: 0
 	labels: 1
-	layer: Media
+	layer: 3D 01
 	basisu: 0.999906 -0.012159 0.00629402
 	basisv: -0.00624815 0.00380691 0.999973
 	zlog: 0
@@ -452,7 +466,7 @@ Plot: Green
 	title: GeoViewer Green plot
 	y2log: 0
 	boundaries: 1
-	extends: 13429.9 10072.4
+	extends: 4497.65 4515.01
 	ylog: 0
 	grid: 0
 	cbtics: 0
@@ -472,13 +486,13 @@ Plot: Blue
 	Format: .eps
 	Type:   Geometry
 	origin: 0 -1011.86 1087.05
-	layer: Media
+	layer: 3D 01
 	title: GeoViewer Blue plot
 	labels: 1
 	coord: Z-Y
 	boundaries: 1
 	subtype: Material
-	extends: 6024.45 4518.34
+	extends: 6024.45 6047.71
 	basisu: 0 0 1
 	basisv: 0 1 0
 End
@@ -488,13 +502,13 @@ Plot: Magenta
 	Format: .eps
 	Type:   Geometry
 	origin: -6.21122 -144.251 10.1414
-	layer: Media
+	layer: 3D 01
 	title: GeoViewer Magenta plot
 	labels: 1
 	coord: U-V
 	boundaries: 1
 	subtype: Material
-	extends: 3043.47 2282.6
+	extends: 3043.47 3055.22
 	basisu: 0.999954 0.00871955 0.00395519
 	basisv: -0.00855101 0.999131 -0.0407954
 End
