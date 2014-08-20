@@ -1,30 +1,19 @@
-*$ CREATE MGDRAW.FOR
-*COPY MGDRAW
+*----------------------------------------------------------------------*
 *                                                                      *
-*=== mgdraw ===========================================================*
+*     MaGnetic field trajectory DRAWing: actually this entry manages   *
+*                                        all trajectory dumping for    *
+*                                        drawing                       *
+*                                                                      *
+*     Created on   21 Aug 2014     by   Li Dengjie                     *
+*     Last change   *
+*                                                                      *
+*----------------------------------------------------------------------*
 *                                                                      *
       SUBROUTINE MGDRAW ( ICODE, MREG )
 
       INCLUDE '(DBLPRC)'
       INCLUDE '(DIMPAR)'
       INCLUDE '(IOUNIT)'
-*
-*----------------------------------------------------------------------*
-*                                                                      *
-*     Copyright (C) 1990-2013      by        Alfredo Ferrari           *
-*     All Rights Reserved.                                             *
-*                                                                      *
-*                                                                      *
-*     MaGnetic field trajectory DRAWing: actually this entry manages   *
-*                                        all trajectory dumping for    *
-*                                        drawing                       *
-*                                                                      *
-*     Created on   01 March 1990   by        Alfredo Ferrari           *
-*                                              INFN - Milan            *
-*     Last change   12-Nov-13      by        Alfredo Ferrari           *
-*                                              INFN - Milan            *
-*                                                                      *
-*----------------------------------------------------------------------*
 *
       INCLUDE '(CASLIM)'
       INCLUDE '(COMPUT)'
@@ -88,6 +77,8 @@
          END IF
       END IF
       WRITE (*,*) ''
+
+
 *  |  End of quenching
 *  +-------------------------------------------------------------------*
       RETURN
@@ -114,16 +105,6 @@
       CALL GEOR2N ( NEWREG,NRGNAM,IERR2)
       WRITE (*,*) 'lidj BXDRAW (',MRGNAM,'->',NRGNAM,')'
       WRITE (*,*) ''
-
-         IF( JTRACK.EQ.1) THEN
-            IF(ETRACK.GT.AM(JTRACK)) THEN
-               PRINT *,"-------> Filling histo"
-               CALL treefill(JTRACK,
-     +                       (ETRACK-AM(JTRACK)),XSCO,YSCO,ZSCO,
-     +                       CXTRCK,CYTRCK,CZTRCK)
-            ENDIF
-         ENDIF
-
       RETURN
 *
 *======================================================================*
@@ -215,61 +196,13 @@
          ELSE
             FILNAM = CFDRAW
          END IF
-C         OPEN ( UNIT = IODRAW, FILE = FILNAM, STATUS = 'NEW', FORM =
-C     &          'UNFORMATTED' )
       END IF
       WRITE (*,*) 'lidj SODRAW()'
-C      WRITE (*,*) -NCASE, NPFLKA, NSTMAX, SNGL (TKESUM),
-C     &                SNGL (WEIPRI)
-*  +-------------------------------------------------------------------*
-*  |  (Radioactive) isotope: it works only for 1 source particle on
-*  |  the stack for the time being
-      IF ( ILOFLK (NPFLKA) .GE. 100000 .AND. LRADDC (NPFLKA) ) THEN
-         IARES  = MOD ( ILOFLK (NPFLKA), 100000  )  / 100
-         IZRES  = MOD ( ILOFLK (NPFLKA), 10000000 ) / 100000
-         IISRES = ILOFLK (NPFLKA) / 10000000
-         IONID  = ILOFLK (NPFLKA)
-C         WRITE (*,*) ( IONID,SNGL(-TKEFLK(I)),
-C     &                    SNGL (WTFLK(I)), SNGL (XFLK (I)),
-C     &                    SNGL (YFLK (I)), SNGL (ZFLK (I)),
-C     &                    SNGL (TXFLK(I)), SNGL (TYFLK(I)),
-C     &                    SNGL (TZFLK(I)), I = 1, NPFLKA )
-*  |
-*  +-------------------------------------------------------------------*
-*  |  Patch for heavy ions: it works only for 1 source particle on
-*  |  the stack for the time being
-      ELSE IF ( ABS (ILOFLK (NPFLKA)) .GE. 10000 ) THEN
-         IONID = ILOFLK (NPFLKA)
-         CALL DCDION ( IONID )
-C         WRITE (*,*) ( IONID,SNGL(TKEFLK(I)+AMNHEA(-IONID)),
-C     &                    SNGL (WTFLK(I)), SNGL (XFLK (I)),
-C     &                    SNGL (YFLK (I)), SNGL (ZFLK (I)),
-C     &                    SNGL (TXFLK(I)), SNGL (TYFLK(I)),
-C     &                    SNGL (TZFLK(I)), I = 1, NPFLKA )
-*  |
-*  +-------------------------------------------------------------------*
-*  |  Patch for heavy ions: ???
-      ELSE IF ( ILOFLK (NPFLKA) .LT. -6 ) THEN
-C         WRITE (*,*) ( IONID,SNGL(TKEFLK(I)+AMNHEA(-ILOFLK(NPFLKA))),
-C     &                    SNGL (WTFLK(I)), SNGL (XFLK (I)),
-C     &                    SNGL (YFLK (I)), SNGL (ZFLK (I)),
-C     &                    SNGL (TXFLK(I)), SNGL (TYFLK(I)),
-C     &                    SNGL (TZFLK(I)), I = 1, NPFLKA )
-*  |
-*  +-------------------------------------------------------------------*
-*  |
-      ELSE
       WRITE (*,*)   'Particle:',ILOFLK(1),
      &               'generation:',LOFLK(1),
      &               'totalEng:', SNGL (TKEFLK(1)),
      &               'age:',AGESTK(1)
       WRITE (*,*)  'xyz : ',SNGL(XFLK(1)),SNGL(YFLK(1)), SNGL (ZFLK(1))
-C         WRITE (*,*) ( ILOFLK(I), SNGL (TKEFLK(I)+AM(ILOFLK(I))),
-C     &                    SNGL (WTFLK(I)), SNGL (XFLK (I)),
-C     &                    SNGL (YFLK (I)), SNGL (ZFLK (I)),
-C     &                    SNGL (TXFLK(I)), SNGL (TYFLK(I)),
-C     &                    SNGL (TZFLK(I)), I = 1, NPFLKA )
-      END IF
       WRITE (*,*) ''
 *  |
 *  +-------------------------------------------------------------------*
@@ -327,6 +260,14 @@ C     &                    SNGL (TZFLK(I)), I = 1, NPFLKA )
      &               'age:',ATRACK,NCASE,NCASES
       WRITE (*,*)  'xyz : ',SNGL (XSCO), SNGL (YSCO), SNGL (ZSCO)
       WRITE (*,*) ''
+         IF( JTRACK.EQ.1) THEN
+            IF(ETRACK.GT.AM(JTRACK)) THEN
+               PRINT *,"-------> Filling histo"
+               CALL treefill(JTRACK,
+     +                       (ETRACK-AM(JTRACK)),XSCO,YSCO,ZSCO,
+     +                       CXTRCK,CYTRCK,CZTRCK)
+            ENDIF
+         ENDIF
       RETURN
 *=== End of subrutine Mgdraw ==========================================*
       END
