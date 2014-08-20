@@ -34,6 +34,7 @@
 ********************************************************************
       LOGICAL LFIRST
       DATA LFIRST / .TRUE. /
+      DATA ISrsNum / 0 /
 *
       PARAMETER(NLINES = 1000000,MaxP=5)
       DIMENSION Enrgy(NLINES), Theta(NLINES), Phi(NLINES),
@@ -112,6 +113,7 @@
 * Npflka is the stack counter: of course any time source is called it
 * must be =0
       NPFLKA = NPFLKA + 1
+      ISrsNum=ISrsNum+1
 * Wt is the weight of the particle
       WTFLK  (NPFLKA) = 1 
       WEIPRI = WEIPRI + WTFLK (NPFLKA)
@@ -155,19 +157,20 @@
 * Group number for "low" energy neutrons, set to 0 anyway
       IGROUP (NPFLKA) = 0
 * Kinetic energy of the particle (GeV)
-      TKEFLK (NPFLKA) = Enrgy(NPFLKA)
+      TKEFLK (NPFLKA) = Enrgy(ISrsNum)
 * Particle momentum
       PMOFLK (NPFLKA) = SQRT ( TKEFLK (NPFLKA) * ( TKEFLK (NPFLKA)
      &                       + TWOTWO * AM (ILOFLK(NPFLKA)) ) )
 
 *==
 *  incident direction vector
-      ProVec(1) = SIND ( Theta(NPFLKA) ) * COSD ( Phi(NPFLKA) )
-      ProVec(2) = SIND ( Theta(NPFLKA) ) * SIND ( Phi(NPFLKA) )
-      ProVec(3) = COSD ( Theta(NPFLKA) )
+      ProVec(1) = SIN (Theta(ISrsNum)/PIPIPI)*COS ( Phi(ISrsNum)/PIPIPI)
+      ProVec(2) = SIN (Theta(ISrsNum)/PIPIPI)*SIN ( Phi(ISrsNum)/PIPIPI)
+      ProVec(3) = -COS (Theta(ISrsNum)/PIPIPI)
 
 *  total valid surface area
       TVaiS = 0
+      SecTag = 0
       DO I = 1,MaxP
          TotS=1
          DO J=1,3
@@ -186,10 +189,11 @@
             TVaiS = TVaiS + ValidS(I)
          END IF
       END DO
+      WRITE(*,*) 'TVaiS:' ,TVaiS
+      WRITE(*,*) 'ValidS:',(ValidS(I),I=1,MaxP)
 
 *  uniform sampling 
       SR = FLRNDM(DUMMY)
-      SecTag = 0
       SRFlag = 0
       DO I = 1,MaxP
          IF ( SecTag(I) .EQ. 1 ) THEN
@@ -202,16 +206,19 @@
 *  !!! initial position
                DIniPo=((SPoMin(I,1:3)+PRVec*SLen(I,1:3))+(-100*ProVec))
      &                *100
+               WRITE(*,*) ISrsNum,'if initial position : ',
+     &                    (DIniPo(J),j=1,3)
                EXIT 
             END IF
          END IF 
       END DO
+      WRITE(*,*) ISrsNum,'initial position : ',(DIniPo(J),j=1,3)
 
 
 * Cosines (tx,ty,tz)
       TXFLK  (NPFLKA) = ProVec(1)
       TYFLK  (NPFLKA) = ProVec(2)
-      TZFLK  (NPFLKA) = SQRT ( ONEONE - TXFLK (NPFLKA)**2
+      TZFLK  (NPFLKA) = -SQRT ( ONEONE - TXFLK (NPFLKA)**2
      &                       - TYFLK (NPFLKA)**2 ) !==ProVec(3)
 * Particle coordinates
       XFLK   (NPFLKA) = DIniPo(1)

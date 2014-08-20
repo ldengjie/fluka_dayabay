@@ -1,14 +1,15 @@
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 TITLE
 Dayabay EH1 muon simulation
+GLOBAL         1000.       -1.       0.0        1.        1.
 * Set the defaults for precision simulations
 DEFAULTS                                                              NEW-DEFA
-GLOBAL         1000.       -1.       0.0        3.        1.
 * Maxmium energy of muon is 8764.80967GeV
-BEAM      , -8888.0,  , , , , ,MUON+
+BEAM         -8888.0                                                  MUON+
 * call source.f
 SOURCE
-GEOBEGIN   ,  ,  ,  ,  ,  ,  , COMBNAME
-0,0,
+GEOBEGIN                                                              COMBNAME
+    0    0          
 * BlackHole,mandatory
 SPH blkHole    0.0 0.0 0.0 100000.0
 * Vacuum,beam from here
@@ -67,45 +68,46 @@ GDLS         5 +ad1rcc1 |+ad2rcc1
 IWS          5 +hall6 +h5xyp -pla5 -pla6 -pla7 -pla8 -ad2rcc6 -ad1rcc6
 END
 GEOEND
-STOP
+*STOP
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
+MATERIAL          6.   12.0107     2.265                              ICARBON
+LOW-MAT      ICARBON        6.       -3.      296.                    CARBON
+MATERIAL          1.    1.0079    0.0708                              IH
+LOW-MAT           IH        1.       -3.      296.                    HYDROGEN
+MATERIAL         64.              7.9004                              GADOLINI
+MATERIAL         25.                7.44                              MANGANES
+MATERIAL         24.                7.18                              CHROMIUM
+MATERIAL         20.                1.55                              CALCIUM1
+MATERIAL         16.                 2.0                              SULFUR
+MATERIAL         15.                 2.2                              PHOSPHO
+MATERIAL         28.               8.902                              NICKEL1
+MATERIAL         11.               0.971                              SODIUM1
+MATERIAL         12.                1.74                              MAGNESI1
+MATERIAL         13.              2.6989                              ALUMINU1
+MATERIAL         26.               7.874                              IRON1
+MATERIAL         19.               0.862                              POTASSIU
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 * 104 Air dry (near sea level)
 *
-MATERIAL  , , , 0.00120484,  , , ,AIR
-COMPOUND  , -0.0001248, CARBON, -0.755267, NITROGEN, -0.231781, OXYGEN, AIR
-COMPOUND  , -0.012827, ARGON,  , , , ,AIR
+MATERIAL                       .00120484                              AIR
+COMPOUND   -1.248E-4    CARBON -0.755267  NITROGEN -0.231781    OXYGENAIR
+COMPOUND   -0.012827     ARGON                                        AIR
 * 276 Water liquid H2O
 * Chemical Formula:  H -- O -- H
-MATERIAL  , , , 1.0,  , , ,WATER
-COMPOUND  , 2.0, HYDROGEN, 1.0, OXYGEN,  , ,WATER
-MATERIAL  , 6., 12.0107,  , , , ,ICARBON
-LOW-MAT   , ICARBON, 6., -3., 296.,  , ,CARBON
-MATERIAL  , 1., 1.0079,  , , , ,IH
-LOW-MAT   , IH, 1., -3., 296.,  , ,HYDROGEN
-* Gd isotopes
-*MATERIAL  , 64., 152., , , , 152., Gd152
-*MATERIAL  , 64., 154., , , , 154., Gd154
-*MATERIAL  , 64., 155., , , , 155., Gd155
-*MATERIAL  , 64., 156., , , , 156., Gd156
-*MATERIAL  , 64., 157., , , , 157., Gd157
-*MATERIAL  , 64., 158., , , , 158., Gd158
-*MATERIAL  , 64., 160., , , , 160., Gd160
-* Gd element
-*MATERIAL   ,  ,  ,  ,  ,  ,  , Gd
-*COMPOUND  , -0.002, Gd152, -0.022, Gd154, -0.149, Gd155, Gd
-*COMPOUND  , -0.206, Gd156, -0.157, Gd157, -0.247, Gd158, Gd
-*COMPOUND  , -0.217, Gd160,  , , , ,Gd
-MATERIAL  , 64., , 7.9004,  , , ,GADOLINI
+MATERIAL                             1.0                              WATER
+COMPOUND         2.0  HYDROGEN       1.0    OXYGEN                    WATER
 * GdLiquidScintillator
-MATERIAL  , , , 0.855,  , , ,GdLs
-COMPOUND  , -0.8535, ICARBON, -0.1288, IH, -0.0003, NITROGEN, GdLs
-COMPOUND  , -0.0164, OXYGEN, -0.001, GADOLINI,  , ,GdLs
+MATERIAL                           0.855                              GdLs
+COMPOUND     -0.8535   ICARBON   -0.1288        IH   -0.0003  NITROGENGdLs
+COMPOUND     -0.0164    OXYGEN    -0.001  GADOLINI                    GdLs
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 * Liquid Scintillator
-MATERIAL  , , , 0.855,  , , ,Ls
-COMPOUND  , -0.8544, ICARBON, -0.1289, IH, -0.0003, NITROGEN, Ls
-COMPOUND  , -0.0164, OXYGEN,  , , , ,Ls
+MATERIAL                           0.855                              Ls
+COMPOUND     -0.8544   ICARBON   -0.1289        IH   -0.0003  NITROGENLs
+COMPOUND     -0.0164    OXYGEN                                        Ls
 * Mineral Oil
-MATERIAL  , , , 0.838,  , , ,Mo
-COMPOUND  , -0.8514, ICARBON, -0.1486, IH,  , ,Mo
+MATERIAL                           0.838                              Mo
+COMPOUND     -0.8514   ICARBON   -0.1486        IH                    Mo
 * Plexiglas  Acrylic
 * Chemical             H   CH3
 * Formula              |   |
@@ -115,66 +117,55 @@ COMPOUND  , -0.8514, ICARBON, -0.1486, IH,  , ,Mo
 *  C  H  O                 ||        3
 *   5  8  2                O
 * Density variation is very narrow: 1.14-1.19 g/cm3.
-MATERIAL  , , , 1.18,  , , ,Acrylic
-COMPOUND  , 8.0, IH, 5.0, ICARBON, 2.0, OXYGEN, Acrylic
+MATERIAL                            1.18                              Acrylic
+COMPOUND         8.0        IH       5.0   ICARBON       2.0    OXYGENAcrylic
 * Steel
-MATERIAL  , , , 8.1,  , , ,Steel
-MATERIAL  , 26., 55.847,  , , , ,Fe
-MATERIAL  , 15., 30.9738,  , , , ,P
-MATERIAL  , 16., 32.066,  , , , ,S
-MATERIAL  , 24., 51.9961,  , , , ,Cr
-MATERIAL  , 25., 54.9381,  , , , ,Mn
-MATERIAL  , 28., 58.6934,  , , , ,Ni
-COMPOUND  , -0.70845, Fe, -0.0008, ICARBON, -0.02, Mn, Steel
-COMPOUND  , -0.00045, P, -0.0003, S, -0.01, SILICON, Steel
-COMPOUND  , -0.18, Cr, -0.08, Ni,  , ,Steel
-* Granite Rock
-MATERIAL  , , , 2.7,  , , ,Rock
-MATERIAL  , 11., 22.9898,  , , , ,Na
-MATERIAL  , 12., 24.3050,  , , , ,Mg
-MATERIAL  , 13., 26.9815,  , , , ,Al
-MATERIAL  , 19., 39.0983,  , , , ,K
-MATERIAL  , 20., 40.078,  , , , ,Ca
-COMPOUND  , -0.485, OXYGEN, -0.343, SILICON, -0.08, Al, Rock
-COMPOUND  , -0.02, Fe, -0.001, Mg, -0.002, Ca, Rock
-COMPOUND  , -0.024, Na, -0.045, K,  , ,Rock
+MATERIAL                             8.1                              Steel
+COMPOUND    -0.70845      IRON   -0.0008   ICARBON     -0.02  MANGANESSteel
+COMPOUND    -0.00045   PHOSPHO   -0.0003    SULFUR     -0.01   SILICONSteel
+COMPOUND       -0.18  CHROMIUM     -0.08    NICKEL                    Steel
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
-ASSIGNMA  , BLCKHOLE, BLKHOLE
-ASSIGNMA  , VACUUM, VACUUM
-ASSIGNMA  , AIR, AIR
-ASSIGNMA  , Rock, STONE
-ASSIGNMA  , WATER, OWS
-ASSIGNMA  , WATER, IWS
-ASSIGNMA  , Steel, SST
-ASSIGNMA  , Mo, MO
-ASSIGNMA  , Acrylic, OAT
-ASSIGNMA  , Ls, LS
-ASSIGNMA  , Acrylic, IAT
-ASSIGNMA  , GdLs, GDLS
+* Granite Rock
+MATERIAL                             2.7                              Rock
+COMPOUND      -0.485    OXYGEN    -0.343   SILICON     -0.08  ALUMINUMRock
+COMPOUND       -0.02      IRON    -0.001  MAGNESIU    -0.002   CALCIUMRock
+COMPOUND      -0.024    SODIUM    -0.045  POTASSIU                    Rock
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
+ASSIGNMA    BLCKHOLE   BLKHOLE
+ASSIGNMA      VACUUM    VACUUM
+ASSIGNMA         AIR       AIR
+ASSIGNMA        Rock     STONE
+ASSIGNMA       WATER       OWS
+ASSIGNMA       WATER       IWS
+ASSIGNMA       Steel       SST
+ASSIGNMA          Mo        MO
+ASSIGNMA     Acrylic       OAT
+ASSIGNMA          Ls        LS
+ASSIGNMA     Acrylic       IAT
+ASSIGNMA        GdLs      GDLS
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 * e+e- photo don't be transported,just deposited at the point of production
-EMF        ,  ,  ,  ,  ,  ,  , EMF-OFF
+EMF                                                                   EMF-OFF
 * muon NEW-DEFA : 10MeV ,change to 1KeV
-PART-THR  , -1E-06, MUON+, MUON-, , 0.0
+PART-THR      -1E-06     MUON+     MUON-                 0.0
 * proton NEW-DEFA : 10MeV ,change to 1KeV
-PART-THR  , -1E-06, PROTON, APROTON, , 0.0
-* Set the random number seed
-*RANDOMIZ  , 1.
+PART-THR      -1E-06    PROTON   APROTON                 0.0
 * muon photonuclear reaction:produce hadrons(n/p) istopes; maybe pi0 -> 2gamma
-MUPHOTON  , 1., , , HYDROGEN, @LASTMAT
+MUPHOTON          1.                      HYDROGEN  @LASTMAT
 * Direct electron pair production && Bremsstrahlung : activated by NEW-DEFA (2)(3) = 0,0.001 by default,override (2)(3) = -1,-1 here for continuous energy losses
-PAIRBREM  , 3., -1., -1., HYDROGEN, @LASTMAT
+PAIRBREM          3.       -1.       -1.  HYDROGEN  @LASTMAT
 * Delta ray: actived by NEW-DEFA defaultly,(1)=0.0001 ,override (1)=-1
-DELTARAY  , -1., , , HYDROGEN, @LASTMAT
+DELTARAY         -1.                      HYDROGEN  @LASTMAT
 * set 5 single scattering at boundary,be useful to classify which region fn prompt signal belong to,and not only for this.
-MULSOPT   , , , , 1., , 5., GLOBHAD
+MULSOPT                                         1.                    GLOBHAD
 * activate muon decay
-PHYSICS   , 1., , , MUON+, MUON-,  ,DECAYS
+PHYSICS           1.                         MUON+     MUON-          DECAYS
 * In order to achieve reasonable results for residual nuclei production the new evaporation module must be
 * activated and heavy fragment evaporation should also be activated,Coalescence should also be activated
-PHYSICS   , 3.,  , , , , ,EVAPORAT
-PHYSICS    ,  ,  ,  ,  ,  ,  , COALESCE
+PHYSICS           3.                                                  EVAPORAT
+PHYSICS                                                               COALESCE
 * use PEANUT model at all energies
-PHYSICS   , 1000., 1000., 1000., 1000., 1000., 1000., PEATHRES
+PHYSICS        1000.     1000.     1000.     1000.     1000.     1000.PEATHRES
 * need to link Dpmjet and Rqmd:
 * case 1:just link them
 * 1)link:$FLUPRO/flutil/ldpmqmd,generates "flukadpm3"
@@ -184,8 +175,14 @@ PHYSICS   , 1000., 1000., 1000., 1000., 1000., 1000., PEATHRES
 * 2)link:$FLUPRO/flutil/ldpmqmd yyy.o -o myyyy,generates"myyyy"
 * 3)run :$FLUPRO/flutil/rfluka -e myyyy -N0 -M5 example
 * here IONTRANS   need  to  think  about  isotopes  transport
-IONTRANS  , HEAVYION
-RADDECAY  , 2., -1., 1., 0.0, 9999999999, 1.
+IONTRANS    HEAVYION
+RADDECAY          2.       -1.        1.       0.09999999999        1.
+USRICALL
+USROCALL
+USERDUMP        100.                 0.0        1.                    hehe
+*USERDUMP      6.5E-3    1.5E-6                                        UDQUENCH
+* Set the random number seed
+RANDOMIZ          1.
 * Set the number of primary histories to be simulated in the run
-START     , 1000000.
+START          1000.
 STOP

@@ -2,4 +2,7 @@
 !*.flair
 !*.inp
 !*.f
+!*.cpp
+!*.h
+!*.csh
 !.gitignore
