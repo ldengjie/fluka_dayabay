@@ -55,7 +55,7 @@
          LFIRST = .FALSE.
          LUSSRC = .TRUE.
 *     *** User initialization ***
-        OPEN(UNIT=88,FILE="../mountain_DYB",STATUS="OLD")
+        OPEN(UNIT=88,FILE="../mountain.DYB",STATUS="OLD")
         DO I = 1, NLINES
            READ(88,*) Enrgy(I),Theta(I),Phi(I)
            IF(I .LE. 50) THEN
@@ -189,8 +189,8 @@
             TVaiS = TVaiS + ValidS(I)
          END IF
       END DO
-      WRITE(*,*) 'TVaiS:' ,TVaiS
-      WRITE(*,*) 'ValidS:',(ValidS(I),I=1,MaxP)
+C      WRITE(*,*) 'TVaiS:' ,TVaiS
+C      WRITE(*,*) 'ValidS:',(ValidS(I),I=1,MaxP)
 
 *  uniform sampling 
       SR = FLRNDM(DUMMY)
@@ -206,13 +206,13 @@
 *  !!! initial position
                DIniPo=((SPoMin(I,1:3)+PRVec*SLen(I,1:3))+(-100*ProVec))
      &                *100
-               WRITE(*,*) ISrsNum,'if initial position : ',
-     &                    (DIniPo(J),j=1,3)
+C               WRITE(*,*) ISrsNum,'if initial position : ',
+C     &                    (DIniPo(J),j=1,3)
                EXIT 
             END IF
          END IF 
       END DO
-      WRITE(*,*) ISrsNum,'initial position : ',(DIniPo(J),j=1,3)
+C      WRITE(*,*) ISrsNum,'initial position : ',(DIniPo(J),j=1,3)
 
 
 * Cosines (tx,ty,tz)
