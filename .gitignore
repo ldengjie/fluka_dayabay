@@ -6,3 +6,4 @@
 !*.h
 !*.csh
 !.gitignore
+!Makefile
