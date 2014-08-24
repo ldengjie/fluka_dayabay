@@ -24,7 +24,7 @@ C      WRITE(*,*) "Save into stack : ",KPART(NPSECN),'NP : ',NP
       if(KPART(NPSECN).eq.8 .and. NP.ne.1) then
          if(ISPUSR(3).eq.0) then
              NeuNum=NeuNum+1
-             WRITE(*,*) 'stuprf:NeuNum ',NeuNum
+C             WRITE(*,*) 'stuprf:NeuNum ',NeuNum
 *ISPUSR 1.reaction type 3 neutron num 4.isotopes num ?.gamma num 
 *SPAUSR 1.parent's age
              ISPARK(3,NPFLKA)=NeuNum !then ISPARK->ISPUSR

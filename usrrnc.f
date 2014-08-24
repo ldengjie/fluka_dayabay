@@ -7,6 +7,8 @@
       INCLUDE '(DBLPRC)'
       INCLUDE '(DIMPAR)'
       INCLUDE '(IOUNIT)'
+      INCLUDE '(IMGDRAW)'
+
 *
 *----------------------------------------------------------------------*
 *                                                                      *
@@ -29,20 +31,20 @@
       DOUBLE PRECISION HafTime
       EXTERNAL TIM1O2, BDNOPT
       CALL GEOR2N ( MREG,RGNAM,IERR1)
-      if(MREG.gt.4) WRITE(*,*) 'RGNAM',RGNAM
-      if(RGNAM.eq.'SST'.or.RGNAM.eq.'MO'.or.RGNAM.eq.'OAT'.or.
-     &RGNAM.eq.'LS'.or.RGNAM.eq.'IAT'.or.RGNAM.eq.'GDLS') then
+C      if(MREG.gt.4) WRITE(*,*) 'RGNAM',RGNAM
+C      if(RGNAM.eq.'SST'.or.RGNAM.eq.'MO'.or.RGNAM.eq.'OAT'.or.
+C     &RGNAM.eq.'LS'.or.RGNAM.eq.'IAT'.or.RGNAM.eq.'GDLS') then
         ISOMER = 0
         HafTime = TIM1O2 ( IA, IZ, KA, KZ, T12DAU, BRDAUG, ISOMER )
         if(HafTime>1E38) then
 C            WRITE(*,*) 'USRRNC():stable'
         else
 C            WRITE(*,*) 'USRRNC():',IZ,IA,X, Y, Z
-            call filliso(NCASE,IZ,IA,X, Y, Z)
-C            WRITE(*,*) 'FillIso : ',NCASE,IZ,IA,X, Y, Z
+            call filliso(EvtID,IZ,IA,X, Y, Z)
+C            WRITE(*,*) 'FillIso : ',EvtID,IZ,IA,X, Y, Z
             IsoNum=IsoNum+1
         endif
-      endif
+C      endif
       RETURN
 *=== End of subroutine Usrrnc =========================================*
       END

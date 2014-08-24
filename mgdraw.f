@@ -27,12 +27,16 @@
       INCLUDE '(SUMCOU)'
       INCLUDE '(TRACKR)'
       INCLUDE '(IMGDRAW)'
+
+      DIMENSION KA (4), KZ (4), BRDAUG (4), T12DAU (4)
+      DOUBLE PRECISION HafTime
 *
       DIMENSION DTQUEN ( MXTRCK, MAXQMG )
 *
       LOGICAL LFCOPE
       SAVE LFCOPE
       DATA LFCOPE / .FALSE. /
+      EXTERNAL TIM1O2, BDNOPT
 *----------------------------------------------------------------------*
 *                                                                      *
 *     Icode = 1: call from Kaskad                                      *
@@ -91,9 +95,9 @@ C            WRITE(*,*) 'DTRACK (I):',DTRACK (I)
                     ISpaMaTy=0
                 endif
                call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-     &DTRACK (I),ATRACK,JTRACK,IICode,ISpaMaId,ISpaMaTy)
-           write(*,*) 'fillspa',NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-     &DTRACK (I),ATRACK,JTRACK,IICode,ISpaMaId,ISpaMaTy
+     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy)
+C           write(*,*) 'fillspa',NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
+C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy
             endif
          ENDDO
       endif
@@ -238,12 +242,13 @@ C      WRITE (*,*) ''
      &MuInitTP(1),MuInitTP(2),MuInitTP(3),OwsLen,IwsLen,MoLen,
      &LsLen,GdLen,
      &NeuNum,IsoNum)
-      WRITE(*,*) 'fillmuon',NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
-     &MuInitP(2),MuInitP(3),
-     &MuInitTP(1),MuInitTP(2),MuInitTP(3),OwsLen,IwsLen,MoLen,
-     &LsLen,GdLen,
-     &NeuNum,IsoNum
+C      WRITE(*,*) 'fillmuon',NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
+C     &MuInitP(2),MuInitP(3),
+C     &MuInitTP(1),MuInitTP(2),MuInitTP(3),OwsLen,IwsLen,MoLen,
+C     &LsLen,GdLen,
+C     &NeuNum,IsoNum
 *neutron
+C      write(*,*) 'NeuNum',NeuNum
       if(NeuNum.gt.0) then
           DO I=1,NeuNum
         call fillneu(NCASE,NeuInitE(I),NeuInitT(I),
@@ -251,11 +256,11 @@ C      WRITE (*,*) ''
      &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
      &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
      &NeuMaID(I),NeuType(I))
-        WRITE(*,*) 'fillneu',NCASE,NeuInitE(I),NeuInitT(I),
-     &NeuInitP(I,1),NeuInitP(I,2),NeuInitP(I,3),
-     &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
-     &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
-     &NeuMaID(I),NeuType(I)
+C        WRITE(*,*) 'fillneu',NCASE,NeuInitE(I),NeuInitT(I),
+C     &NeuInitP(I,1),NeuInitP(I,2),NeuInitP(I,3),
+C     &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
+C     &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
+C     &NeuMaID(I),NeuType(I)
           enddo
       endif
 *
@@ -331,8 +336,8 @@ C      WRITE (*,*)  'eng : ',SNGL (RULL)
                 endif
                call fillspa(NCASE,XSCO,YSCO,ZSCO,
      &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy)
-               write(*,*) 'fillspa',NCASE,XSCO,YSCO,ZSCO,
-     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy
+C               write(*,*) 'fillspa',NCASE,XSCO,YSCO,ZSCO,
+C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy
       endif
 
 *  +-------------------------------------------------------------------*
@@ -380,6 +385,7 @@ C      WRITE (*,*) ''
       else
          MuCharge=-1
       endif
+      EvtID=NCASE
 
 *
 *  |
@@ -497,11 +503,37 @@ C      WRITE(*,*) ICESTR,IBESTR,'->',ICRES,IBRES,AMNRES,AMMRES
           DO IP = 1, NP 
              if(KPART(IP).eq.3) then
            call fillmi(NCASE,TKI(IP),AGESEC(IP)+ATRACK,XSCO,YSCO,ZSCO)
-      write(*,*) 'fillmi',NCASE,TKI(IP),AGESEC(IP)+ATRACK,XSCO,YSCO,ZSCO
+C      write(*,*) 'fillmi',NCASE,TKI(IP),AGESEC(IP)+ATRACK,XSCO,YSCO,ZSCO
              endif
           END DO 
           
       endif
+
+*isotope
+C      if(RGNAM.eq.'SST'.or.RGNAM.eq.'MO'.or.RGNAM.eq.'OAT'.or.
+C     &RGNAM.eq.'LS'.or.RGNAM.eq.'IAT'.or.RGNAM.eq.'GDLS') then
+C      DO IP = 1,NPHEAV 
+C        HafTime = TIM1O2 ( IBHEAV(KHEAVY(IP)), ICHEAV(KHEAVY(IP)),
+C     &                     KA, KZ, T12DAU, BRDAUG, 0)
+C        if(HafTime.lt.1E38) then
+C            call filliso(NCASE,ICHEAV(KHEAVY(IP)),IBHEAV(KHEAVY(IP)),
+C     &   XSCO,YSCO,ZSCO)
+C            write(*,*) 'filliso1',NCASE,ICHEAV(KHEAVY(IP)),
+C     &   IBHEAV(KHEAVY(IP)),XSCO,YSCO,ZSCO
+C            IsoNum=IsoNum+1
+C        endif
+C      ENDDO
+C      if(ICRES.gt.0) then
+C        HafTime = TIM1O2 ( IBRES,ICRES,
+C     &                     KA, KZ, T12DAU, BRDAUG, 0)
+C        if(HafTime.lt.1E38) then
+C            call filliso(NCASE,ICHEAV(KHEAVY(IP)),IBHEAV(KHEAVY(IP)),
+C     &   XSCO,YSCO,ZSCO)
+C            write(*,*) 'filliso2',NCASE,ICHEAV(KHEAVY(IP)),
+C     &   IBHEAV(KHEAVY(IP)),XSCO,YSCO,ZSCO
+C            IsoNum=IsoNum+1
+C        endif
+C      endif
 
       RETURN
 *=== End of subrutine Mgdraw ==========================================*

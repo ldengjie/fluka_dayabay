@@ -37,6 +37,7 @@ RESULTSSO       = Results.o ResultsDict.o
 RESULTSH        = Results.h ResultsDict.h
 
 OBJS            = usrini.o usrout.o mgdraw.o source.o stuprf.o usrrnc.o usrein.o
+#OBJS            = usrini.o usrout.o mgdraw.o source.o stuprf.o  usrein.o
 
 #------------------------------------------------------------------------------
 

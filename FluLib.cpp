@@ -19,24 +19,24 @@ static TFile *RootFile = 0;
 //static TTree *RootTree = 0;
 //
 static TTree *MuonTree = 0;
-double MuInitKineE,MuInitTime,MuInitLocalX,MuInitLocalY,MuInitLocalZ,MuInitLocalXCos,MuInitLocalYCos,MuInitLocalZCos,MuOwsTrackLength,MuIwsTrackLength,MuMoTrackLength,MuLsTrackLength,MuGdLsTrackLength;
-int    MuEventID,MuNumOfNeutron,MuNumOfIsotope,MuMuonCharge;
+Double_t MuInitKineE,MuInitTime,MuInitLocalX,MuInitLocalY,MuInitLocalZ,MuInitLocalXCos,MuInitLocalYCos,MuInitLocalZCos,MuOwsTrackLength,MuIwsTrackLength,MuMoTrackLength,MuLsTrackLength,MuGdLsTrackLength=0.;
+Int_t    MuEventID,MuNumOfNeutron,MuNumOfIsotope,MuMuonCharge=0;
 
 static TTree *IsoTree = 0;
-double IsoDecayLoaclX,IsoDecayLoaclY,IsoDecayLoaclZ;
-int    IsoEventID,IsoZ,IsoA;
+Double_t IsoDecayLoaclX,IsoDecayLoaclY,IsoDecayLoaclZ=0;
+Int_t    IsoEventID,IsoZ,IsoA=0;
 
 static TTree *MichelTree = 0;
-double MiLocalX,MiLocalY,MiLocalZ,MiKineE,MiMichelLocalTime;
-int    MiEventID; 
+Double_t MiLocalX,MiLocalY,MiLocalZ,MiKineE,MiMichelLocalTime=0;
+Int_t    MiEventID=0; 
 
 static TTree *SpaTree = 0;
-double Spax,Spay,Spaz,SpadE,Spatime,SpaquenchedDepE;
-int    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,SpaMotherInteractionType;
+Double_t Spax,Spay,Spaz,SpadE,Spatime,SpaquenchedDepE=0;
+Int_t    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,SpaMotherInteractionType=0;
 
 static TTree *NeuTree = 0;
-double NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum;
-int    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType;
+Double_t NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum=0;
+Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType=0;
 
 //static Results *TheResults = 0;
 
@@ -115,12 +115,6 @@ extern "C" {
   }
 }
 //
-//#ifndef WIN32
-//#define treefill treefill_
-//#else
-//#define treefill TREEFILL
-//#endif
-//
 //extern "C" {
 //void treefill(Int_t &ij, Double_t &econtr, Double_t &xa, Double_t &ya, Double_t &za,
 //Double_t &txx, Double_t &tyy, Double_t &tzz)
@@ -141,7 +135,7 @@ extern "C" {
 #define fillmuon FILLMUON
 #endif
 extern "C" {
-  void fillmuon( int m_MuEventID,int m_MuMuonCharge,double m_MuInitKineE,double m_MuInitTime,double m_MuInitLocalX,double m_MuInitLocalY,double m_MuInitLocalZ,double m_MuInitLocalXCos,double m_MuInitLocalYCos,double m_MuInitLocalZCos,double m_MuOwsTrackLength,double m_MuIwsTrackLength,double m_MuMoTrackLength,double m_MuLsTrackLength,double m_MuGdLsTrackLength,int m_MuNumOfNeutron,int m_MuNumOfIsotope)
+  void fillmuon( Int_t &m_MuEventID,Int_t &m_MuMuonCharge,Double_t &m_MuInitKineE,Double_t &m_MuInitTime,Double_t &m_MuInitLocalX,Double_t &m_MuInitLocalY,Double_t &m_MuInitLocalZ,Double_t &m_MuInitLocalXCos,Double_t &m_MuInitLocalYCos,Double_t &m_MuInitLocalZCos,Double_t &m_MuOwsTrackLength,Double_t &m_MuIwsTrackLength,Double_t &m_MuMoTrackLength,Double_t &m_MuLsTrackLength,Double_t &m_MuGdLsTrackLength,Int_t &m_MuNumOfNeutron,Int_t &m_MuNumOfIsotope)
   {
 	MuEventID         = m_MuEventID;
 	MuInitKineE       = m_MuInitKineE;
@@ -160,6 +154,7 @@ extern "C" {
 	MuNumOfNeutron    = m_MuNumOfNeutron;
 	MuNumOfIsotope    = m_MuNumOfIsotope;
 	MuMuonCharge      = m_MuMuonCharge     ;
+    //printf("MuEventID   %d \n",MuEventID);
     MuonTree->Fill();
   }
 }
@@ -170,7 +165,7 @@ extern "C" {
 #define filliso FILLISO
 #endif
 extern "C" {
-  void filliso(int m_IsoEventID,int m_IsoZ,int m_IsoA,double m_IsoDecayLoaclX,double m_IsoDecayLoaclY,double m_IsoDecayLoaclZ)
+    void filliso(Int_t &m_IsoEventID,Int_t &m_IsoZ,Int_t &m_IsoA,Double_t &m_IsoDecayLoaclX,Double_t &m_IsoDecayLoaclY,Double_t &m_IsoDecayLoaclZ)
   {
 	IsoDecayLoaclX = m_IsoDecayLoaclX;
 	IsoDecayLoaclY = m_IsoDecayLoaclY;
@@ -188,7 +183,7 @@ extern "C" {
 #define fillmi     FILLMI    
 #endif
 extern "C" {
-  void fillmi(int m_MiEventID,double m_MiKineE,double m_MiMichelLocalTime,double m_MiLocalX,double m_MiLocalY,double m_MiLocalZ)
+    void fillmi(Int_t &m_MiEventID,Double_t &m_MiKineE,Double_t &m_MiMichelLocalTime,Double_t &m_MiLocalX,Double_t &m_MiLocalY,Double_t &m_MiLocalZ)
   {
 	MiLocalX          = m_MiLocalX;          
 	MiLocalY          = m_MiLocalY;
@@ -206,7 +201,7 @@ extern "C" {
 #define fillspa FILLSPA
 #endif
 extern "C" {
-  void fillspa(double m_Spax,double m_Spay,double m_Spaz,double m_SpadE,double m_Spatime,double m_SpaquenchedDepE, int    m_SpaEventID,int m_SpaFlukaNumber,int m_SpaEnergyDepositedType,int m_SpaMotherFlukaNumber,int m_SpaMotherInteractionType)
+    void fillspa( Int_t    &m_SpaEventID,Double_t &m_Spax,Double_t &m_Spay,Double_t &m_Spaz,Double_t &m_SpadE,Double_t &m_Spatime,Double_t &m_SpaquenchedDepE,Int_t &m_SpaFlukaNumber,Int_t &m_SpaEnergyDepositedType,Int_t &m_SpaMotherFlukaNumber,Int_t &m_SpaMotherInteractionType)
   {
 	Spax                     = m_Spax;
 	Spay                     = m_Spay;
@@ -229,7 +224,7 @@ extern "C" {
 #define fillneu FILLNEU
 #endif
 extern "C" {
-  void fillneu(int    m_NeuEventID,double m_NeuInitKineE,double m_NeuInitTime,double m_NeuInitLocalX,double m_NeuInitLocalY,double m_NeuInitLocalZ,double m_NeuCapLocalX,double m_NeuCapLocalY,double m_NeuCapLocalZ,double m_NeuCapTime,double m_NeuCapGammaESum,int m_NeuCapGammaNum,int m_NeuMotherFlukaNumber,int m_NeuMotherInteractionType)
+    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType)
   {
 	NeuInitKineE              = m_NeuInitKineE;
 	NeuInitTime               = m_NeuInitTime;
@@ -245,7 +240,7 @@ extern "C" {
 	NeuCapGammaNum            = m_NeuCapGammaNum;
 	NeuMotherFlukaNumber      = m_NeuMotherFlukaNumber;
 	NeuMotherInteractionType  = m_NeuMotherInteractionType ;
-    MuonTree->Fill();
+    NeuTree->Fill();
   }
 }
 
