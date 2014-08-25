@@ -95,9 +95,9 @@ C            WRITE(*,*) 'DTRACK (I):',DTRACK (I)
                     ISpaMaTy=0
                 endif
                call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy)
+     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG)
 C           write(*,*) 'fillspa',NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy
+C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,NRGNAM
             endif
          ENDDO
       endif
@@ -106,10 +106,22 @@ C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy
 *  |  Quenching is activated
       IF ( LQEMGD ) THEN
          IF ( MTRACK .GT. 0 ) THEN
+            QenE=0
             RULLL  = ZERZER
             CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-C            WRITE (*,*) 'que : ',((SNGL(DTQUEN(I,JBK)),'||',I=1,MTRACK),
+C            write(*,*) DTRACK (1)
+C            WRITE (*,*)'que1 : ',((SNGL(DTQUEN(I,JBK)),'||',I=1,MTRACK),
 C     &                         JBK = 1, NQEMGD )
+
+            if(ZFRTTK.gt.1.5) then
+                JBK=2
+            else
+                JBK=1
+            endif
+            DO I=1,MTRACK
+                QenE=QenE+DTQUEN(I,JBK)
+            ENDDO
+C            write(*,*) 'que1 : ',JTRACK,ZFRTTK,JBK,DTRACK (1),'->',QenE
          END IF
       END IF
 C      WRITE (*,*) ''
@@ -255,7 +267,7 @@ C      write(*,*) 'NeuNum',NeuNum
      &NeuInitP(I,1),NeuInitP(I,2),NeuInitP(I,3),
      &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
      &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
-     &NeuMaID(I),NeuType(I))
+     &NeuMaID(I),NeuType(I),NeuCapVm(I))
 C        WRITE(*,*) 'fillneu',NCASE,NeuInitE(I),NeuInitT(I),
 C     &NeuInitP(I,1),NeuInitP(I,2),NeuInitP(I,3),
 C     &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
@@ -335,19 +347,28 @@ C      WRITE (*,*)  'eng : ',SNGL (RULL)
                     ISpaMaTy=0
                 endif
                call fillspa(NCASE,XSCO,YSCO,ZSCO,
-     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy)
+     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG)
 C               write(*,*) 'fillspa',NCASE,XSCO,YSCO,ZSCO,
-C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy
+C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,NRGNAM
       endif
 
 *  +-------------------------------------------------------------------*
 *  |  Quenching is activated : calculate quenching factor
 *  |  and store quenched energy in DTQUEN(1, jbk)
       IF ( LQEMGD ) THEN
+            QenE=0
          RULLL = RULL
          CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-C         WRITE (*,*) 'que : ',(SNGL (DTQUEN(1, JBK)),'||',JBK=1,NQEMGD)
+C            write(*,*) RULL
+C         WRITE (*,*) 'que2 : ',(SNGL (DTQUEN(1, JBK)),'||',JBK=1,NQEMGD)
       END IF
+            if(ZFRTTK.gt.1.5) then
+                JBK=2
+            else
+                JBK=1
+            endif
+            QenE=QenE+DTQUEN(1,JBK)
+C            write(*,*) 'que2 : ',JTRACK,ZFRTTK,JBK,RULL,'->',QenE
 C      WRITE (*,*) ''
 *  |  end quenching
 *  +-------------------------------------------------------------------*
@@ -480,30 +501,53 @@ C      WRITE(*,*) ICESTR,IBESTR,'->',ICRES,IBRES,AMNRES,AMMRES
 * SPAUSR 1.parent's age
       SPAUSR(1)=ATRACK
 
-      if(JTRACK.eq.8)then
-          IsCap=1
+C      if(JTRACK.eq.8)then
+      if(ICODE.eq.300)then
+          IsCap=0
           DO IP = 1, NP 
              if(KPART(IP).ne.7) then
-                IsCap=0
+                 IsCap=0
+                 exit
+             else
+                 IsCap=IsCap+1
              endif
           END DO 
-          if(IsCap.eq.1) then
+          if(IsCap.ge.1) then
+              NeuGamaE(ISPUSR(3))=0
+              NeuGamaN(ISPUSR(3))=0
              DO IP = 1, NP 
                  if(KPART(IP).eq.7) then
                      NeuGamaN(ISPUSR(3))=NeuGamaN(ISPUSR(3))+1
                      NeuGamaE(ISPUSR(3))=NeuGamaE(ISPUSR(3))+TKI (IP)
                      NeuCapT(ISPUSR(3))=AGESEC(IP)+ATRACK
                      NeuCapP(ISPUSR(3),1:3)=[XSCO,YSCO,ZSCO]
+                     NeuCapVm(ISPUSR(3))=MREG
                  endif
              END DO 
+C                WRITE(*,*) 'NeuGamaE',NeuGamaE(ISPUSR(3)),
+C     & 'NeuGamaN',NeuGamaN(ISPUSR(3)),'now is : ',ISPUSR(3),'at ',NCASE,
+C     & NRGNAM 
+C                WRITE(*,*) '*GENSTK'
+C                DO IP = 1, NP 
+C                    WRITE(*,*) '+>',KPART(IP),TKI (IP),AGESEC(IP)
+C                END DO 
+C                WRITE(*,*) '*FHEAVY'
+C                DO IP = 1,NPHEAV 
+C                    WRITE(*,*) '=>',KHEAVY(IP),TKHEAV(IP),AGHEAV(IP),
+C     &                         ICHEAV(KHEAVY(IP)),IBHEAV(KHEAVY(IP)),
+C     &                         ANHEAV(KHEAVY(IP))
+C                END DO 
+C                WRITE(*,*) '*RESNUC',ICESTR,IBESTR,'->',
+C     &ICRES,IBRES,AMNRES,AMMRES
+C                WRITE(*,*) ' '
           endif
       endif
 *Michel electron
       if(LTRACK.eq.1 .and. ICODE.eq.102) then
           DO IP = 1, NP 
              if(KPART(IP).eq.3) then
-           call fillmi(NCASE,TKI(IP),AGESEC(IP)+ATRACK,XSCO,YSCO,ZSCO)
-C      write(*,*) 'fillmi',NCASE,TKI(IP),AGESEC(IP)+ATRACK,XSCO,YSCO,ZSCO
+      call fillmi(NCASE,TKI(IP),AGESEC(IP)+ATRACK,XSCO,YSCO,ZSCO,MREG)
+C      write(*,*) 'fillmi',NCASE,TKI(IP),AGESEC(IP)+ATRACK,XSCO,YSCO,ZSCO,NRGNAM
              endif
           END DO 
           

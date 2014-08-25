@@ -24,19 +24,19 @@ Int_t    MuEventID,MuNumOfNeutron,MuNumOfIsotope,MuMuonCharge=0;
 
 static TTree *IsoTree = 0;
 Double_t IsoDecayLoaclX,IsoDecayLoaclY,IsoDecayLoaclZ=0;
-Int_t    IsoEventID,IsoZ,IsoA=0;
+Int_t    IsoEventID,IsoZ,IsoA,IsoDecayVolume=0;
 
 static TTree *MichelTree = 0;
 Double_t MiLocalX,MiLocalY,MiLocalZ,MiKineE,MiMichelLocalTime=0;
-Int_t    MiEventID=0; 
+Int_t    MiEventID,MiVolName=0; 
 
 static TTree *SpaTree = 0;
 Double_t Spax,Spay,Spaz,SpadE,Spatime,SpaquenchedDepE=0;
-Int_t    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,SpaMotherInteractionType=0;
+Int_t    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,SpaMotherInteractionType,SpaVolume=0;
 
 static TTree *NeuTree = 0;
 Double_t NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum=0;
-Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType=0;
+Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType,NeuCapVolumeName=0;
 
 //static Results *TheResults = 0;
 
@@ -71,6 +71,7 @@ extern "C" {
 	IsoTree->Branch("EventID",&IsoEventID,"EventID/I");
 	IsoTree->Branch("Z",&IsoZ,"Z/I");
 	IsoTree->Branch("A",&IsoA,"A/I");
+	IsoTree->Branch("DecayVolume",&IsoDecayVolume,"DecayVolume/I");
 	
 	MichelTree=new TTree("MichelElectron","MichelElectron");
 	MichelTree->Branch("LocalX",&MiLocalX,"LocalX/D");
@@ -79,6 +80,7 @@ extern "C" {
 	MichelTree->Branch("KineE",&MiKineE,"KineE/D");
 	MichelTree->Branch("MichelLocalTime",&MiMichelLocalTime,"MichelLocalTime/D");
 	MichelTree->Branch("EventID",&MiEventID,"EventID/I");
+	MichelTree->Branch("VolName",&MiVolName,"VolName/I");
 	
 	SpaTree=new TTree("Spallation","Spallation");
 	SpaTree->Branch("x",&Spax,"x/D");
@@ -92,6 +94,7 @@ extern "C" {
 	SpaTree->Branch("EnergyDepositedType",&SpaEnergyDepositedType,"EnergyDepositedType/I");
 	SpaTree->Branch("MotherFlukaNumber",&SpaMotherFlukaNumber,"MotherFlukaNumber/I");
 	SpaTree->Branch("MotherInteractionType",&SpaMotherInteractionType,"MotherInteractionType/I");
+	SpaTree->Branch("Volume",&SpaVolume,"Volume/I");
 
     //RootTree->Branch("Results", "Results", &TheResults, 64000, 1);
     NeuTree = new TTree("Neutron","Neutron");
@@ -109,6 +112,7 @@ extern "C" {
 	NeuTree->Branch("CapGammaNum",&NeuCapGammaNum,"CapGammaNum/I");
 	NeuTree->Branch("MotherFlukaNumber",&NeuMotherFlukaNumber,"MotherFlukaNumber/I");
 	NeuTree->Branch("MotherInteractionType",&NeuMotherInteractionType,"MotherInteractionType/I");
+	NeuTree->Branch("CapVolumeName",&NeuCapVolumeName,"CapVolumeName/I");
 
     printf("%f\n", pluto);
 
@@ -165,7 +169,7 @@ extern "C" {
 #define filliso FILLISO
 #endif
 extern "C" {
-    void filliso(Int_t &m_IsoEventID,Int_t &m_IsoZ,Int_t &m_IsoA,Double_t &m_IsoDecayLoaclX,Double_t &m_IsoDecayLoaclY,Double_t &m_IsoDecayLoaclZ)
+    void filliso(Int_t &m_IsoEventID,Int_t &m_IsoZ,Int_t &m_IsoA,Double_t &m_IsoDecayLoaclX,Double_t &m_IsoDecayLoaclY,Double_t &m_IsoDecayLoaclZ,Int_t &m_IsoDecayVolume)
   {
 	IsoDecayLoaclX = m_IsoDecayLoaclX;
 	IsoDecayLoaclY = m_IsoDecayLoaclY;
@@ -173,6 +177,7 @@ extern "C" {
 	IsoEventID     = m_IsoEventID;
 	IsoZ           = m_IsoZ;
 	IsoA           = m_IsoA;
+    IsoDecayVolume = m_IsoDecayVolume;
     IsoTree->Fill();
   }
 }
@@ -183,7 +188,7 @@ extern "C" {
 #define fillmi     FILLMI    
 #endif
 extern "C" {
-    void fillmi(Int_t &m_MiEventID,Double_t &m_MiKineE,Double_t &m_MiMichelLocalTime,Double_t &m_MiLocalX,Double_t &m_MiLocalY,Double_t &m_MiLocalZ)
+    void fillmi(Int_t &m_MiEventID,Double_t &m_MiKineE,Double_t &m_MiMichelLocalTime,Double_t &m_MiLocalX,Double_t &m_MiLocalY,Double_t &m_MiLocalZ,Int_t &m_MiVolName)
   {
 	MiLocalX          = m_MiLocalX;          
 	MiLocalY          = m_MiLocalY;
@@ -191,6 +196,7 @@ extern "C" {
 	MiKineE           = m_MiKineE;
 	MiMichelLocalTime = m_MiMichelLocalTime;
 	MiEventID         = m_MiEventID; 
+    MiVolName         = m_MiVolName;
     MichelTree->Fill();
   }
 }
@@ -201,7 +207,7 @@ extern "C" {
 #define fillspa FILLSPA
 #endif
 extern "C" {
-    void fillspa( Int_t    &m_SpaEventID,Double_t &m_Spax,Double_t &m_Spay,Double_t &m_Spaz,Double_t &m_SpadE,Double_t &m_Spatime,Double_t &m_SpaquenchedDepE,Int_t &m_SpaFlukaNumber,Int_t &m_SpaEnergyDepositedType,Int_t &m_SpaMotherFlukaNumber,Int_t &m_SpaMotherInteractionType)
+    void fillspa( Int_t    &m_SpaEventID,Double_t &m_Spax,Double_t &m_Spay,Double_t &m_Spaz,Double_t &m_SpadE,Double_t &m_Spatime,Double_t &m_SpaquenchedDepE,Int_t &m_SpaFlukaNumber,Int_t &m_SpaEnergyDepositedType,Int_t &m_SpaMotherFlukaNumber,Int_t &m_SpaMotherInteractionType,Int_t &m_SpaVolume)
   {
 	Spax                     = m_Spax;
 	Spay                     = m_Spay;
@@ -214,6 +220,7 @@ extern "C" {
 	SpaEnergyDepositedType   = m_SpaEnergyDepositedType;
 	SpaMotherFlukaNumber     = m_SpaMotherFlukaNumber;
 	SpaMotherInteractionType = m_SpaMotherInteractionType;
+    SpaVolume                = m_SpaVolume;
     SpaTree->Fill();
   }
 }
@@ -224,7 +231,7 @@ extern "C" {
 #define fillneu FILLNEU
 #endif
 extern "C" {
-    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType)
+    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName)
   {
 	NeuInitKineE              = m_NeuInitKineE;
 	NeuInitTime               = m_NeuInitTime;
@@ -240,6 +247,7 @@ extern "C" {
 	NeuCapGammaNum            = m_NeuCapGammaNum;
 	NeuMotherFlukaNumber      = m_NeuMotherFlukaNumber;
 	NeuMotherInteractionType  = m_NeuMotherInteractionType ;
+    NeuCapVolumeName          = m_NeuCapVolumeName;
     NeuTree->Fill();
   }
 }
