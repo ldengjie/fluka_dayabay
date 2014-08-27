@@ -89,3 +89,6 @@ rfluka -e DayabayMuon -N0 -M100 dayabay
 -N 起始run number
 -M 这次作业运行的run的个数
 
+5.其他
+    5.1 打开可视化(flair)
+    flair dayabay.inp

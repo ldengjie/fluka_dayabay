@@ -137,25 +137,11 @@ ASSIGNMA     Acrylic       IAT
 ASSIGNMA        GdLs      GDLS
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 * ************************************* e+e- gamma **************************************
-* e+e- photo don't be transported,just deposited at the point of production
-*EMF                                                                   EMF-OFF
-* Delta ray : actived by NEW-DEFA defaultly,(1)=0.0001 ,override (1)=-1
-*DELTARAY         -1.                     HYDROGENH  @LASTMAT
-*EMFCUT        -1E-06     1E-06       0.0 HYDROGENH  @LASTMAT          PROD-CUT
-*EMFCUT        -1E-06     1E-06       0.0    VACUUM  @LASTREG
-*DELTARAY       0.001       0.0       0.0 HYDROGENH  @LASTMAT
 * Turn on photonuclear reaction,maybe produce neutron
 PHOTONUC          1.                      HYDROGEN  @LASTMAT
 * Muon pair production by photon
 PHOTONUC       1111.                      HYDROGEN  @LASTMAT          MUMUPAIR
 * ************************************* muon ********************************************
-* Electron pair production && Bremsstrahlung : activated by NEW-DEFA (2)(3) = 0,0.001 by default,override (2)(3) = -1,-1 here for continuous energy losses
-*PAIRBREM          3.       -1.       -1. HYDROGENH  @LASTMAT
-*PAIRBREM          3.     0.001     0.001 HYDROGENH  @LASTMAT
-* muon NEW-DEFA : 10MeV ,change to 1KeV,also for hadrons
-*PART-THR      -1E-06    PROTON  @LASTPAR                 0.0
-* muon photonuclear reaction:produce hadrons(n/p) istopes; maybe pi0 -> 2gamma
-*MUPHOTON          1.                     HYDROGENH  @LASTMAT
 * activate muon decay,alse for leptons and hadrons
 PHYSICS           1.                                                  DECAYS
 * ************************************* isotopes ****************************************
