@@ -1,0 +1,33 @@
+*general
+      CHARACTER*16 FILNAM
+      CHARACTER*8 MRGNAM
+      CHARACTER*8 NRGNAM
+      INTEGER EvtID
+*muon
+      INTEGER NeuNum,IsoNum,MuCharge,IEMPTY
+      DOUBLE PRECISION :: MuInitT, MuInitE,OwsLen,
+     &IwsLen,LsLen,GdLen,MoLen
+      DOUBLE PRECISION,DIMENSION(3) ::MuInitP,MuInitTP
+      DOUBLE PRECISION,DIMENSION(2,3) ::
+     &OwsInitP,IwsInitP,MoInitP,LsInitP,GdInitP,
+     &OwsFinaP,IwsFinaP,MoFinaP,LsFinaP,GdFinaP
+
+*neutron
+      PARAMETER ( MxNeuN = 1000)
+      DOUBLE PRECISION,DIMENSION(MxNeuN) :: NeuInitT, NeuInitE
+      DOUBLE PRECISION,DIMENSION(MxNeuN) ::NeuGamaE,NeuCapT
+      DOUBLE PRECISION,DIMENSION(MxNeuN,3) ::NeuInitP,NeuCapP
+      INTEGER ,DIMENSION(MxNeuN)::NeuMaID,NeuType,NeuGamaN,NeuCapVm
+
+
+*save
+      COMMON / IMGDRAW / 
+     &          NeuNum,IsoNum,MuCharge,EvtID,
+     &          MuInitT, MuInitE,MuInitP,MuInitTP,
+     &          OwsInitP,IwsInitP,MoInitP,LsInitP,GdInitP,
+     &          OwsFinaP,IwsFinaP,MoFinaP,LsFinaP,GdFinaP,
+     &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
+     &          NeuCapT,NeuGamaE,
+     &          NeuMaID,NeuType,NeuCapVm,
+     &          FILNAM,MRGNAM,NRGNAM
+      SAVE / IMGDRAW /

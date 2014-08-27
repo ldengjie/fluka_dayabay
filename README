@@ -1,0 +1,91 @@
+大亚湾三个实验厅的产生子
+/junofs/users/luhq/juno/others/G4dyb_14_2_Mu/Generators/Muon/data
+在这个下面，你看到mountain_DYB,mountain_LA,mountain_Far
+是一个txt文件，里面每一行是一个muon信息，前三列为muon到实验厅时的能量，theta,phi，是你需要的信息;
+后面三列为muon穿山之前的地面上的能量，theta，phi，对我们没用。
+
+JUNO的muon在
+/junofs/users/luhq/juno/J13v1r1/Generator/Muon/data/mountain.juno
+和上面一样格式。
+
+mu+/mu- = 1.3:1
+
+材料：
+/junofs/users/luhq/juno/others/G4dyb_14_2_Mu/G4dyb/src/dywDetectorConstruction.cc
+
+
+/junofs/users/luhq/juno/J13v1r1/Simulation/DetSim/DetSim1/src/LSExpSteppingAction.cc
+255-270行，有两个birk常数值。
+
+
+几何对应编号:
+
+    1  BLKHOLE 
+    2  VACUUM  
+    3  AIR     
+    4  STONE   
+    5  OWS     
+    6  IWS     
+    7  SST     
+    8  MO      
+    9  OAT     
+   10  LS      
+   11  IAT     
+   12  GDLS    
+               
+1.配置路径,添加到~/.tcshrc ：
+
+#python, repo need version of python =2.7
+setenv LD_LIBRARY_PATH /afs/ihep.ac.cn/users/l/lidj/user/software/python2.7.8/lib:$LD_LIBRARY_PATH
+setenv PATH /afs/ihep.ac.cn/users/l/lidj/user/software/python2.7.8/bin:$PATH
+#g++ 4.9.0
+setenv PATH /afs/ihep.ac.cn/users/l/lidj/user/software/gcc-4.9.0/bin:$PATH
+setenv LD_LIBRARY_PATH /afs/ihep.ac.cn/users/l/lidj/user/software/gcc-4.9.0/lib:/afs/ihep.ac.cn/users/l/lidj/user/software/gcc-4.9.0/lib64:/afs/ihep.ac.cn/users/l/lidj/user/software/mpc-0.8.1/lib:/afs/ihep.ac.cn/users/l/lidj/user/software/gmp-4.3.2/lib:/afs/ihep.ac.cn/users/l/lidj/user/software/mpfr-2.4.2/lib:$LD_LIBRARY_PATH
+#fluka
+setenv FLUPRO /afs/ihep.ac.cn/users/l/lidj/user/software/fluka
+setenv FLUFOR gfortran
+#flair
+#tcl
+setenv LD_LIBRARY_PATH /afs/ihep.ac.cn/users/l/lidj/user/software/tcl/lib:$LD_LIBRARY_PATH
+setenv PATH /afs/ihep.ac.cn/users/l/lidj/user/software/tcl/bin:$PATH
+#tk
+setenv LD_LIBRARY_PATH /afs/ihep.ac.cn/users/l/lidj/user/software/tk/lib:$LD_LIBRARY_PATH
+setenv PATH /afs/ihep.ac.cn/users/l/lidj/user/software/tk/bin:$PATH
+#run flair
+setenv TK_LIBRARY /afs/ihep.ac.cn/users/l/lidj/user/software/tk/lib/tk8.4
+setenv PATH ${FLUPRO}:${FLUPRO}/flutil:/afs/ihep.ac.cn/users/l/lidj/user/software/flair/bin:$PATH
+setenv PYTHONPATH /afs/ihep.ac.cn/users/l/lidj/user/software/flair/flair/lib:$PYTHONPATH
+
+#dayabay muon simulation for using cfortran.h temporarily
+setenv LD_LIBRARY_PATH /afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay:$LD_LIBRARY_PATH
+
+2.修改代码
+    2.1 产生子
+    source.f
+    2.2 保存至于ROOT
+    FluLib.cpp
+    2.3 调用FluLib.cpp里的fill函数
+    mgdraw.f
+        2.3.1 SODRAW
+        初始化primary particle时触发,用来获取primary particle相关初始化信息
+        2.3.2 MGDRAW
+        每一个step和连续丢失能量时，触发一次
+        2.3.3 ENDRAW
+        在某个点丢失能量时，触发
+        2.3.4 USDRAW 
+        在某个点上reaction时，触发，可以查询到次级粒子
+        2.3.5 EEDRAW
+        整个事例模拟完成时，触发
+    2.4 heavy nuclear保存
+    usrrnc.f
+    heavy nuclear停止或decay或其他方式消失时，触发
+    2.5 其他
+
+3.编译
+make
+
+4.运行
+rfluka -e DayabayMuon -N0 -M100 dayabay
+-N 起始run number
+-M 这次作业运行的run的个数
+
