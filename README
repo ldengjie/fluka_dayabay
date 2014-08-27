@@ -60,7 +60,8 @@ setenv PATH ${FLUPRO}:${FLUPRO}/flutil:/afs/ihep.ac.cn/users/l/lidj/user/softwar
 setenv PYTHONPATH /afs/ihep.ac.cn/users/l/lidj/user/software/flair/flair/lib:$PYTHONPATH
 
 #dayabay muon simulation for using cfortran.h temporarily
-setenv LD_LIBRARY_PATH /afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay:$LD_LIBRARY_PATH
+setenv FLUWORK /afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay
+setenv LD_LIBRARY_PATH ${FLUWORK}:$LD_LIBRARY_PATH
 
 2.修改代码
     2.1 产生子
@@ -88,9 +89,14 @@ setenv LD_LIBRARY_PATH /afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay:
 make
 
 4.运行
-rfluka -e DayabayMuon -N0 -M100 dayabay
--N 起始run number
--M 这次作业运行的run的个数
+    4.1 运行单个任务
+    rfluka -e DayabayMuon -N0 -M100 dayabay
+    -N 起始run number
+    -M 这次作业运行的run的个数
+    4.2 提交作业至服务器
+    genJobs.csh，修改run个数和存放路径。
+    source genJobs.csh
+    source submit.csh
 
 5.其他
     5.1 打开可视化(flair)
