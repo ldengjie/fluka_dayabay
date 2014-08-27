@@ -55,7 +55,8 @@
          LFIRST = .FALSE.
          LUSSRC = .TRUE.
 *     *** User initialization ***
-        OPEN(UNIT=88,FILE="../mountain.DYB",STATUS="OLD")
+        OPEN(UNIT=88,FILE="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaW
+     &ork/dayabay/mountain.DYB",STATUS="OLD")
         DO I = 1, NLINES
            READ(88,*) Enrgy(I),Theta(I),Phi(I)
            IF(I .LE. 50) THEN
@@ -68,11 +69,14 @@
 C        OPoMin=[-11,-8,-8]
 C        OPoMax=[11,8,33]
 *rock+waterpool
-        OPoMin=[-11,-8,-8]
-        OPoMax=[11,8,8]
+C        OPoMin=[-11,-8,-8]
+C        OPoMax=[11,8,8]
 *waterpool
 C        OPoMin=[-8,-5,-5]
 C        OPoMax=[8,5,5]
+*AD
+        OPoMin=[-5.5,-2.5,-2.5]
+        OPoMax=[5.5,2.5,2.5]
 
         SVecN=0
         SLen=0
