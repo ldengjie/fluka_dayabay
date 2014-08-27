@@ -8,7 +8,7 @@ rfluka -e $FLUWORK/DayabayMuon -N0 -M10 dayabay
 foreach rootfile (`ls *.root`)
     @ newNam= $i + $startRunNum
     set newNamStr=`printf "fluSim_%06d.root\n" $newNam`
-    mv $rootfile ../$newNamStr
+    mv $rootfile ../../rootFile/$newNamStr
     @ i = $i + 1
 end
 
