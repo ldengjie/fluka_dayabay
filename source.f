@@ -64,8 +64,16 @@
         END DO
         CLOSE(88)
 * initial surface 
+*hall
+C        OPoMin=[-11,-8,-8]
+C        OPoMax=[11,8,33]
+*rock+waterpool
         OPoMin=[-11,-8,-8]
-        OPoMax=[11,8,33]
+        OPoMax=[11,8,8]
+*waterpool
+C        OPoMin=[-8,-5,-5]
+C        OPoMax=[8,5,5]
+
         SVecN=0
         SLen=0
 * 1st plane        

@@ -21,7 +21,7 @@ RPP hall2      -1068. 1610. -800. 700. 500. 3000.
 RPP hall3      1590. 2723. -800. 700. 500. 1210.
 RPP hall4      -1150. 1050. -2000. -790. 500. 900.
 RPP stone6     -750. -300. -1800. -800. 500. 900.
-RPP stone7     100. 350. -1800. -800. 500. 900.
+RPP stone7     100. 550. -1800. -800. 500. 900.
 RPP hall5      -800. 800. -500. 500. -500. 510.
 PLA pla1       -100. -100. 0.0 507. 500. 0.0
 PLA pla2       100. -100. 0.0 -507. 500. 0.0
@@ -166,11 +166,6 @@ PHYSICS                                                               COALESCE
 PHYSICS        1000.     1000.     1000.     1000.     1000.     1000.PEATHRES
 * activate radioactive decays
 RADDECAY          2.       -1.        1.       0.09999999999        1.
-* isotopes  transport , need to link Dpmjet and Rqmd:
-*IONTRANS    HEAVYION
-* ************************************* neutron *****************************************
-* neutrons transport with point-wise way
-*LOW-NEUT                                                           1.0
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 * *********************************** user routines *************************************
 USRICALL
@@ -181,5 +176,5 @@ USERWEIG                                                 1.0
 * Set the random number seed
 RANDOMIZ          1.
 * Set the number of primary histories to be simulated in the run
-START         20000.
+START        100000.
 STOP
