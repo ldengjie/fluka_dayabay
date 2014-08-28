@@ -11,8 +11,8 @@ set dataDir="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/test2
 
 mkdir -p $dataDir/jobScripts $dataDir/rootFile
 cd $dataDir/jobScripts
-if ( -e submit.csh ) then
-    rm submit.csh
+if ( -e ../submit.csh ) then
+    rm ../submit.csh
 endif
 
 @ dirNum = $totalRun / $runNumInDir
