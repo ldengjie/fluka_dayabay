@@ -3,6 +3,7 @@
       CHARACTER*8 MRGNAM
       CHARACTER*8 NRGNAM
       INTEGER EvtID
+      INTEGER NextSeedNum
 *muon
       INTEGER NeuNum,IsoNum,MuCharge,IEMPTY
       DOUBLE PRECISION :: MuInitT, MuInitE,OwsLen,
@@ -29,5 +30,5 @@
      &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
      &          NeuCapT,NeuGamaE,
      &          NeuMaID,NeuType,NeuCapVm,
-     &          FILNAM,MRGNAM,NRGNAM
+     &          FILNAM,MRGNAM,NRGNAM,NextSeedNum
       SAVE / IMGDRAW /

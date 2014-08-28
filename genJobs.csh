@@ -3,11 +3,11 @@
 #已经运行过的run个数
 @ existedRun=0
 #这次需要运行的run个数
-@ totalRun=1000
+@ totalRun=100
 #每个文件夹下run个数
 @ runNumInDir=20
 #脚本生成位置和数据存放位置
-set dataDir="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/test2"
+set dataDir="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/test3"
 
 mkdir -p $dataDir/jobScripts $dataDir/rootFile
 cd $dataDir/jobScripts
@@ -34,6 +34,7 @@ while( $i < $dirNum + $existedRun)
     sed -e "s#DATADIR#$wholePath#g"\
         -e "s#STARTRUNNUM#$dirNam#g"\
         -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_$nowJobNum.csh
+    echo 1 >NextSeedNum
     popd
     echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_$nowJobNum.csh >>../submit.csh
 end

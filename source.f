@@ -18,6 +18,7 @@
       INCLUDE '(PAPROP)'
       INCLUDE '(SOURCM)'
       INCLUDE '(SUMCOU)'
+      INCLUDE '(IMGDRAW)'
 ********************************************************************
 *
 *  SVecN  : normal vector of each surface
@@ -59,11 +60,14 @@
      &ork/dayabay/mountain.DYB",STATUS="OLD")
         DO I = 1, NLINES
            READ(88,*) Enrgy(I),Theta(I),Phi(I)
-           IF(I .LE. 50) THEN
-               WRITE(LUNOUT,*) I,Enrgy(I),Theta(I),Phi(I)
-           END IF
+C           IF(I .LE. 50) THEN
+C               WRITE(LUNOUT,*) I,Enrgy(I),Theta(I),Phi(I)
+C           END IF
         END DO
         CLOSE(88)
+        OPEN(UNIT=89,FILE="../NextSeedNum",STATUS="OLD")
+           READ(89,*) ISrsNum 
+        CLOSE(89)
 * initial surface 
 *hall
 C        OPoMin=[-11,-8,-8]
@@ -125,7 +129,13 @@ C        OPoMax=[8,5,5]
 * Npflka is the stack counter: of course any time source is called it
 * must be =0
       NPFLKA = NPFLKA + 1
-      ISrsNum=ISrsNum+1
+      if(ISrsNum.eq.0 .or. ISrsNum.gt.NLINES) then
+          ISrsNum=1
+      endif
+C           IF(ISrsNum .LT. NextSeedNum+50) THEN
+C               WRITE(*,*) ISrsNum,Enrgy(ISrsNum),
+C     &Theta(ISrsNum),Phi(ISrsNum)
+C           END IF
 * Wt is the weight of the particle
       WTFLK  (NPFLKA) = 1 
       WEIPRI = WEIPRI + WTFLK (NPFLKA)
@@ -265,6 +275,8 @@ C      WRITE(*,*) ISrsNum,'initial position : ',(DIniPo(J),j=1,3)
       NLATTC (NPFLKA) = MLATTC
       CMPATH (NPFLKA) = ZERZER
       CALL SOEVSV
+      ISrsNum=ISrsNum+1
+      NextSeedNum=ISrsNum
       RETURN
 *=== End of subroutine Source =========================================*
       END

@@ -8,6 +8,7 @@
       INCLUDE '(DBLPRC)'
       INCLUDE '(DIMPAR)'
       INCLUDE '(IOUNIT)'
+      INCLUDE '(IMGDRAW)'
 *
 *----------------------------------------------------------------------*
 *                                                                      *
@@ -31,6 +32,9 @@
       CHARACTER SDUM*8
 
       CALL FILECLOSE
+        OPEN(UNIT=90,FILE="../NextSeedNum",STATUS="REPLACE")
+           WRITE(90,*) NextSeedNum
+        CLOSE(90)
 *
       RETURN
 *=== End of subroutine Usrout =========================================*
