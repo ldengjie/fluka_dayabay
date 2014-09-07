@@ -3,6 +3,7 @@
       CHARACTER*8 MRGNAM
       CHARACTER*8 NRGNAM
       INTEGER EvtID
+      INTEGER NowVol
       INTEGER NextSeedNum
 *muon
       INTEGER NeuNum,IsoNum,MuCharge,IEMPTY
@@ -14,11 +15,13 @@
      &OwsFinaP,IwsFinaP,MoFinaP,LsFinaP,GdFinaP
 
 *neutron
-      PARAMETER ( MxNeuN = 1000)
+      PARAMETER ( MxNeuN = 10000)
       DOUBLE PRECISION,DIMENSION(MxNeuN) :: NeuInitT, NeuInitE
       DOUBLE PRECISION,DIMENSION(MxNeuN) ::NeuGamaE,NeuCapT
       DOUBLE PRECISION,DIMENSION(MxNeuN,3) ::NeuInitP,NeuCapP
-      INTEGER ,DIMENSION(MxNeuN)::NeuMaID,NeuType,NeuGamaN,NeuCapVm
+      INTEGER ,DIMENSION(MxNeuN)::NeuMaID,NeuType,NeuGamaN,
+     &NeuCapVm,NeuCapTn
+      DOUBLE PRECISION :: MaxNeuE
 
 
 *save
@@ -29,6 +32,6 @@
      &          OwsFinaP,IwsFinaP,MoFinaP,LsFinaP,GdFinaP,
      &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
      &          NeuCapT,NeuGamaE,
-     &          NeuMaID,NeuType,NeuCapVm,
-     &          FILNAM,MRGNAM,NRGNAM,NextSeedNum
+     &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,
+     &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol
       SAVE / IMGDRAW /

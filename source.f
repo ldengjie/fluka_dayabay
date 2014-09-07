@@ -70,8 +70,8 @@ C           END IF
         CLOSE(89)
 * initial surface 
 *hall
-C        OPoMin=[-11,-8,-8]
-C        OPoMax=[11,8,33]
+        OPoMin=[-11,-8,-8]
+        OPoMax=[11,8,33]
 *rock+waterpool
 C        OPoMin=[-11,-8,-8]
 C        OPoMax=[11,8,8]
@@ -79,8 +79,8 @@ C        OPoMax=[11,8,8]
 C        OPoMin=[-8,-5,-5]
 C        OPoMax=[8,5,5]
 *AD
-        OPoMin=[-5.5,-2.5,-2.5]
-        OPoMax=[5.5,2.5,2.5]
+C        OPoMin=[-5.5,-2.5,-2.5]
+C        OPoMax=[5.5,2.5,2.5]
 
         SVecN=0
         SLen=0

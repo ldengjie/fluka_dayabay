@@ -20,22 +20,38 @@
          ISPARK (ISPR,NPFLKA) = ISPUSR (ISPR)
   200 CONTINUE
 C      WRITE(*,*) "Save into stack : ",KPART(NPSECN),'NP : ',NP
+*save initial volume
+         ISPARK (5,NPFLKA) = MREG
 *neutron
-      if(KPART(NPSECN).eq.8 .and. NP.ne.1) then
-         if(ISPUSR(3).eq.0) then
-             NeuNum=NeuNum+1
-C             WRITE(*,*) 'stuprf:NeuNum ',NeuNum
-*ISPUSR 1.reaction type 3 neutron num 4.isotopes num ?.gamma num 
+      if(KPART(NPSECN).EQ.8) then
+       if(ISPUSR(2).eq.8) then
+          if(ISPUSR(1).eq.101) then
+             if(TKI (NPSECN).ne.MaxNeuE) then
+C                 WRITE(*,*) 'TKI (NPSECN):MaxNeuE',TKI(NPSECN),MaxNeuE
+                NeuNum=NeuNum+1
+*ISPUSR 1.reaction type 2.parent'd id 3.neutron num 4.isotopes num ?.gamma num 
 *SPAUSR 1.parent's age
-             ISPARK(3,NPFLKA)=NeuNum !then ISPARK->ISPUSR
-             NeuMaID(NeuNum)=IJ
-             NeuType(NeuNum)=ISPUSR(1)
-             NeuInitT(NeuNum)=AGESEC(NPSECN)+SPAUSR(1)
-             NeuInitE(NeuNum)=TKI (NPSECN)
-             NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
-         end if
-
-      end if
+                ISPARK(3,NPFLKA)=NeuNum !then ISPARK->ISPUSR
+                NeuMaID(NeuNum)=IJ
+                NeuType(NeuNum)=ISPUSR(1)
+                NeuInitT(NeuNum)=AGESEC(NPSECN)+SPAUSR(1)
+                NeuInitE(NeuNum)=0
+                NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
+C                WRITE(*,*) 'Find a secondary neutron'
+             endif
+          endif
+       else
+         NeuNum=NeuNum+1
+         ISPARK(3,NPFLKA)=NeuNum !then ISPARK->ISPUSR
+         NeuMaID(NeuNum)=IJ
+         NeuType(NeuNum)=ISPUSR(1)
+         NeuInitT(NeuNum)=AGESEC(NPSECN)+SPAUSR(1)
+C         NeuInitE(NeuNum)=TKI (NPSECN)
+         NeuInitE(NeuNum)=0
+         NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
+C                WRITE(*,*) 'Find a primary neutron'
+       endif
+      endif
 *  Increment the track number and put it into the last flag:
       IF ( NPSECN .GT. NPPRMR ) THEN
          IF ( NTRCKS .EQ. 2000000000 ) NTRCKS = -2000000000

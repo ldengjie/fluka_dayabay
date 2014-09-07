@@ -54,6 +54,8 @@
  52      CONTINUE
          LOUEMF (NPNW) = LLOUSE
  500  CONTINUE
+*save initial volume
+            IESPAK (5,NPNW) = NowVol
 *  Increment the track number and put it into the last flag:
       NEXTRK = 0
       DO 100 KP = NPSTRT, NPEMF

@@ -32,11 +32,11 @@ Int_t    MiEventID,MiVolName=0;
 
 static TTree *SpaTree = 0;
 Double_t Spax,Spay,Spaz,SpadE,Spatime,SpaquenchedDepE=0;
-Int_t    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,SpaMotherInteractionType,SpaVolume=0;
+Int_t    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,SpaMotherInteractionType,SpaVolume,SpaInitVolume=0;
 
 static TTree *NeuTree = 0;
 Double_t NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum=0;
-Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType,NeuCapVolumeName=0;
+Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType,NeuCapVolumeName,NeuCapTargetName=0;
 
 //static Results *TheResults = 0;
 
@@ -95,6 +95,7 @@ extern "C" {
 	SpaTree->Branch("MotherFlukaNumber",&SpaMotherFlukaNumber,"MotherFlukaNumber/I");
 	SpaTree->Branch("MotherInteractionType",&SpaMotherInteractionType,"MotherInteractionType/I");
 	SpaTree->Branch("Volume",&SpaVolume,"Volume/I");
+	SpaTree->Branch("InitVolume",&SpaInitVolume,"InitVolume/I");
 
     //RootTree->Branch("Results", "Results", &TheResults, 64000, 1);
     NeuTree = new TTree("Neutron","Neutron");
@@ -113,6 +114,7 @@ extern "C" {
 	NeuTree->Branch("MotherFlukaNumber",&NeuMotherFlukaNumber,"MotherFlukaNumber/I");
 	NeuTree->Branch("MotherInteractionType",&NeuMotherInteractionType,"MotherInteractionType/I");
 	NeuTree->Branch("CapVolumeName",&NeuCapVolumeName,"CapVolumeName/I");
+	NeuTree->Branch("CapTargetName",&NeuCapTargetName,"CapTargetName/I");
 
     printf("%f\n", pluto);
 
@@ -207,7 +209,7 @@ extern "C" {
 #define fillspa FILLSPA
 #endif
 extern "C" {
-    void fillspa( Int_t    &m_SpaEventID,Double_t &m_Spax,Double_t &m_Spay,Double_t &m_Spaz,Double_t &m_SpadE,Double_t &m_Spatime,Double_t &m_SpaquenchedDepE,Int_t &m_SpaFlukaNumber,Int_t &m_SpaEnergyDepositedType,Int_t &m_SpaMotherFlukaNumber,Int_t &m_SpaMotherInteractionType,Int_t &m_SpaVolume)
+    void fillspa( Int_t    &m_SpaEventID,Double_t &m_Spax,Double_t &m_Spay,Double_t &m_Spaz,Double_t &m_SpadE,Double_t &m_Spatime,Double_t &m_SpaquenchedDepE,Int_t &m_SpaFlukaNumber,Int_t &m_SpaEnergyDepositedType,Int_t &m_SpaMotherFlukaNumber,Int_t &m_SpaMotherInteractionType,Int_t &m_SpaVolume,Int_t &m_SpaInitVolume)
   {
 	Spax                     = m_Spax;
 	Spay                     = m_Spay;
@@ -221,6 +223,7 @@ extern "C" {
 	SpaMotherFlukaNumber     = m_SpaMotherFlukaNumber;
 	SpaMotherInteractionType = m_SpaMotherInteractionType;
     SpaVolume                = m_SpaVolume;
+    SpaInitVolume                = m_SpaInitVolume;
     SpaTree->Fill();
   }
 }
@@ -231,7 +234,7 @@ extern "C" {
 #define fillneu FILLNEU
 #endif
 extern "C" {
-    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName)
+    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName,Int_t &m_NeuCapTargetName)
   {
 	NeuInitKineE              = m_NeuInitKineE;
 	NeuInitTime               = m_NeuInitTime;
@@ -248,6 +251,7 @@ extern "C" {
 	NeuMotherFlukaNumber      = m_NeuMotherFlukaNumber;
 	NeuMotherInteractionType  = m_NeuMotherInteractionType ;
     NeuCapVolumeName          = m_NeuCapVolumeName;
+    NeuCapTargetName          = m_NeuCapTargetName;
     NeuTree->Fill();
   }
 }

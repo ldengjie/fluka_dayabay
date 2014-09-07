@@ -63,8 +63,13 @@ C     &NeuMaID,NeuType=0
       NeuGamaE=0
       NeuMaID=0 
       NeuType=0
+      NeuCapVm=0
+      NeuCapTn=0
+      MaxNeuE=0
+
 *general
       NRGNAM='VACUUM'
+      NowVol=2
 
       RETURN
 *=== End of subroutine Usrein =========================================*
