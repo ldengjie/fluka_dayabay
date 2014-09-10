@@ -17,6 +17,7 @@ mu+/mu- = 1.3:1
 /junofs/users/luhq/juno/J13v1r1/Simulation/DetSim/DetSim1/src/LSExpSteppingAction.cc
 255-270行，有两个birk常数值。
 
+***************************************************************************
 
 几何对应编号:
 
@@ -84,6 +85,8 @@ Type of Neutron (USDRAW)
     ICODE = 40x: call from subroutine KASHEA (heavy ion interactions)
     = 400: delta ray generation secondaries
                
+***************************************************************************
+
 1.配置路径,添加到~/.tcshrc ：
 
 #python, repo need version of python =2.7
@@ -152,3 +155,31 @@ make
 5.其他
     5.1 打开可视化(flair)
     flair dayabay.inp
+
+***************************************************************************
+
+批量提交作业：
+genJobs.csh：
+    #已经运行过的run个数 
+    4 @ existedRun=15000
+    #这次需要运行的run个数
+    6 @ totalRun=6664
+    #每个文件夹下run个数
+    8 @ runNumInDir=4
+    #脚本生成位置和数据存放位置
+    10 set dataDir="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/PART5"
+
+    24 @ newseed = 1234898764 + $i * $runNumInDir
+    31 sed -e "s#1234898764#${newseed}#g" $FLUWORK/dayabay.inp>dayabay.inp
+    39 echo 600001 >NextSeedNum
+    41 echo qsub -q dybshortq jobScripts/$dirNamStr/fluka_$nowJobNum.csh >>../submit.csh
+
+dayabay.inp:
+    * Set the random number seed
+    165 RANDOMIZ          1.1234898764
+    * Set the number of primary histories to be simulated in the run
+    167 START        100000.
+
+tip:
+    1. L24 L31 L165 保持一致 1234898764,改变第5位+1
+    2. L167,100000最佳，30分钟左右一个run
