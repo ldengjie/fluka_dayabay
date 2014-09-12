@@ -1,13 +1,13 @@
 #/bin/tcsh
 
 #已经运行过的run个数
-@ existedRun=15000
+@ existedRun=35660
 #这次需要运行的run个数
-@ totalRun=6664
+@ totalRun=4000
 #每个文件夹下run个数
-@ runNumInDir=4
+@ runNumInDir=20
 #脚本生成位置和数据存放位置
-set dataDir="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/PART5"
+set dataDir="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data0/PART8"
 
 mkdir -p $dataDir/jobScripts $dataDir/rootFile
 cd $dataDir/jobScripts
@@ -21,14 +21,14 @@ endif
 @ newseed=0
 #while( $i < $dirNum + $existedRun)
 while( $i < $dirNum)
-    @ newseed = 1234898764 + $i * $runNumInDir 
+    @ newseed = 1235198764 + $i * $runNumInDir 
     echo $newseed
     @ dirNam = $i * $runNumInDir + 1 + $existedRun
     set dirNamStr = `printf "%06d\n" $dirNam` 
     echo $dirNamStr
     mkdir -p $dirNamStr
     pushd $dirNamStr 
-    sed -e "s#1234898764#${newseed}#g" $FLUWORK/dayabay.inp>dayabay.inp
+    sed -e "s#1235198764#${newseed}#g" $FLUWORK/dayabay.inp>dayabay.inp
     set nowDir=`pwd`
     @ i = $i + 1
     set nowJobNum=`printf "%04d\n" $i`
@@ -36,8 +36,8 @@ while( $i < $dirNum)
     sed -e "s#DATADIR#$wholePath#g"\
         -e "s#STARTRUNNUM#$dirNam#g"\
         -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_$nowJobNum.csh
-    echo 600001 >NextSeedNum
+    echo 1 >NextSeedNum
     popd
-    echo qsub -q dybshortq jobScripts/$dirNamStr/fluka_$nowJobNum.csh >>../submit.csh
+    echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_$nowJobNum.csh >>../submit.csh
 end
 cd $dataDir
