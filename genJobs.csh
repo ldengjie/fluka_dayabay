@@ -45,6 +45,6 @@ while( $i < $dirNum)
         -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_$nowJobNum.csh
     echo 1 >NextSeedNum
     popd
-    echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_$nowJobNum.csh >>../submit.csh.$j
+    echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_dayabay_$nowJobNum.csh >>../submit.csh.$j
 end
 cd $dataDir
