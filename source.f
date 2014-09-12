@@ -1,4 +1,4 @@
-*=== Source of muons at dayabay     
+*=== Source of muons at LA     
 *=== Auther  : lidengjie@ihep.ac.cn 
 *=== Created : Thursday Aug 14 2014 
 *
@@ -57,7 +57,7 @@
          LUSSRC = .TRUE.
 *     *** User initialization ***
         OPEN(UNIT=88,FILE="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaW
-     &ork/dayabay/mountain.DYB",STATUS="OLD")
+     &ork/LA/mountain.LA",STATUS="OLD")
         DO I = 1, NLINES
            READ(88,*) Enrgy(I),Theta(I),Phi(I)
 C           IF(I .LE. 50) THEN
