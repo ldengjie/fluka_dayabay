@@ -1,0 +1,2 @@
+setenv FLUWORK `pwd` 
+setenv LD_LIBRARY_PATH ${FLUWORK}:$LD_LIBRARY_PATH

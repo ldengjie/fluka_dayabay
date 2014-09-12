@@ -7,7 +7,9 @@
 #每个文件夹下run个数
 @ runNumInDir=20
 #脚本生成位置和数据存放位置
-set dataDir="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data0/PART8"
+
+set FLUWORK `pwd` 
+set dataDir=$FLUWORK/data/PART8
 
 mkdir -p $dataDir/jobScripts $dataDir/rootFile
 cd $dataDir/jobScripts
@@ -34,6 +36,7 @@ while( $i < $dirNum)
     set nowJobNum=`printf "%04d\n" $i`
     set wholePath=$nowDir
     sed -e "s#DATADIR#$wholePath#g"\
+    sed -e "s#WORKPATH#$FLUWORK#g"\
         -e "s#STARTRUNNUM#$dirNam#g"\
         -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_$nowJobNum.csh
     echo 1 >NextSeedNum

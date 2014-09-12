@@ -1,4 +1,8 @@
 #/bin/tcsh
+
+setenv FLUWORK WORKPATH
+setenv LD_LIBRARY_PATH ${FLUWORK}:$LD_LIBRARY_PATH
+
 cd DATADIR
 rfluka -e $FLUWORK/DayabayMuon -N0 -M10 dayabay 
 
