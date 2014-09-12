@@ -42,7 +42,7 @@ while( $i < $dirNum)
     sed -e "s#DATADIR#$wholePath#g"\
         -e "s#WORKPATH#$FLUWORK#g"\
         -e "s#STARTRUNNUM#$dirNam#g"\
-        -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_$nowJobNum.csh
+        -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_LA_$nowJobNum.csh
     echo 600001 >NextSeedNum
     popd
     echo qsub -q dybshortq jobScripts/$dirNamStr/fluka_LA_$nowJobNum.csh >>../submit.csh.$j
