@@ -7,9 +7,7 @@ DEFAULTS                                                              PRECISIO
 * ************************************* sources *****************************************
 * Maxmium energy of muon is 8764.80967GeV
 BEAM         -8888.0                                                  MUON+
-*BEAM          -0.025                                                  NEUTRON
-*BEAMPOS         300.       0.0      150.                              NEGATIVE
-*call source.f
+* call source.f
 SOURCE
 * ************************************* geometry ****************************************
 GEOBEGIN                                                              COMBNAME
@@ -20,7 +18,7 @@ SPH blkHole    0.0 0.0 0.0 100000.0
 SPH vacuum     0.0 0.0 0.0 30000.0
 RPP hall1      -2800. -1066. -800. 700. 500. 900.
 RPP hall2      -1068. 1610. -800. 700. 500. 3000.
-RPP hall3      1590. 2723. -800. 700. 500. 1210.
+RPP hall3      1590. 2230. -800. 700. 500. 3000.
 RPP hall4      -1150. 1050. -2000. -790. 500. 900.
 RPP stone6     -750. -300. -1800. -800. 500. 900.
 RPP stone7     100. 550. -1800. -800. 500. 900.
