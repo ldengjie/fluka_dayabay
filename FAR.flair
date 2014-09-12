@@ -1,8 +1,8 @@
 #!/afs/ihep.ac.cn/users/l/lidj/user/software/flair/flair/flair
 # FLUKA Project file
 Version: 2
-Title: Dayabay EH1 muon simulation
-Input: dayabay.inp
+Title: Far EH1 muon simulation
+Input: FAR.inp
 Tabs: 0.1 0.32 0.56 0.81 1.0
 Page: Input
 DefMain: True
