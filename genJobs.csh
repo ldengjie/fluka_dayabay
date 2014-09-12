@@ -11,18 +11,22 @@
 set FLUWORK=`pwd` 
 set dataDir=$FLUWORK/data/PART8
 
+if ( -e $dataDir ) then
+    rm $dataDir/* -rf
+    echo clean $dataDir
+endif
+
 mkdir -p $dataDir/jobScripts $dataDir/rootFile
 cd $dataDir/jobScripts
-if ( -e ../submit.csh ) then
-    rm ../submit.csh
-endif
 
 @ dirNum = $totalRun / $runNumInDir
 #@ i=$existedRun
 @ i=0
 @ newseed=0
+@ j=0
 #while( $i < $dirNum + $existedRun)
 while( $i < $dirNum)
+    @ j = $i / 1000
     @ newseed = 1235198764 + $i * $runNumInDir 
     echo $newseed
     @ dirNam = $i * $runNumInDir + 1 + $existedRun
@@ -41,6 +45,6 @@ while( $i < $dirNum)
         -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_$nowJobNum.csh
     echo 1 >NextSeedNum
     popd
-    echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_$nowJobNum.csh >>../submit.csh
+    echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_dayabay_$nowJobNum.csh >>../submit.csh.$j
 end
 cd $dataDir
