@@ -41,7 +41,7 @@ OBJS            = usrini.o usrout.o mgdraw.o source.o stuprf.o stupre.o usrrnc.o
 
 #------------------------------------------------------------------------------
 
-all:            libResults.so FluLib.o DayabayMuon
+all:            libResults.so FluLib.o JunoMuon
 
 libResults.so:  $(RESULTSSO) $(RESULTSH)
 		$(LD) $(SOFLAGS) $(LDFLAGS) $(RESULTSSO) $(GLIBS) -o libResults.so
@@ -58,12 +58,12 @@ FluLib.o:   Results.h
 .f.$(ObjSuf):
 	       $(FLUPRO)/flutil/fff $?
 
-DayabayMuon:     $(OBJS) FluLib.$(ObjSuf) libResults.so
+JunoMuon:     $(OBJS) FluLib.$(ObjSuf) libResults.so
 	       $(FLUPRO)/flutil/ldpmqmd -o $@ -m fluka $?
 
 
 clean:
-		@rm -f DayabayMuon Results.o ResultsDict.o FluLib.o core *.so ResultsDict.cpp $(OBJS) *.FOR
+		@rm -f JunoMuon Results.o ResultsDict.o FluLib.o core *.so ResultsDict.cpp $(OBJS) *.FOR
 
 .$(SrcSuf).$(ObjSuf):
 	$(CXX) $(CXXFLAGS) -c $<

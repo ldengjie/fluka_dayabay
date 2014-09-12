@@ -30,7 +30,7 @@ while( $i < $dirNum)
     echo $dirNamStr
     mkdir -p $dirNamStr
     pushd $dirNamStr 
-    sed -e "s#1235198764#${newseed}#g" $FLUWORK/dayabay.inp>dayabay.inp
+    sed -e "s#1235198764#${newseed}#g" $FLUWORK/JUNO.inp>JUNO.inp
     set nowDir=`pwd`
     @ i = $i + 1
     set nowJobNum=`printf "%04d\n" $i`
