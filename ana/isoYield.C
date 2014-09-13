@@ -43,16 +43,17 @@
     int NeuNum=f_neu->GetEntries();
     cout<<"NeuNum  : "<<NeuNum<<endl;
     */
-    int rootNum=10000;
+    int rootNum=100;
     int adMuonNum=0;
     double adMuonLength=0.;
     int neuNum=0;
     int isoNum[150][300]={0};
+    
 
     //loop for counting
     for( int i=1 ; i<rootNum+1; i++ )
     {
-        TString nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data2/PART3/rootFile/fluSim_%06d.root",i);
+        TString nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/whole/fluSim_%06d.root",i);
         if( i%100==0 )
         {
             std::cout<<"filename : "<<nameStr<<endl;
@@ -165,4 +166,24 @@
         }
     }
     cout<<" "<<endl;
+
+    ofstream outfile;
+    outfile.open("result.txt");
+
+    outfile<<"adMuonNum : "<<adMuonNum<<endl;
+    outfile<<"adMuonLength : "<<adMuonLength<<endl;
+    outfile<<" "<<endl;
+    outfile<<"neuNum : "<<neuNum<<"   neuYield : "<<neuNum/adMuonLength/0.855<<endl;
+    outfile<<" "<<endl;
+    outfile<<"isoNum : "<<endl;
+    for( int z=0 ; z<150 ; z++ )
+    {
+        for( int a=0 ; a<300 ; a++ )
+        {
+            if(isoNum[z][a]==0) continue;
+            outfile<<"    "<<z<<"/"<<a<<" : "<<isoNum[z][a]<<"   isoYield : "<<isoNum[z][a]/adMuonLength/0.855<<endl;
+        }
+    }
+    outfile<<" "<<endl;
+    outfile.close();
 }
