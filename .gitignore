@@ -3,6 +3,7 @@
 !*.inp
 !*.f
 !*.cpp
+!*.C
 !*.h
 !*.csh
 !.gitignore
@@ -10,3 +11,4 @@
 !(IMGDRAW)
 !README
 !NextSeedNum
+!ana/
