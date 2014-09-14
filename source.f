@@ -37,7 +37,7 @@
       DATA LFIRST / .TRUE. /
       DATA ISrsNum / 0 /
 *
-      PARAMETER(NLINES = 1000000,MaxP=5)
+      PARAMETER(NLINES = 100000,MaxP=5)
       DIMENSION Enrgy(NLINES), Theta(NLINES), Phi(NLINES),
      &          SVecN(MaxP,3),SPoMin(MaxP,3),SLen(MaxP,3)
       SAVE LFIRST, Enrgy, Theta, Phi, SVecN,SPoMin, SLen
@@ -70,17 +70,17 @@ C           END IF
         CLOSE(89)
 * initial surface 
 *hall
-        OPoMin=[-11,-8,-8]
-        OPoMax=[11,8,33]
+C        OPoMin=[,,]
+C        OPoMax=[,,]
 *rock+waterpool
-C        OPoMin=[-11,-8,-8]
-C        OPoMax=[11,8,8]
+        OPoMin=[-25,-25,-25]
+        OPoMax=[25,25,25]
 *waterpool
-C        OPoMin=[-8,-5,-5]
-C        OPoMax=[8,5,5]
+C        OPoMin=[-21,-21,-21]
+C        OPoMax=[21,21,21]
 *AD
-C        OPoMin=[-5.5,-2.5,-2.5]
-C        OPoMax=[5.5,2.5,2.5]
+C        OPoMin=[-17.8,-17.8,-17.8]
+C        OPoMax=[17.8,17.8,17.8]
 
         SVecN=0
         SLen=0

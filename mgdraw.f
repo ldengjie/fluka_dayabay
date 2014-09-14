@@ -37,7 +37,7 @@
 *
       EXTERNAL TIM1O2, BDNOPT
 
-      if(NRGNAM.eq.'LS'.or.NRGNAM.eq.'GDLS') then
+      if(NRGNAM.eq.'AD') then
          DO I=1,MTRACK
             if(DTRACK (I).gt.0) then
                 IICode=0
@@ -48,9 +48,9 @@
                     ISpaMaId=0
                     ISpaMaTy=0
                 endif
-               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
-     &MREG,ISPUSR(5))
+C               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
+C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
+C     &MREG,ISPUSR(5))
 C      WRITE(*,*) 'ISPUSR(5):',ISPUSR(5)
             endif
          ENDDO
@@ -79,69 +79,33 @@ C      WRITE(*,*) 'ISPUSR(5):',ISPUSR(5)
       ENTRY BXDRAW ( ICODE, MREG, NEWREG, XSCO, YSCO, ZSCO )
       CALL GEOR2N ( MREG,MRGNAM,IERR1)
       CALL GEOR2N ( NEWREG,NRGNAM,IERR2)
-      IF (NRGNAM.EQ.'OWS') THEN
+      IF (NRGNAM.EQ.'WS') THEN
           IF(DOT_PRODUCT(OwsInitP(1,1:3),OwsInitP(1,1:3)).eq.0) then
               OwsInitP(1,1:3)=[XSCO, YSCO, ZSCO]
           else
               OwsInitP(2,1:3)=[XSCO, YSCO, ZSCO]
           end if
-      ELSE IF(NRGNAM.EQ.'IWS') THEN
-          IF(DOT_PRODUCT(IwsInitP(1,1:3),IwsInitP(1,1:3)).EQ.0) then
-              IwsInitP(1,1:3)=[XSCO, YSCO, ZSCO]
-          else
-              IwsInitP(2,1:3)=[XSCO, YSCO, ZSCO]
-          end if
-      ELSE IF(NRGNAM.EQ.'MO') THEN
-          IF(DOT_PRODUCT(MoInitP(1,1:3),MoInitP(1,1:3)).EQ.0) then
-              MoInitP(1,1:3)=[XSCO, YSCO, ZSCO]
-          else
-              MoInitP(2,1:3)=[XSCO, YSCO, ZSCO]
-          end if
-      ELSE IF(NRGNAM.EQ.'LS') THEN
+      ELSE IF(NRGNAM.EQ.'AD') THEN
           IF(DOT_PRODUCT(LsInitP(1,1:3),LsInitP(1,1:3)).EQ.0) then
               LsInitP(1,1:3)=[XSCO, YSCO, ZSCO]
           else
               LsInitP(2,1:3)=[XSCO, YSCO, ZSCO]
           end if
-      ELSE IF(NRGNAM.EQ.'GDLS') THEN
-          IF(DOT_PRODUCT(GdInitP(1,1:3),GdInitP(1,1:3)).EQ.0) then
-              GdInitP(1,1:3)=[XSCO, YSCO, ZSCO]
-          else
-              GdInitP(2,1:3)=[XSCO, YSCO, ZSCO]
-          end if
       ELSE
 
       END IF
 
-      IF (MRGNAM.EQ.'OWS') THEN
+      IF (MRGNAM.EQ.'WS') THEN
           IF(DOT_PRODUCT(OwsFinaP(1,1:3),OwsFinaP(1,1:3)).EQ.0) then
               OwsFinaP(1,1:3)=[XSCO, YSCO, ZSCO]
           else
               OwsFinaP(2,1:3)=[XSCO, YSCO, ZSCO]
           end if
-      ELSE IF(MRGNAM.EQ.'IWS') THEN
-          IF(DOT_PRODUCT(IwsFinaP(1,1:3),IwsFinaP(1,1:3)).EQ.0) then
-              IwsFinaP(1,1:3)=[XSCO, YSCO, ZSCO]
-          else
-              IwsFinaP(2,1:3)=[XSCO, YSCO, ZSCO]
-          end if
-      ELSE IF(MRGNAM.EQ.'MO') THEN
-          IF(DOT_PRODUCT(MoFinaP(1,1:3),MoFinaP(1,1:3)).EQ.0) then
-              MoFinaP(1,1:3)=[XSCO, YSCO, ZSCO]
-          else
-              MoFinaP(2,1:3)=[XSCO, YSCO, ZSCO]
-          end if
-      ELSE IF(MRGNAM.EQ.'LS') THEN
+      ELSE IF(MRGNAM.EQ.'AD') THEN
           IF(DOT_PRODUCT(LsFinaP(1,1:3),LsFinaP(1,1:3)).EQ.0) then
               LsFinaP(1,1:3)=[XSCO, YSCO, ZSCO]
           else
               LsFinaP(2,1:3)=[XSCO, YSCO, ZSCO]
-          end if
-      ELSE IF(MRGNAM.EQ.'GDLS') THEN
-          IF(DOT_PRODUCT(GdFinaP(1,1:3),GdFinaP(1,1:3)).EQ.0) then
-              GdFinaP(1,1:3)=[XSCO, YSCO, ZSCO]
-          else
-              GdFinaP(2,1:3)=[XSCO, YSCO, ZSCO]
           end if
       ELSE
       END IF
@@ -154,18 +118,9 @@ C      WRITE(*,*) 'ISPUSR(5):',ISPUSR(5)
       OwsLen=sqrt(DOT_PRODUCT(OwsFinaP(1,1:3)-OwsInitP(1,1:3),
      &OwsFinaP(1,1:3)-OwsInitP(1,1:3)))+sqrt(DOT_PRODUCT(
      &OwsFinaP(2,1:3)-OwsInitP(2,1:3),OwsFinaP(2,1:3)-OwsInitP(2,1:3)))
-      IwsLen=sqrt(DOT_PRODUCT(IwsFinaP(1,1:3)-IwsInitP(1,1:3),
-     &IwsFinaP(1,1:3)-IwsInitP(1,1:3)))+sqrt(DOT_PRODUCT(
-     &IwsFinaP(2,1:3)-IwsInitP(2,1:3),IwsFinaP(2,1:3)-IwsInitP(2,1:3)))
-      MoLen=sqrt(DOT_PRODUCT(MoFinaP(1,1:3)-MoInitP(1,1:3),
-     &MoFinaP(1,1:3)-MoInitP(1,1:3)))+sqrt(DOT_PRODUCT(
-     &MoFinaP(2,1:3)-MoInitP(2,1:3),MoFinaP(2,1:3)-MoInitP(2,1:3)))
       LsLen=sqrt(DOT_PRODUCT(LsFinaP(1,1:3)-LsInitP(1,1:3),
      &LsFinaP(1,1:3)-LsInitP(1,1:3)))+sqrt(DOT_PRODUCT(
      &LsFinaP(2,1:3)-LsInitP(2,1:3),LsFinaP(2,1:3)-LsInitP(2,1:3)))
-      GdLen=sqrt(DOT_PRODUCT(GdFinaP(1,1:3)-GdInitP(1,1:3),
-     &GdFinaP(1,1:3)-GdInitP(1,1:3)))+sqrt(DOT_PRODUCT(
-     &GdFinaP(2,1:3)-GdInitP(2,1:3),GdFinaP(2,1:3)-GdInitP(2,1:3)))
 
       call fillmuon(NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
      &MuInitP(2),MuInitP(3),
@@ -190,7 +145,7 @@ C             WRITE(*,*) 'Error:NeuInitE(I).eq.0'
 
 *  +-------------------------------------------------------------------*
       ENTRY ENDRAW ( ICODE, MREG, RULL, XSCO, YSCO, ZSCO )
-      if(NRGNAM.eq.'LS'.or.NRGNAM.eq.'GDLS') then
+      if(NRGNAM.eq.'AD') then
                 IICode=ICODE
                 if(LTRACK.gt.1) then
                     ISpaMaId=ISPUSR(2)
@@ -199,8 +154,8 @@ C             WRITE(*,*) 'Error:NeuInitE(I).eq.0'
                     ISpaMaId=0
                     ISpaMaTy=0
                 endif
-               call fillspa(NCASE,XSCO,YSCO,ZSCO,
-     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
+C               call fillspa(NCASE,XSCO,YSCO,ZSCO,
+C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
 C      WRITE(*,*) 'ISPUSR(5):',ISPUSR(5)
       endif
 

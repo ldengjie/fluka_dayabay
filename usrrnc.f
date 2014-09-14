@@ -32,8 +32,6 @@
       EXTERNAL TIM1O2, BDNOPT
       CALL GEOR2N ( MREG,RGNAM,IERR1)
 C      if(MREG.gt.4) WRITE(*,*) 'RGNAM',RGNAM
-C      if(RGNAM.eq.'SST'.or.RGNAM.eq.'MO'.or.RGNAM.eq.'OAT'.or.
-C     &RGNAM.eq.'LS'.or.RGNAM.eq.'IAT'.or.RGNAM.eq.'GDLS') then
 *isotope
         ISOMER = 0
         HafTime = TIM1O2 ( IA, IZ, KA, KZ, T12DAU, BRDAUG, ISOMER )
