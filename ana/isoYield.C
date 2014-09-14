@@ -1,49 +1,5 @@
-//#include  <iostream>
-//#include  <TTree.h>
-//#include  <TH1F.h>
-//#include  <TCanvas.h>
-//#include  <TFile.h>
-//#include  <TChain.h>
-//using namespace std;
-//int main(int argc, char *argv[])
 {
-    /*
-    TCanvas* c=new TCanvas("c","c",800,600);
-    //TString dataPath="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data0/PART2/rootFile/1.root";
-    TString dataPath="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data0/PART2/rootFile/.root";
-    TChain* f_mu=new TChain("Muon");
-    f_mu->Add(dataPath);
-    //cout<<"Entries  : "<<f_mu->GetEntries()<<endl;
-    f_mu->Draw("EventID>>h_mu","MoTrackLength>0");
-    int ADMuonNum=h_mu->GetEntries();
-    cout<<"ADMuonNum  : "<<ADMuonNum<<endl;
-    //c->SaveAs("c.eps");
-
-    TChain* f_iso=new TChain("Isotope");
-    f_iso->Add(dataPath);
-    //cout<<"Entries  : "<<f_iso->GetEntries()<<endl;
-    f_iso->Draw("Z:A>>h_iso","DecayVolume>=8");
-    int IsoNum;
-    for( int z=0 ; z<250 ; z++ )
-    {
-        for( int a=0 ; a<250 ; a++ )
-        {
-            IsoNum=h_iso->GetBinContent(z,a);
-            if( IsoNum>0 )
-            {
-                cout<<z<<"/"<<a<<" : "<<IsoNum<<endl;
-            }
-        }
-        
-    }
-    
-    TChain* f_neu=new TChain("Neutron");
-    f_neu->Add(dataPath);
-    f_neu->Draw("InitKineE>>h_neu(30000,0,0.3)","InitLocalY>-250&&InitLocalY<250&&InitLocalZ>-250&&InitLocalZ<250&&((InitLocalX>-550&&InitLocalX<-50)||(InitLocalX>50&&InitLocalX<550))");
-    int NeuNum=f_neu->GetEntries();
-    cout<<"NeuNum  : "<<NeuNum<<endl;
-    */
-    int rootNum=100;
+    int rootNum=31834;
     int adMuonNum=0;
     double adMuonLength=0.;
     int neuNum=0;
@@ -113,9 +69,9 @@
             int isoZ;
             int isoA;
             isot->SetBranchAddress("EventID",&isoEventID);
-            isot->SetBranchAddress("DecayLoaclX",&isoDecayLocalX);
-            isot->SetBranchAddress("DecayLoaclY",&isoDecayLocalY);
-            isot->SetBranchAddress("DecayLoaclZ",&isoDecayLocalZ);
+            isot->SetBranchAddress("DecayLocalX",&isoDecayLocalX);
+            isot->SetBranchAddress("DecayLocalY",&isoDecayLocalY);
+            isot->SetBranchAddress("DecayLocalZ",&isoDecayLocalZ);
             isot->SetBranchAddress("Z",&isoZ);
             isot->SetBranchAddress("A",&isoA);
 

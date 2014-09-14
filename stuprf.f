@@ -37,6 +37,7 @@ C                 WRITE(*,*) 'TKI (NPSECN):MaxNeuE',TKI(NPSECN),MaxNeuE
                 NeuInitT(NeuNum)=AGESEC(NPSECN)+SPAUSR(1)
                 NeuInitE(NeuNum)=0
                 NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
+                NeuInitVm=MREG
 C                WRITE(*,*) 'Find a secondary neutron'
              endif
           endif

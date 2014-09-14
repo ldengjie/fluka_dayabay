@@ -66,6 +66,7 @@ C     &NeuMaID,NeuType=0
       NeuCapVm=0
       NeuCapTn=0
       MaxNeuE=0
+      NeuInitVm=0
 
 *general
       NRGNAM='VACUUM'
