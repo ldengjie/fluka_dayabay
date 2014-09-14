@@ -20,7 +20,7 @@
       DOUBLE PRECISION,DIMENSION(MxNeuN) ::NeuGamaE,NeuCapT
       DOUBLE PRECISION,DIMENSION(MxNeuN,3) ::NeuInitP,NeuCapP
       INTEGER ,DIMENSION(MxNeuN)::NeuMaID,NeuType,NeuGamaN,
-     &NeuCapVm,NeuCapTn
+     &NeuCapVm,NeuCapTn,NeuInitVm
       DOUBLE PRECISION :: MaxNeuE
 
 
@@ -32,6 +32,6 @@
      &          OwsFinaP,IwsFinaP,MoFinaP,LsFinaP,GdFinaP,
      &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
      &          NeuCapT,NeuGamaE,
-     &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,
+     &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,NeuInitVm,
      &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol
       SAVE / IMGDRAW /
