@@ -23,7 +23,7 @@ Double_t MuInitKineE,MuInitTime,MuInitLocalX,MuInitLocalY,MuInitLocalZ,MuInitLoc
 Int_t    MuEventID,MuNumOfNeutron,MuNumOfIsotope,MuMuonCharge=0;
 
 static TTree *IsoTree = 0;
-Double_t IsoDecayLoaclX,IsoDecayLoaclY,IsoDecayLoaclZ=0;
+Double_t IsoDecayLocalX,IsoDecayLocalY,IsoDecayLocalZ=0;
 Int_t    IsoEventID,IsoZ,IsoA,IsoDecayVolume=0;
 
 static TTree *MichelTree = 0;
@@ -36,7 +36,7 @@ Int_t    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,S
 
 static TTree *NeuTree = 0;
 Double_t NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum=0;
-Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType,NeuCapVolumeName,NeuCapTargetName=0;
+Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType,NeuCapVolumeName,NeuCapTargetName,NeuInitVolumeName=0;
 
 //static Results *TheResults = 0;
 
@@ -65,9 +65,9 @@ extern "C" {
 	MuonTree->Branch("MuonCharge",&MuMuonCharge,"MuonCharge/I");
 	
 	IsoTree=new TTree("Isotope","Isotope");
-	IsoTree->Branch("DecayLoaclX",&IsoDecayLoaclX,"DecayLoaclX/D");
-	IsoTree->Branch("DecayLoaclY",&IsoDecayLoaclY,"DecayLoaclY/D");
-	IsoTree->Branch("DecayLoaclZ",&IsoDecayLoaclZ,"DecayLoaclZ/D");
+	IsoTree->Branch("DecayLocalX",&IsoDecayLocalX,"DecayLocalX/D");
+	IsoTree->Branch("DecayLocalY",&IsoDecayLocalY,"DecayLocalY/D");
+	IsoTree->Branch("DecayLocalZ",&IsoDecayLocalZ,"DecayLocalZ/D");
 	IsoTree->Branch("EventID",&IsoEventID,"EventID/I");
 	IsoTree->Branch("Z",&IsoZ,"Z/I");
 	IsoTree->Branch("A",&IsoA,"A/I");
@@ -115,6 +115,7 @@ extern "C" {
 	NeuTree->Branch("MotherInteractionType",&NeuMotherInteractionType,"MotherInteractionType/I");
 	NeuTree->Branch("CapVolumeName",&NeuCapVolumeName,"CapVolumeName/I");
 	NeuTree->Branch("CapTargetName",&NeuCapTargetName,"CapTargetName/I");
+	NeuTree->Branch("InitVolumeName",&NeuInitVolumeName,"InitVolumeName/I");
 
     printf("%f\n", pluto);
 
@@ -171,11 +172,11 @@ extern "C" {
 #define filliso FILLISO
 #endif
 extern "C" {
-    void filliso(Int_t &m_IsoEventID,Int_t &m_IsoZ,Int_t &m_IsoA,Double_t &m_IsoDecayLoaclX,Double_t &m_IsoDecayLoaclY,Double_t &m_IsoDecayLoaclZ,Int_t &m_IsoDecayVolume)
+    void filliso(Int_t &m_IsoEventID,Int_t &m_IsoZ,Int_t &m_IsoA,Double_t &m_IsoDecayLocalX,Double_t &m_IsoDecayLocalY,Double_t &m_IsoDecayLocalZ,Int_t &m_IsoDecayVolume)
   {
-	IsoDecayLoaclX = m_IsoDecayLoaclX;
-	IsoDecayLoaclY = m_IsoDecayLoaclY;
-	IsoDecayLoaclZ = m_IsoDecayLoaclZ;
+	IsoDecayLocalX = m_IsoDecayLocalX;
+	IsoDecayLocalY = m_IsoDecayLocalY;
+	IsoDecayLocalZ = m_IsoDecayLocalZ;
 	IsoEventID     = m_IsoEventID;
 	IsoZ           = m_IsoZ;
 	IsoA           = m_IsoA;
@@ -234,7 +235,7 @@ extern "C" {
 #define fillneu FILLNEU
 #endif
 extern "C" {
-    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName,Int_t &m_NeuCapTargetName)
+    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName,Int_t &m_NeuCapTargetName,Int_t &m_NeuInitVolumeName)
   {
 	NeuInitKineE              = m_NeuInitKineE;
 	NeuInitTime               = m_NeuInitTime;
@@ -252,6 +253,7 @@ extern "C" {
 	NeuMotherInteractionType  = m_NeuMotherInteractionType ;
     NeuCapVolumeName          = m_NeuCapVolumeName;
     NeuCapTargetName          = m_NeuCapTargetName;
+    NeuInitVolumeName          = m_NeuInitVolumeName;
     NeuTree->Fill();
   }
 }
