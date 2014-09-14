@@ -16,6 +16,11 @@ if ( -e $dataDir ) then
     echo clean $dataDir
 endif
 
+if ( -e $dataDir ) then
+    rm $dataDir/* -rf
+    echo clean $dataDir
+endif
+
 mkdir -p $dataDir/jobScripts $dataDir/rootFile
 cd $dataDir/jobScripts
 

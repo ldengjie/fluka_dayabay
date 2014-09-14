@@ -48,9 +48,9 @@
                     ISpaMaId=0
                     ISpaMaTy=0
                 endif
-               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
-     &MREG,ISPUSR(5))
+C               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
+C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
+C     &MREG,ISPUSR(5))
 C      WRITE(*,*) 'ISPUSR(5):',ISPUSR(5)
             endif
          ENDDO
@@ -199,8 +199,8 @@ C             WRITE(*,*) 'Error:NeuInitE(I).eq.0'
                     ISpaMaId=0
                     ISpaMaTy=0
                 endif
-               call fillspa(NCASE,XSCO,YSCO,ZSCO,
-     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
+C               call fillspa(NCASE,XSCO,YSCO,ZSCO,
+C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
 C      WRITE(*,*) 'ISPUSR(5):',ISPUSR(5)
       endif
 
