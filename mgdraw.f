@@ -244,8 +244,13 @@ C      WRITE(*,*) ''
       ISPUSR(1)=ICODE
       ISPUSR(2)=JTRACK
       NowVol=MREG
-* SPAUSR 1.parent's age
+* SPAUSR 1.parent's age 
       SPAUSR(1)=ATRACK
+*
+      USDP(1)=XSCO 
+      USDP(2)=YSCO 
+      USDP(3)=ZSCO 
+      USDVol=MREG
 *find maximum energy of secondary neutron
       if(ICODE.eq.101 .and. JTRACK.eq.8) then
          SecNeuNO=0

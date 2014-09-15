@@ -71,6 +71,8 @@ C     &NeuMaID,NeuType=0
 *general
       NRGNAM='VACUUM'
       NowVol=2
+      USDP=0
+      USDVol=0
 
       RETURN
 *=== End of subroutine Usrein =========================================*

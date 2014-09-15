@@ -5,6 +5,8 @@
       INTEGER EvtID
       INTEGER NowVol
       INTEGER NextSeedNum
+      DOUBLE PRECISION ,DIMENSION(3) ::USDP
+      INTEGER USDVol
 *muon
       INTEGER NeuNum,IsoNum,MuCharge,IEMPTY
       DOUBLE PRECISION :: MuInitT, MuInitE,OwsLen,
@@ -29,9 +31,9 @@
      &          NeuNum,IsoNum,MuCharge,EvtID,
      &          MuInitT, MuInitE,MuInitP,MuInitTP,
      &          OwsInitP,IwsInitP,MoInitP,LsInitP,GdInitP,
-     &          OwsFinaP,IwsFinaP,MoFinaP,LsFinaP,GdFinaP,
+     &          OwsFinaP,IwsFinaP,MoFinaP,LsFinaP,GdFinaP,USDP,
      &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
      &          NeuCapT,NeuGamaE,
      &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,NeuInitVm,
-     &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol
+     &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol,USDVol
       SAVE / IMGDRAW /
