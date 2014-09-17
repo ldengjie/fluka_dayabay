@@ -163,5 +163,5 @@ USERWEIG                                                 1.0
 * Set the random number seed
 RANDOMIZ          1.1235298764
 * Set the number of primary histories to be simulated in the run
-START          1000.
+START        100000.
 STOP
