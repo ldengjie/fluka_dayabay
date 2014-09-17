@@ -37,7 +37,7 @@
 *
       EXTERNAL TIM1O2, BDNOPT
 
-      if(NRGNAM.eq.'AD') then
+      if(MREG.eq.5) then
          DO I=1,MTRACK
             if(DTRACK (I).gt.0) then
                 IICode=0
@@ -141,7 +141,7 @@ C             WRITE(*,*) 'Error:NeuInitE(I).eq.0'
 
 *  +-------------------------------------------------------------------*
       ENTRY ENDRAW ( ICODE, MREG, RULL, XSCO, YSCO, ZSCO )
-      if(NRGNAM.eq.'AD') then
+      if(MREG.eq.5) then
                 IICode=ICODE
                 if(LTRACK.gt.1) then
                     ISpaMaId=ISPUSR(2)

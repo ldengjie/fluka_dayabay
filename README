@@ -21,43 +21,28 @@ mu+/mu- = 1.3:1
 
 几何对应编号:
 
-    1  BLKHOLE 
-    2  VACUUM  
-    3  AIR     
-    4  STONE   
-    5  OWS     
-    6  IWS     
-    7  SST     
-    8  MO      
-    9  OAT     
-   10  LS      
-   11  IAT     
-   12  GDLS    
+     1  BLKHOLE  
+     2  VACUUM  
+     3  STONE  
+     4  WS    
+     5  AD   
 
-Fluka medium     Name     
-  number                  
-      1        BLCKHOLE   
-      2        VACUUM     
-      3        HYDROGEN   
-      6        CARBON     
-      7        NITROGEN   
-      8        OXYGEN     
-      9        MAGNESIU   
-     10        ALUMINUM   
-     11        IRON       
-     14        SILICON    
-     15        ICARBON    
-     16        IH         
-     19        SODIUM     
-     20        ARGON      
-     21        CALCIUM    
-     25        NICKEL     
-     26        GADOLINI   
-     27        MANGANES   
-     28        CHROMIUM   
-     29        SULFUR     
-     30        PHOSPHO    
-     33        POTASSIU   
+   Fluka medium     Name    
+     number                
+         1        BLCKHOLE 
+         2        VACUUM  
+         3        HYDROGEN
+         7        NITROGEN
+         8        OXYGEN 
+         9        MAGNESIU 
+        10        ALUMINUM 
+        11        IRON     
+        14        SILICON  
+        15        ICARBON 
+        16        IH     
+        19        SODIUM 
+        21        CALCIUM 
+        33        POTASSIU 
 
 Type of Neutron (USDRAW)
     ICODE : type of event
