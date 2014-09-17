@@ -240,8 +240,9 @@ C      WRITE(*,*) ISrsNum,'initial position : ',(DIniPo(J),j=1,3)
 * Cosines (tx,ty,tz)
       TXFLK  (NPFLKA) = ProVec(1)
       TYFLK  (NPFLKA) = ProVec(2)
-      TZFLK  (NPFLKA) = -SQRT ( ONEONE - TXFLK (NPFLKA)**2
-     &                       - TYFLK (NPFLKA)**2 ) !==ProVec(3)
+      TZFLK  (NPFLKA) = ProVec(3)
+C      TZFLK  (NPFLKA) = -SQRT ( ONEONE - TXFLK (NPFLKA)**2
+C     &                       - TYFLK (NPFLKA)**2 ) !==ProVec(3)
 * Particle coordinates
       XFLK   (NPFLKA) = DIniPo(1)
       YFLK   (NPFLKA) = DIniPo(2)

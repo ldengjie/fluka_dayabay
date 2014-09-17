@@ -77,56 +77,51 @@ C     &MREG,ISPUSR(5))
 
 *  +-------------------------------------------------------------------*
       ENTRY BXDRAW ( ICODE, MREG, NEWREG, XSCO, YSCO, ZSCO )
+      if(LTRACK.eq.1) then
       CALL GEOR2N ( MREG,MRGNAM,IERR1)
       CALL GEOR2N ( NEWREG,NRGNAM,IERR2)
       IF (NRGNAM.EQ.'WS') THEN
-          IF(DOT_PRODUCT(OwsInitP(1,1:3),OwsInitP(1,1:3)).eq.0) then
-              OwsInitP(1,1:3)=[XSCO, YSCO, ZSCO]
+          IF(DOT_PRODUCT(OwsInitP(1:3),OwsInitP(1:3)).eq.0) then
+              OwsInitP(1:3)=[XSCO, YSCO, ZSCO]
           else
-              OwsInitP(2,1:3)=[XSCO, YSCO, ZSCO]
+              WRITE(*,*) 'ERROR : OwsInitP .NE. 0'
           end if
       ELSE IF(NRGNAM.EQ.'AD') THEN
-          IF(DOT_PRODUCT(LsInitP(1,1:3),LsInitP(1,1:3)).EQ.0) then
-              LsInitP(1,1:3)=[XSCO, YSCO, ZSCO]
+          IF(DOT_PRODUCT(LsInitP(1:3),LsInitP(1:3)).EQ.0) then
+              LsInitP(1:3)=[XSCO, YSCO, ZSCO]
           else
-              LsInitP(2,1:3)=[XSCO, YSCO, ZSCO]
+              WRITE(*,*) 'ERROR : LsInitP .NE. 0'
           end if
       ELSE
 
       END IF
 
       IF (MRGNAM.EQ.'WS') THEN
-          IF(DOT_PRODUCT(OwsFinaP(1,1:3),OwsFinaP(1,1:3)).EQ.0) then
-              OwsFinaP(1,1:3)=[XSCO, YSCO, ZSCO]
-          else
-              OwsFinaP(2,1:3)=[XSCO, YSCO, ZSCO]
-          end if
+          OwsLen=OwsLen+sqrt((XSCO-OwsInitP(1))*(XSCO-OwsInitP(1))+
+     &                       (YSCO-OwsInitP(2))*(YSCO-OwsInitP(2))+
+     &                       (ZSCO-OwsInitP(3))*(ZSCO-OwsInitP(3)))
+          OwsInitP=0
       ELSE IF(MRGNAM.EQ.'AD') THEN
-          IF(DOT_PRODUCT(LsFinaP(1,1:3),LsFinaP(1,1:3)).EQ.0) then
-              LsFinaP(1,1:3)=[XSCO, YSCO, ZSCO]
-          else
-              LsFinaP(2,1:3)=[XSCO, YSCO, ZSCO]
-          end if
+          LsLen=LsLen+sqrt((XSCO-LsInitP(1))*(XSCO-LsInitP(1))+
+     &                       (YSCO-LsInitP(2))*(YSCO-LsInitP(2))+
+     &                       (ZSCO-LsInitP(3))*(ZSCO-LsInitP(3)))
+          LsInitP=0
       ELSE
       END IF
+
+      endif
 
       RETURN
 
 *  +-------------------------------------------------------------------*
-      ENTRY EEDRAW ( ICODE )
-*muon
-      OwsLen=sqrt(DOT_PRODUCT(OwsFinaP(1,1:3)-OwsInitP(1,1:3),
-     &OwsFinaP(1,1:3)-OwsInitP(1,1:3)))+sqrt(DOT_PRODUCT(
-     &OwsFinaP(2,1:3)-OwsInitP(2,1:3),OwsFinaP(2,1:3)-OwsInitP(2,1:3)))
-      LsLen=sqrt(DOT_PRODUCT(LsFinaP(1,1:3)-LsInitP(1,1:3),
-     &LsFinaP(1,1:3)-LsInitP(1,1:3)))+sqrt(DOT_PRODUCT(
-     &LsFinaP(2,1:3)-LsInitP(2,1:3),LsFinaP(2,1:3)-LsInitP(2,1:3)))
-
+      ENTRY EEDRAW ( ICODE ) 
+*muon 
       call fillmuon(NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
      &MuInitP(2),MuInitP(3),
      &MuInitTP(1),MuInitTP(2),MuInitTP(3),OwsLen,IwsLen,MoLen,
      &LsLen,GdLen,
      &NeuNum,IsoNum)
+C      WRITE(*,*) 'EE LEN',OwsLen,IwsLen,MoLen,LsLen,GdLen
 *neutron
       if(NeuNum.gt.0) then
           DO I=1,NeuNum
@@ -177,6 +172,7 @@ C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
 
 *  +-------------------------------------------------------------------*
       ENTRY SODRAW
+C      WRITE(*,*) 'SOD LEN',OwsLen,IwsLen,MoLen,LsLen,GdLen
       MuInitT=AGESTK(1)
       MuInitE=TKEFLK(1)
       MuInitP=[XFLK(1),YFLK(1),ZFLK(1)]
@@ -199,8 +195,13 @@ C      WRITE(*,*) ''
       ISPUSR(1)=ICODE
       ISPUSR(2)=JTRACK
       NowVol=MREG
-* SPAUSR 1.parent's age
+* SPAUSR 1.parent's age 
       SPAUSR(1)=ATRACK
+*
+      USDP(1)=XSCO 
+      USDP(2)=YSCO 
+      USDP(3)=ZSCO 
+      USDVol=MREG
 *find maximum energy of secondary neutron
       if(ICODE.eq.101 .and. JTRACK.eq.8) then
          SecNeuNO=0
@@ -263,7 +264,7 @@ C             WRITE(*,*) 'Neutron captured on :',MMTRCK
           endif
       endif
 *Michel electron
-      if(LTRACK.eq.1 .and. ICODE.eq.102) then
+      if((JTRACK.eq.10 .or. JTRACK.eq.11) .and. ICODE.eq.102) then
           DO IP = 1, NP 
              if(KPART(IP).eq.3) then
       call fillmi(NCASE,TKI(IP),AGESEC(IP)+ATRACK,XSCO,YSCO,ZSCO,MREG)
