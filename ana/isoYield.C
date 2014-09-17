@@ -1,5 +1,5 @@
 {
-    int rootNum=31834;
+    int rootNum=5000;
     int adMuonNum=0;
     double adMuonLength=0.;
     int neuNum=0;
@@ -9,7 +9,7 @@
     //loop for counting
     for( int i=1 ; i<rootNum+1; i++ )
     {
-        TString nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/whole/fluSim_%06d.root",i);
+        TString nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/JUNO/data0/whole/fluSim_%06d.root",i);
         if( i%100==0 )
         {
             std::cout<<"filename : "<<nameStr<<endl;
@@ -69,9 +69,9 @@
             int isoZ;
             int isoA;
             isot->SetBranchAddress("EventID",&isoEventID);
-            isot->SetBranchAddress("DecayLocalX",&isoDecayLocalX);
-            isot->SetBranchAddress("DecayLocalY",&isoDecayLocalY);
-            isot->SetBranchAddress("DecayLocalZ",&isoDecayLocalZ);
+            isot->SetBranchAddress("DecayLoaclX",&isoDecayLocalX);
+            isot->SetBranchAddress("DecayLoaclY",&isoDecayLocalY);
+            isot->SetBranchAddress("DecayLoaclZ",&isoDecayLocalZ);
             isot->SetBranchAddress("Z",&isoZ);
             isot->SetBranchAddress("A",&isoA);
 
@@ -79,7 +79,7 @@
             for( int u=0 ; u<mtnum ; u++ )
             {
                 mt->GetEntry(u);
-                if(muMoTrackLength==0) continue;
+                if(muLsTrackLength==0) continue;
                 muIndex.insert(std::pair<int,int>(muEventID,u));
                 adMuonNum++;
                 adMuonLength+=(muMoTrackLength+muLsTrackLength+muGdLsTrackLength);
@@ -89,7 +89,8 @@
             {
                 neut->GetEntry(r);
                 if(muIndex.find(neuEventID)==muIndex.end()) continue;
-                if(!(neuInitLocalY>-250&&neuInitLocalY<250&&neuInitLocalZ>-250&&neuInitLocalZ<250&&((neuInitLocalX>-550&&neuInitLocalX<-50)||(neuInitLocalX>50&&neuInitLocalX<550)))) continue;
+                //if(!(neuInitLocalY>-250&&neuInitLocalY<250&&neuInitLocalZ>-250&&neuInitLocalZ<250&&((neuInitLocalX>-550&&neuInitLocalX<-50)||(neuInitLocalX>50&&neuInitLocalX<550)))) continue;
+                if(sqrt((neuInitLocalX)*(neuInitLocalX)+(neuInitLocalY)*(neuInitLocalY)+(neuInitLocalZ)*(neuInitLocalZ))>1780) continue;
                 neuNum++;
             }
 
@@ -97,7 +98,8 @@
             {
                 isot->GetEntry(i);
                 if(muIndex.find(isoEventID)==muIndex.end()) continue;
-                if(!(isoDecayLocalY>-250&&isoDecayLocalY<250&&isoDecayLocalZ>-250&&isoDecayLocalZ<250&&((isoDecayLocalX>-550&&isoDecayLocalX<-50)||(isoDecayLocalX>50&&isoDecayLocalX<550)))) continue;
+                //if(!(isoDecayLocalY>-250&&isoDecayLocalY<250&&isoDecayLocalZ>-250&&isoDecayLocalZ<250&&((isoDecayLocalX>-550&&isoDecayLocalX<-50)||(isoDecayLocalX>50&&isoDecayLocalX<550)))) continue;
+                if(sqrt((isoDecayLocalX)*(isoDecayLocalX)+(isoDecayLocalY)*(isoDecayLocalY)+(isoDecayLocalZ)*(isoDecayLocalZ))>1780) continue;
                 isoNum[isoZ][isoA]++;
             }
 
