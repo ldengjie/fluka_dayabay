@@ -38,19 +38,23 @@ C                 WRITE(*,*) 'TKI (NPSECN):MaxNeuE',TKI(NPSECN),MaxNeuE
                 NeuInitE(NeuNum)=0
                 NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
                 NeuInitVm=MREG
-C                WRITE(*,*) 'Find a secondary neutron'
+C                WRITE(*,*) 'Find a secondary neutron',IJ,ISPUSR(2)
              endif
           endif
        else
          NeuNum=NeuNum+1
          ISPARK(3,NPFLKA)=NeuNum !then ISPARK->ISPUSR
          NeuMaID(NeuNum)=IJ
+C         if(IJ.eq.7) then
+C            WRITE(*,*) 'neutron from gamma'
+C         endif
          NeuType(NeuNum)=ISPUSR(1)
          NeuInitT(NeuNum)=AGESEC(NPSECN)+SPAUSR(1)
 C         NeuInitE(NeuNum)=TKI (NPSECN)
          NeuInitE(NeuNum)=0
          NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
-C                WRITE(*,*) 'Find a primary neutron'
+         NeuInitVm=MREG
+C                WRITE(*,*) 'Find a primary neutron',IJ,ISPUSR(2)
        endif
       endif
 *  Increment the track number and put it into the last flag:

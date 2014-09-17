@@ -23,8 +23,8 @@ Double_t MuInitKineE,MuInitTime,MuInitLocalX,MuInitLocalY,MuInitLocalZ,MuInitLoc
 Int_t    MuEventID,MuNumOfNeutron,MuNumOfIsotope,MuMuonCharge=0;
 
 static TTree *IsoTree = 0;
-Double_t IsoDecayLocalX,IsoDecayLocalY,IsoDecayLocalZ=0;
-Int_t    IsoEventID,IsoZ,IsoA,IsoDecayVolume=0;
+Double_t IsoDecayLocalX,IsoDecayLocalY,IsoDecayLocalZ,IsoInitLocalX,IsoInitLocalY,IsoInitLocalZ=0;
+Int_t    IsoEventID,IsoZ,IsoA,IsoDecayVolume,IsoInitVolume=0;
 
 static TTree *MichelTree = 0;
 Double_t MiLocalX,MiLocalY,MiLocalZ,MiKineE,MiMichelLocalTime=0;
@@ -72,6 +72,10 @@ extern "C" {
 	IsoTree->Branch("Z",&IsoZ,"Z/I");
 	IsoTree->Branch("A",&IsoA,"A/I");
 	IsoTree->Branch("DecayVolume",&IsoDecayVolume,"DecayVolume/I");
+	IsoTree->Branch("InitVolume",&IsoInitVolume,"InitVolume/I");
+	IsoTree->Branch("InitLocalX",&IsoInitLocalX,"InitLocalX/D");
+	IsoTree->Branch("InitLocalY",&IsoInitLocalY,"InitLocalY/D");
+	IsoTree->Branch("InitLocalZ",&IsoInitLocalZ,"InitLocalZ/D");
 	
 	MichelTree=new TTree("MichelElectron","MichelElectron");
 	MichelTree->Branch("LocalX",&MiLocalX,"LocalX/D");
@@ -172,7 +176,7 @@ extern "C" {
 #define filliso FILLISO
 #endif
 extern "C" {
-    void filliso(Int_t &m_IsoEventID,Int_t &m_IsoZ,Int_t &m_IsoA,Double_t &m_IsoDecayLocalX,Double_t &m_IsoDecayLocalY,Double_t &m_IsoDecayLocalZ,Int_t &m_IsoDecayVolume)
+    void filliso(Int_t &m_IsoEventID,Int_t &m_IsoZ,Int_t &m_IsoA,Double_t &m_IsoDecayLocalX,Double_t &m_IsoDecayLocalY,Double_t &m_IsoDecayLocalZ,Int_t &m_IsoDecayVolume,Double_t &m_IsoInitLocalX,Double_t &m_IsoInitLocalY,Double_t &m_IsoInitLocalZ,Int_t &m_IsoInitVolume)
   {
 	IsoDecayLocalX = m_IsoDecayLocalX;
 	IsoDecayLocalY = m_IsoDecayLocalY;
@@ -181,6 +185,10 @@ extern "C" {
 	IsoZ           = m_IsoZ;
 	IsoA           = m_IsoA;
     IsoDecayVolume = m_IsoDecayVolume;
+	IsoInitLocalX = m_IsoInitLocalX;
+	IsoInitLocalY = m_IsoInitLocalY;
+	IsoInitLocalZ = m_IsoInitLocalZ;
+    IsoInitVolume = m_IsoInitVolume;
     IsoTree->Fill();
   }
 }
