@@ -97,7 +97,7 @@
             {
                 isot->GetEntry(i);
                 if(muIndex.find(isoEventID)==muIndex.end()) continue;
-                if(!(isoDecayLocalY>-250&&isoDecayLocalY<250&&isoDecayLocalZ>-250&&isoDecayLocalZ<250&&((isoDecayLocalX>-550&&isoDecayLocalX<-50)||(isoDecayLocalX>50&&isoDecayLocalX<550)))) continue;
+                if(!(((isoDecayLocalY>-250&&isoDecayLocalY<250)||(isoDecayLocalY>350&&isoDecayLocalY<850))&&isoDecayLocalZ>-250&&isoDecayLocalZ<250&&((isoDecayLocalX>-550&&isoDecayLocalX<-50)||(isoDecayLocalX>50&&isoDecayLocalX<550)))) continue;
                 isoNum[isoZ][isoA]++;
             }
 
