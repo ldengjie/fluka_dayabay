@@ -41,7 +41,8 @@ C     &RGNAM.eq.'LS'.or.RGNAM.eq.'IAT'.or.RGNAM.eq.'GDLS') then
 C            WRITE(*,*) 'USRRNC():stable'
         else
 C            WRITE(*,*) 'USRRNC():',IZ,IA,X, Y, Z
-            call filliso(EvtID,IZ,IA,X, Y, Z,MREG)
+            call filliso(EvtID,IZ,IA,X, Y, Z,MREG
+     &,USDP(1),USDP(2),USDP(3),USDVol)
 C            WRITE(*,*) 'FillIso : ',EvtID,IZ,IA,X, Y, Z
             IsoNum=IsoNum+1
         endif

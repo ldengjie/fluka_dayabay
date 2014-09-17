@@ -48,16 +48,16 @@ C     &NeuMaID,NeuType=0
       MoInitP=0 
       LsInitP=0 
       GdInitP=0 
-      OwsFinaP=0 
-      IwsFinaP=0 
-      MoFinaP=0 
-      LsFinaP=0 
-      GdFinaP=0 
+      OwsLen=0
+      IwsLen=0
+      MoLen=0
+      LsLen=0
+      GdLen=0
 *neutron
       NeuInitT=0 
       NeuInitE=0 
       NeuInitP=0 
-      NeuCapP=0 
+      NeuCapP=100000 
       NeuCapT=0 
       NeuGamaN=0 
       NeuGamaE=0
@@ -71,6 +71,8 @@ C     &NeuMaID,NeuType=0
 *general
       NRGNAM='VACUUM'
       NowVol=2
+      USDP=0
+      USDVol=0
 
       RETURN
 *=== End of subroutine Usrein =========================================*
