@@ -113,10 +113,6 @@ setenv TK_LIBRARY /afs/ihep.ac.cn/users/l/lidj/user/software/tk/lib/tk8.4
 setenv PATH ${FLUPRO}:${FLUPRO}/flutil:/afs/ihep.ac.cn/users/l/lidj/user/software/flair/bin:$PATH
 setenv PYTHONPATH /afs/ihep.ac.cn/users/l/lidj/user/software/flair/flair/lib:$PYTHONPATH
 
-#dayabay muon simulation for using cfortran.h temporarily
-setenv FLUWORK /afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay
-setenv LD_LIBRARY_PATH ${FLUWORK}:$LD_LIBRARY_PATH
-
 2.修改代码
     2.1 产生子
     source.f
