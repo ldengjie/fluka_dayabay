@@ -26,9 +26,12 @@
       INCLUDE '(QUEMGD)'
       INCLUDE '(SUMCOU)'
       INCLUDE '(TRACKR)'
+*
       INCLUDE '(IMGDRAW)'
       INCLUDE '(BLNKCM)'
       INCLUDE '(LOWNEU)'
+      INCLUDE '(RESNUC)'
+      INCLUDE '(EVTFLG)'
 
       DIMENSION KA (4), KZ (4), BRDAUG (4), T12DAU (4)
       DOUBLE PRECISION HafTime
@@ -133,7 +136,7 @@ C             WRITE(*,*) 'Error:NeuInitE(I).eq.0'
      &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
      &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
      &NeuMaID(I),NeuType(I),NeuCapVm(I),NeuCapTn(I),
-     &NeuInitVm)
+     &NeuInitVm(I),NeuMaE(I))
          endif
           enddo
       endif
@@ -195,8 +198,13 @@ C      WRITE(*,*) ''
       ISPUSR(1)=ICODE
       ISPUSR(2)=JTRACK
       NowVol=MREG
-* SPAUSR 1.parent's age 
+* SPAUSR 1.parent's age 2.parent's energy
       SPAUSR(1)=ATRACK
+      if(JTRACK.lt.200 .and. JTRACK.gt.0) then
+          SPAUSR(2)=ETRACK-AM(JTRACK)
+      else
+          SPAUSR(2)=10000
+      endif
 *
       USDP(1)=XSCO 
       USDP(2)=YSCO 
