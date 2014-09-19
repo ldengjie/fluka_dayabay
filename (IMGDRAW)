@@ -18,7 +18,7 @@
 *neutron
       PARAMETER ( MxNeuN = 10000)
       DOUBLE PRECISION,DIMENSION(MxNeuN) :: NeuInitT, NeuInitE
-      DOUBLE PRECISION,DIMENSION(MxNeuN) ::NeuGamaE,NeuCapT
+      DOUBLE PRECISION,DIMENSION(MxNeuN) ::NeuGamaE,NeuCapT,NeuMaE
       DOUBLE PRECISION,DIMENSION(MxNeuN,3) ::NeuInitP,NeuCapP
       INTEGER ,DIMENSION(MxNeuN)::NeuMaID,NeuType,NeuGamaN,
      &NeuCapVm,NeuCapTn,NeuInitVm
@@ -32,7 +32,7 @@
      &          OwsInitP,IwsInitP,MoInitP,LsInitP,GdInitP,
      &          USDP,OwsLen,IwsLen,LsLen,GdLen,MoLen,
      &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
-     &          NeuCapT,NeuGamaE,
+     &          NeuCapT,NeuGamaE,NeuMaE,
      &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,NeuInitVm,
      &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol,USDVol
       SAVE / IMGDRAW /

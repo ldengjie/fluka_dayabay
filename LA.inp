@@ -135,7 +135,10 @@ ASSIGNMA     Acrylic       OAT
 ASSIGNMA          Ls        LS
 ASSIGNMA     Acrylic       IAT
 ASSIGNMA        GdLs      GDLS
-* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..  * ************************************* e+e- gamma **************************************
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7.. 
+* ************************************* e+e- gamma **************************************
+EMFCUT        -1.E-3     1.E-3        0.        2.  @LASTREG
+EMFCUT        -1.E-3     1.E-3        1.        3.  @LASTMAT          PROD-CUT
 * Turn on photonuclear reaction,maybe produce neutron
 PHOTONUC          1.                             3  @LASTMAT
 * Muon pair production by photon
@@ -161,5 +164,5 @@ USERWEIG                                                 1.0
 * Set the random number seed
 RANDOMIZ          1.1235098764
 * Set the number of primary histories to be simulated in the run
-START        100000.
+START          1000.
 STOP

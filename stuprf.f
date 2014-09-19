@@ -30,21 +30,24 @@ C      WRITE(*,*) "Save into stack : ",KPART(NPSECN),'NP : ',NP
 C                 WRITE(*,*) 'TKI (NPSECN):MaxNeuE',TKI(NPSECN),MaxNeuE
                 NeuNum=NeuNum+1
 *ISPUSR 1.reaction type 2.parent'd id 3.neutron num 4.isotopes num ?.gamma num 
-*SPAUSR 1.parent's age
+*SPAUSR 1.parent's age 2.parent's energy
                 ISPARK(3,NPFLKA)=NeuNum !then ISPARK->ISPUSR
                 NeuMaID(NeuNum)=IJ
+                NeuMaE(NeuNum)=SPAUSR(2)
                 NeuType(NeuNum)=ISPUSR(1)
                 NeuInitT(NeuNum)=AGESEC(NPSECN)+SPAUSR(1)
                 NeuInitE(NeuNum)=0
                 NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
-                NeuInitVm=MREG
+                NeuInitVm(NeuNum)=MREG
 C                WRITE(*,*) 'Find a secondary neutron',IJ,ISPUSR(2)
+C       WRITE(*,*) IJ,SPAUSR(2),NeuMaE(NeuNum)
              endif
           endif
        else
          NeuNum=NeuNum+1
          ISPARK(3,NPFLKA)=NeuNum !then ISPARK->ISPUSR
          NeuMaID(NeuNum)=IJ
+         NeuMaE(NeuNum)=SPAUSR(2)
 C         if(IJ.eq.7) then
 C            WRITE(*,*) 'neutron from gamma'
 C         endif
@@ -53,8 +56,9 @@ C         endif
 C         NeuInitE(NeuNum)=TKI (NPSECN)
          NeuInitE(NeuNum)=0
          NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
-         NeuInitVm=MREG
+         NeuInitVm(NeuNum)=MREG
 C                WRITE(*,*) 'Find a primary neutron',IJ,ISPUSR(2)
+C         if(IJ.eq.7) WRITE(*,*) IJ,SPAUSR(2),NeuMaE(NeuNum)
        endif
       endif
 *  Increment the track number and put it into the last flag:
