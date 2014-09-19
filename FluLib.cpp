@@ -35,7 +35,7 @@ Double_t Spax,Spay,Spaz,SpadE,Spatime,SpaquenchedDepE=0;
 Int_t    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,SpaMotherInteractionType,SpaVolume,SpaInitVolume=0;
 
 static TTree *NeuTree = 0;
-Double_t NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum=0;
+Double_t NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum,NeuMotherEnergy=0;
 Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType,NeuCapVolumeName,NeuCapTargetName,NeuInitVolumeName=0;
 
 //static Results *TheResults = 0;
@@ -120,6 +120,7 @@ extern "C" {
 	NeuTree->Branch("CapVolumeName",&NeuCapVolumeName,"CapVolumeName/I");
 	NeuTree->Branch("CapTargetName",&NeuCapTargetName,"CapTargetName/I");
 	NeuTree->Branch("InitVolumeName",&NeuInitVolumeName,"InitVolumeName/I");
+	NeuTree->Branch("MotherEnergy",&NeuMotherEnergy,"MotherEnergy/D");
 
     printf("%f\n", pluto);
 
@@ -243,7 +244,7 @@ extern "C" {
 #define fillneu FILLNEU
 #endif
 extern "C" {
-    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName,Int_t &m_NeuCapTargetName,Int_t &m_NeuInitVolumeName)
+    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName,Int_t &m_NeuCapTargetName,Int_t &m_NeuInitVolumeName,Double_t &m_NeuMotherEnergy)
   {
 	NeuInitKineE              = m_NeuInitKineE;
 	NeuInitTime               = m_NeuInitTime;
@@ -262,6 +263,7 @@ extern "C" {
     NeuCapVolumeName          = m_NeuCapVolumeName;
     NeuCapTargetName          = m_NeuCapTargetName;
     NeuInitVolumeName          = m_NeuInitVolumeName;
+	NeuMotherEnergy      = m_NeuMotherEnergy;
     NeuTree->Fill();
   }
 }
