@@ -120,7 +120,7 @@ extern "C" {
 	NeuTree->Branch("CapVolumeName",&NeuCapVolumeName,"CapVolumeName/I");
 	NeuTree->Branch("CapTargetName",&NeuCapTargetName,"CapTargetName/I");
 	NeuTree->Branch("InitVolumeName",&NeuInitVolumeName,"InitVolumeName/I");
-	NeuTree->Branch("MotherEnergy",&NeuMotherEnergy,"MotherEnergy/D");
+	NeuTree->Branch("MotherKineEnergy",&NeuMotherEnergy,"MotherKineEnergy/D");
 
     printf("%f\n", pluto);
 
