@@ -1,5 +1,5 @@
 {
-    int rootNum=10000;
+    int rootNum=500;
     int adMuonNum=0;
     double adMuonLength=0.;
     int neuNum=0;
@@ -112,7 +112,7 @@
 
     //print 
     cout<<"adMuonNum : "<<adMuonNum<<endl;
-    cout<<"adMuonLength : "<<adMuonLength<<endl;
+    cout<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/adMuonNum<<" per muon"<<endl;
     cout<<" "<<endl;
     cout<<"neuNum : "<<neuNum<<"   neuYield : "<<neuNum/adMuonLength/0.855<<endl;
     cout<<" "<<endl;
@@ -131,7 +131,7 @@
     outfile.open("result.txt");
 
     outfile<<"adMuonNum : "<<adMuonNum<<endl;
-    outfile<<"adMuonLength : "<<adMuonLength<<endl;
+    outfile<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/adMuonNum<<" per muon"<<endl;
     outfile<<" "<<endl;
     outfile<<"neuNum : "<<neuNum<<"   neuYield : "<<neuNum/adMuonLength/0.855<<endl;
     outfile<<" "<<endl;
