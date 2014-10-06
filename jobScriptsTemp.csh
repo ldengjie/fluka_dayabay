@@ -16,5 +16,5 @@ foreach rootfile (`ls *.root`)
     @ i = $i + 1
 end
 
-cd ..
-rm DATADIR -rf
+#cd ..
+#rm DATADIR -rf
