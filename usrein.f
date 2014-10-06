@@ -29,30 +29,13 @@
 *
       INCLUDE '(IMGDRAW)'
 
-C      WRITE(*,*) 'usrein'
-C      NeuNum,IsoNum,
-C     &MuInitT, MuInitE,MuInitP,MuInitTP,
-C     &OwsInitP,IwsInitP,MoInitP,LsInitP,GdInitP,
-C     &OwsFinaP,IwsFinaP,MoFinaP,LsFinaP,GdFinaP,
-C     &NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,NeuGamaT,NeuGamaE,
-C     &NeuMaID,NeuType=0
 *muon
       NeuNum=0 
       IsoNum=0 
       MuInitT=0 
       MuInitE=0 
-      MuInitP=0 
-      MuInitTP=0 
-      OwsInitP=0 
-      IwsInitP=0 
-      MoInitP=0 
-      LsInitP=0 
-      GdInitP=0 
-      OwsLen=0
-      IwsLen=0
-      MoLen=0
-      LsLen=0
-      GdLen=0
+      DetLen=0
+      DetInitP=0
 *neutron
       NeuInitT=0 
       NeuInitE=0 

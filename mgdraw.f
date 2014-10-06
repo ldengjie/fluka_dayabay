@@ -76,6 +76,25 @@ C     &MREG,ISPUSR(5))
          ENDDO
       endif
 
+* get neutron initial energy at this neutron first MGDRAW call
+      if(JTRACK.EQ.8) then
+       if(ISPUSR(3).ne.0) then
+        if(NeuInitE(ISPUSR(3)) .eq. 0) then
+         IF (KTRACK.GT.0) THEN 
+*Randomly distribute the neutron energy in the group <20MeV 
+            ALOGEA = LOG (GMSTOR(IDXSEC+KTRACK+1)) ! Lower bin boundary 
+            ALOGEB = LOG (GMSTOR(IDXSEC+KTRACK)) ! Higher bin boundary 
+            NeuInitE(ISPUSR(3))= 
+     &EXP(ALOGEA+FLRNDM(DUMMY)*(ALOGEB-ALOGEA)) 
+         ELSE
+            NeuInitE(ISPUSR(3))=ETRACK-AM(8)
+         ENDIF 
+        endif
+       else
+      WRITE(*,*) 'error:ISPUSR(3).eq.0'
+       endif
+      endif
+
       RETURN
 
 *  +-------------------------------------------------------------------*
@@ -83,35 +102,21 @@ C     &MREG,ISPUSR(5))
       if(LTRACK.eq.1) then
       CALL GEOR2N ( MREG,MRGNAM,IERR1)
       CALL GEOR2N ( NEWREG,NRGNAM,IERR2)
-      IF (NRGNAM.EQ.'WS') THEN
-          IF(DOT_PRODUCT(OwsInitP(1:3),OwsInitP(1:3)).eq.0) then
-              OwsInitP(1:3)=[XSCO, YSCO, ZSCO]
+              WRITE(*,*) MRGNAM,'->',NRGNAM
+      
+          IF(DOT_PRODUCT(DetInitP(NEWREG,1:3),DetInitP(NEWREG,1:3))
+     &       .eq.0) then
+              DetInitP(NEWREG,1:3)=[XSCO, YSCO, ZSCO]
           else
-              WRITE(*,*) 'ERROR : OwsInitP .NE. 0'
+              WRITE(*,*) 'ERROR : DetInitP .NE. 0',NEWREG
           end if
-      ELSE IF(NRGNAM.EQ.'AD') THEN
-          IF(DOT_PRODUCT(LsInitP(1:3),LsInitP(1:3)).EQ.0) then
-              LsInitP(1:3)=[XSCO, YSCO, ZSCO]
-          else
-              WRITE(*,*) 'ERROR : LsInitP .NE. 0'
-          end if
-      ELSE
 
-      END IF
-
-      IF (MRGNAM.EQ.'WS') THEN
-          OwsLen=OwsLen+sqrt((XSCO-OwsInitP(1))*(XSCO-OwsInitP(1))+
-     &                       (YSCO-OwsInitP(2))*(YSCO-OwsInitP(2))+
-     &                       (ZSCO-OwsInitP(3))*(ZSCO-OwsInitP(3)))
-          OwsInitP=0
-      ELSE IF(MRGNAM.EQ.'AD') THEN
-          LsLen=LsLen+sqrt((XSCO-LsInitP(1))*(XSCO-LsInitP(1))+
-     &                       (YSCO-LsInitP(2))*(YSCO-LsInitP(2))+
-     &                       (ZSCO-LsInitP(3))*(ZSCO-LsInitP(3)))
-          LsInitP=0
-      ELSE
-      END IF
-
+          DetLen(MREG)=DetLen(MREG)+sqrt(
+     &                 (XSCO-DetInitP(MREG,1))*(XSCO-DetInitP(MREG,1))+
+     &                 (YSCO-DetInitP(MREG,2))*(YSCO-DetInitP(MREG,2))+
+     &                 (ZSCO-DetInitP(MREG,3))*(ZSCO-DetInitP(MREG,3)))
+              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
+          DetInitP(MREG,1:3)=0
       endif
 
       RETURN
@@ -121,16 +126,18 @@ C     &MREG,ISPUSR(5))
 *muon 
       call fillmuon(NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
      &MuInitP(2),MuInitP(3),
-     &MuInitTP(1),MuInitTP(2),MuInitTP(3),OwsLen,IwsLen,MoLen,
-     &LsLen,GdLen,
-     &NeuNum,IsoNum)
-C      WRITE(*,*) 'EE LEN',OwsLen,IwsLen,MoLen,LsLen,GdLen
+     &MuInitTP(1),MuInitTP(2),MuInitTP(3),DetLen(3),DetLen(4),
+     &DetLen(5),DetLen(6),DetLen(7),DetLen(8),DetLen(9),DetLen(10),
+     &DetLen(11),DetLen(12),NeuNum,IsoNum)
 *neutron
+      WRITE(*,*) 'fillneu'
+
       if(NeuNum.gt.0) then
           DO I=1,NeuNum
           if(NeuInitE(I).eq.0) then
-C             WRITE(*,*) 'Error:NeuInitE(I).eq.0'
+             WRITE(*,*) 'Error:NeuInitE(I).eq.0'
           else
+        WRITE(*,*) I,NeuInitE(I)
         call fillneu(NCASE,NeuInitE(I),NeuInitT(I),
      &NeuInitP(I,1),NeuInitP(I,2),NeuInitP(I,3),
      &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
@@ -175,7 +182,6 @@ C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
 
 *  +-------------------------------------------------------------------*
       ENTRY SODRAW
-C      WRITE(*,*) 'SOD LEN',OwsLen,IwsLen,MoLen,LsLen,GdLen
       MuInitT=AGESTK(1)
       MuInitE=TKEFLK(1)
       MuInitP=[XFLK(1),YFLK(1),ZFLK(1)]
@@ -191,10 +197,9 @@ C      WRITE(*,*) 'SOD LEN',OwsLen,IwsLen,MoLen,LsLen,GdLen
 
 *  +-------------------------------------------------------------------*
       ENTRY USDRAW ( ICODE, MREG, XSCO, YSCO, ZSCO )
-C      WRITE(*,*) ''
 
 *neutron
-* ISPUSR 1.reaction type 2.parent'd id 3.neutron num 4.isotopes num 5.initial volume ?.gamma num 
+* ISPUSR 1.reaction type 2.parent id 3.neutron num 4.isotopes num 5.initial volume ?.gamma num 
       ISPUSR(1)=ICODE
       ISPUSR(2)=JTRACK
       NowVol=MREG
@@ -211,37 +216,33 @@ C      WRITE(*,*) ''
       USDP(3)=ZSCO 
       USDVol=MREG
 *find maximum energy of secondary neutron
-      if(ICODE.eq.101 .and. JTRACK.eq.8) then
+      if(JTRACK.eq.8 .and. ICODE.eq.101) then
          SecNeuNO=0
          MaxNeuE=0
          do I=1,NP
             if(KPART(I).eq.8) then
                SecNeuNO=SecNeuNO+1
                if(MaxNeuE.lt.TKI(I)) MaxNeuE=TKI(I)
-C               WRITE(*,*) 'MaxNeuE',MaxNeuE
             endif
          enddo
+C         do I=1,NP
+C            if(KPART(I).eq.8) then
+C             if(TKI(I).ne.MaxNeuE) then
+C                 WRITE(*,*) 'USDRAW(',NeuNum,') : find a neutron ',
+C     &'TKI(I):MaxNeuE',TKI(I),MaxNeuE,'mother:',JTRACK
+C             endif
+C            endif
+C         enddo
+C      endif
+C      if(JTRACK.ne.8)then
+C         do I=1,NP
+C            if(KPART(I).eq.8) then
+C                 WRITE(*,*) 'USDRAW(',NeuNum,') : find a neutron ',
+C     &'TKI(I):',TKI(I),'mother:',JTRACK
+C            endif
+C         enddo
       endif
-C               WRITE(*,*) 'MaxNeuE',MaxNeuE
 
-*get neutron initial energy at first USDRAW call
-      if(JTRACK.EQ.8) then
-       if(ISPUSR(3).ne.0) then
-        if(NeuInitE(ISPUSR(3)) .eq. 0) then
-         IF (KTRACK.GT.0) THEN 
-*Randomly distribute the neutron energy in the group <20MeV 
-            ALOGEA = LOG (GMSTOR(IDXSEC+KTRACK+1)) ! Lower bin boundary 
-            ALOGEB = LOG (GMSTOR(IDXSEC+KTRACK)) ! Higher bin boundary 
-            NeuInitE(ISPUSR(3))= 
-     &EXP(ALOGEA+FLRNDM(DUMMY)*(ALOGEB-ALOGEA)) 
-         ELSE
-            NeuInitE(ISPUSR(3))=ETRACK-AM(8)
-         ENDIF 
-        endif
-       else
-C      WRITE(*,*) 'JTRACK',JTRACK
-       endif
-      endif
 *neutron capture
       if(JTRACK.eq.8 .and. ICODE.eq.300)then
           OnlyGamm=0
@@ -271,6 +272,7 @@ C             WRITE(*,*) 'Neutron captured on :',MMTRCK
             endif
           endif
       endif
+
 *Michel electron
       if((JTRACK.eq.10 .or. JTRACK.eq.11) .and. ICODE.eq.102) then
           DO IP = 1, NP 
