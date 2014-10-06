@@ -1,5 +1,5 @@
 {
-    int rootNum=4027;
+    int rootNum=1000;
     int adMuonNum=0;
     double adMuonLength=0.;
     int neuNum=0;
@@ -10,14 +10,14 @@
     for( int i=1 ; i<rootNum+1; i++ )
     {
         TString nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/FAR/data/whole/fluSim_%06d.root",i);
-        if( i%100==0 )
-        {
+        //if( i%100==0 )
+        //{
             std::cout<<"filename : "<<nameStr<<endl;
-        } 
+            //} 
         TFile* f= new TFile(nameStr);
         if( f->IsZombie() )
         {
-            std::cout<<"not exist "<<endl;
+            //std::cout<<"not exist "<<endl;
             f->Close();
         }else
         {
@@ -53,12 +53,14 @@
             double neuInitLocalX;
             double neuInitLocalY;
             double neuInitLocalZ;
+            int neuInitVolumeName;
             neut->SetBranchAddress("EventID",&neuEventID);
             neut->SetBranchAddress("InitTime",&neuInitTime);
             neut->SetBranchAddress("InitKineE",&neuInitKineE);
             neut->SetBranchAddress("InitLocalX",&neuInitLocalX);
             neut->SetBranchAddress("InitLocalY",&neuInitLocalY);
             neut->SetBranchAddress("InitLocalZ",&neuInitLocalZ);
+            neut->SetBranchAddress("InitVolumeName",&neuInitVolumeName);
 
             TTree* isot=(TTree*)f->Get("Isotope");
             int isotnum=isot->GetEntries();
@@ -68,12 +70,14 @@
             double isoDecayLocalZ;
             int isoZ;
             int isoA;
+            int isoInitVolume;
             isot->SetBranchAddress("EventID",&isoEventID);
             isot->SetBranchAddress("DecayLocalX",&isoDecayLocalX);
             isot->SetBranchAddress("DecayLocalY",&isoDecayLocalY);
             isot->SetBranchAddress("DecayLocalZ",&isoDecayLocalZ);
             isot->SetBranchAddress("Z",&isoZ);
             isot->SetBranchAddress("A",&isoA);
+            isot->SetBranchAddress("InitVolume",&isoInitVolume);
 
             map<int,int> muIndex;
             for( int u=0 ; u<mtnum ; u++ )
@@ -89,7 +93,7 @@
             {
                 neut->GetEntry(r);
                 if(muIndex.find(neuEventID)==muIndex.end()) continue;
-                if(!(neuInitLocalY>-250&&neuInitLocalY<250&&neuInitLocalZ>-250&&neuInitLocalZ<250&&((neuInitLocalX>-550&&neuInitLocalX<-50)||(neuInitLocalX>50&&neuInitLocalX<550)))) continue;
+                if(neuInitVolumeName<7) continue;
                 neuNum++;
             }
 
@@ -97,7 +101,7 @@
             {
                 isot->GetEntry(i);
                 if(muIndex.find(isoEventID)==muIndex.end()) continue;
-                if(!(((isoDecayLocalY>-250&&isoDecayLocalY<250)||(isoDecayLocalY>350&&isoDecayLocalY<850))&&isoDecayLocalZ>-250&&isoDecayLocalZ<250&&((isoDecayLocalX>-550&&isoDecayLocalX<-50)||(isoDecayLocalX>50&&isoDecayLocalX<550)))) continue;
+                if(isoInitVolume<7) continue;
                 isoNum[isoZ][isoA]++;
             }
 
@@ -108,7 +112,7 @@
 
     //print 
     cout<<"adMuonNum : "<<adMuonNum<<endl;
-    cout<<"adMuonLength : "<<adMuonLength<<endl;
+    cout<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/adMuonNum<<" per muon"<<endl;
     cout<<" "<<endl;
     cout<<"neuNum : "<<neuNum<<"   neuYield : "<<neuNum/adMuonLength/0.855<<endl;
     cout<<" "<<endl;
@@ -127,7 +131,7 @@
     outfile.open("result.txt");
 
     outfile<<"adMuonNum : "<<adMuonNum<<endl;
-    outfile<<"adMuonLength : "<<adMuonLength<<endl;
+    outfile<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/adMuonNum<<" per muon"<<endl;
     outfile<<" "<<endl;
     outfile<<"neuNum : "<<neuNum<<"   neuYield : "<<neuNum/adMuonLength/0.855<<endl;
     outfile<<" "<<endl;
