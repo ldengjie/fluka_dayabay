@@ -9,11 +9,11 @@
       INTEGER USDVol
 *muon
       INTEGER NeuNum,IsoNum,MuCharge,IEMPTY
-      DOUBLE PRECISION :: MuInitT, MuInitE,OwsLen,
-     &IwsLen,LsLen,GdLen,MoLen
+      DOUBLE PRECISION :: MuInitT, MuInitE
+      DOUBLE PRECISION,DIMENSION(15) ::DetLen
       DOUBLE PRECISION,DIMENSION(3) ::MuInitP,MuInitTP
-      DOUBLE PRECISION,DIMENSION(3) ::
-     &OwsInitP,IwsInitP,MoInitP,LsInitP,GdInitP
+      DOUBLE PRECISION,DIMENSION(15,3) :: DetInitP
+
 
 *neutron
       PARAMETER ( MxNeuN = 10000)
@@ -29,8 +29,8 @@
       COMMON / IMGDRAW / 
      &          NeuNum,IsoNum,MuCharge,EvtID,
      &          MuInitT, MuInitE,MuInitP,MuInitTP,
-     &          OwsInitP,IwsInitP,MoInitP,LsInitP,GdInitP,
-     &          USDP,OwsLen,IwsLen,LsLen,GdLen,MoLen,
+     &          DetInitP,
+     &          USDP,DetLen,
      &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
      &          NeuCapT,NeuGamaE,NeuMaE,
      &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,NeuInitVm,
