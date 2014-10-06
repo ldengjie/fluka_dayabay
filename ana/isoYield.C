@@ -15,7 +15,7 @@
     //loop for counting
     for( int i=1 ; i<rootNum+1; i++ )
     {
-        nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/%s/fluSim_%06d.root",dataVer[j].c_str(),i);
+        nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/fluSim_%06d.root",dataVer[j].c_str(),i);
         //if( i%100==0 )
         //{
         //std::cout<<"filename : "<<nameStr<<endl;
