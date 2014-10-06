@@ -1,14 +1,12 @@
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 TITLE
-Dayabay EH1 muon simulation
+La EH1 muon simulation
 GLOBAL         1000.       -1.       0.0        1.        1.
 * Set the defaults for precision simulations
 DEFAULTS                                                              PRECISIO
 * ************************************* sources *****************************************
 * Maxmium energy of muon is 8764.80967GeV
 BEAM         -8888.0                                                  MUON+
-*BEAM          -1.025                                                  NEUTRON
-*BEAMPOS         300.       0.0     9950.                              NEGATIVE
 * call source.f
 SOURCE
 * ************************************* geometry ****************************************
@@ -20,7 +18,7 @@ SPH blkHole    0.0 0.0 0.0 100000.0
 SPH vacuum     0.0 0.0 0.0 30000.0
 RPP hall1      -2800. -1066. -800. 700. 500. 900.
 RPP hall2      -1068. 1610. -800. 700. 500. 3000.
-RPP hall3      1590. 2723. -800. 700. 500. 1210.
+RPP hall3      1590. 2230. -800. 700. 500. 3000.
 RPP hall4      -1150. 1050. -2000. -790. 500. 900.
 RPP stone6     -750. -300. -1800. -800. 500. 900.
 RPP stone7     100. 550. -1800. -800. 500. 900.
@@ -140,9 +138,7 @@ ASSIGNMA        GdLs      GDLS
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7.. 
 * ************************************* e+e- gamma **************************************
 EMFCUT        -1.E-2     5.E-3        0.        2.  @LASTREG
-EMFCUT        -1.E-2     5.E-3        1.         3  @LASTMAT          PROD-CUT
-*EMFCUT        -1.E-3     1.E-3        0.        2.  @LASTREG
-*EMFCUT        -1.E-3     1.E-3        1.        3.  @LASTMAT          PROD-CUT
+EMFCUT        -1.E-2     5.E-3        1.        3.  @LASTMAT          PROD-CUT
 * Turn on photonuclear reaction,maybe produce neutron
 PHOTONUC          1.                             3  @LASTMAT
 * Muon pair production by photon
@@ -177,5 +173,5 @@ USERWEIG                                                 1.0
 * Set the random number seed
 RANDOMIZ          1.1235298764
 * Set the number of primary histories to be simulated in the run
-START          1000.
+START        100000.
 STOP
