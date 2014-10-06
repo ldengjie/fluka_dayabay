@@ -13,11 +13,11 @@
         if( i%100==0 )
         {
             std::cout<<"filename : "<<nameStr<<endl;
-        } 
+            //} 
         TFile* f= new TFile(nameStr);
         if( f->IsZombie() )
         {
-            std::cout<<"not exist "<<endl;
+            //std::cout<<"not exist "<<endl;
             f->Close();
         }else
         {
@@ -53,12 +53,14 @@
             double neuInitLocalX;
             double neuInitLocalY;
             double neuInitLocalZ;
+            int neuInitVolumeName;
             neut->SetBranchAddress("EventID",&neuEventID);
             neut->SetBranchAddress("InitTime",&neuInitTime);
             neut->SetBranchAddress("InitKineE",&neuInitKineE);
             neut->SetBranchAddress("InitLocalX",&neuInitLocalX);
             neut->SetBranchAddress("InitLocalY",&neuInitLocalY);
             neut->SetBranchAddress("InitLocalZ",&neuInitLocalZ);
+            neut->SetBranchAddress("InitVolumeName",&neuInitVolumeName);
 
             TTree* isot=(TTree*)f->Get("Isotope");
             int isotnum=isot->GetEntries();
@@ -68,12 +70,14 @@
             double isoDecayLocalZ;
             int isoZ;
             int isoA;
+            int isoInitVolume;
             isot->SetBranchAddress("EventID",&isoEventID);
             isot->SetBranchAddress("DecayLoaclX",&isoDecayLocalX);
             isot->SetBranchAddress("DecayLoaclY",&isoDecayLocalY);
             isot->SetBranchAddress("DecayLoaclZ",&isoDecayLocalZ);
             isot->SetBranchAddress("Z",&isoZ);
             isot->SetBranchAddress("A",&isoA);
+            isot->SetBranchAddress("InitVolume",&isoInitVolume);
 
             map<int,int> muIndex;
             for( int u=0 ; u<mtnum ; u++ )
@@ -110,7 +114,7 @@
 
     //print 
     cout<<"adMuonNum : "<<adMuonNum<<endl;
-    cout<<"adMuonLength : "<<adMuonLength<<endl;
+    cout<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/adMuonNum<<" per muon"<<endl;
     cout<<" "<<endl;
     cout<<"neuNum : "<<neuNum<<"   neuYield : "<<neuNum/adMuonLength/0.855<<endl;
     cout<<" "<<endl;
@@ -129,7 +133,7 @@
     outfile.open("result.txt");
 
     outfile<<"adMuonNum : "<<adMuonNum<<endl;
-    outfile<<"adMuonLength : "<<adMuonLength<<endl;
+    outfile<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/adMuonNum<<" per muon"<<endl;
     outfile<<" "<<endl;
     outfile<<"neuNum : "<<neuNum<<"   neuYield : "<<neuNum/adMuonLength/0.855<<endl;
     outfile<<" "<<endl;
