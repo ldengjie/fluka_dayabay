@@ -140,7 +140,7 @@ make
 
 4.运行
     4.1 运行单个任务
-    rfluka -e DayabayMuon -N0 -M100 dayabay
+    rfluka -e LaMuon -N0 -M100 LA
     -N 起始run number
     -M 这次作业运行的run的个数
     4.2 提交作业至服务器
@@ -150,7 +150,7 @@ make
 
 5.其他
     5.1 打开可视化(flair)
-    flair dayabay.inp
+    flair LA.inp
 
 ***************************************************************************
 
@@ -163,14 +163,14 @@ genJobs.csh：
     #每个文件夹下run个数
     8 @ runNumInDir=4
     #脚本生成位置和数据存放位置
-    10 set dataDir="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/PART5"
+    10 set dataDir="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/PART5"
 
     24 @ newseed = 1234898764 + $i * $runNumInDir
-    31 sed -e "s#1234898764#${newseed}#g" $FLUWORK/dayabay.inp>dayabay.inp
+    31 sed -e "s#1234898764#${newseed}#g" $FLUWORK/LA.inp>LA.inp
     39 echo 600001 >NextSeedNum
     41 echo qsub -q dybshortq jobScripts/$dirNamStr/fluka_$nowJobNum.csh >>../submit.csh
 
-dayabay.inp:
+LA.inp:
     * Set the random number seed
     165 RANDOMIZ          1.1234898764
     * Set the number of primary histories to be simulated in the run

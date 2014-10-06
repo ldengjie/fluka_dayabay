@@ -52,27 +52,27 @@ C      if(NRGNAM.eq.'LS'.or.NRGNAM.eq.'GDLS') then
                     ISpaMaId=0
                     ISpaMaTy=0
                 endif
-*  |  Quenching is activated
-                IF ( LQEMGD ) THEN
-                   IF ( MTRACK .GT. 0 ) THEN
-                      QenE=0
-                      RULLL  = ZERZER
-                      CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-                      if(ZFRTTK.gt.1.5) then
-                          JBK=2
-                      else
-                          JBK=1
-                      endif
-                      DO J=1,MTRACK
-                          QenE=QenE+DTQUEN(J,JBK)
-                      ENDDO
-                   END IF
-                END IF
-*  |  End of quenching
-
-               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
-     &MREG,ISPUSR(5))
+C*  |  Quenching is activated
+C                IF ( LQEMGD ) THEN
+C                   IF ( MTRACK .GT. 0 ) THEN
+C                      QenE=0
+C                      RULLL  = ZERZER
+C                      CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
+C                      if(ZFRTTK.gt.1.5) then
+C                          JBK=2
+C                      else
+C                          JBK=1
+C                      endif
+C                      DO J=1,MTRACK
+C                          QenE=QenE+DTQUEN(J,JBK)
+C                      ENDDO
+C                   END IF
+C                END IF
+C*  |  End of quenching
+C
+C               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
+C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
+C     &MREG,ISPUSR(5))
             endif
          ENDDO
       endif
@@ -161,22 +161,22 @@ C      if(NRGNAM.eq.'LS'.or.NRGNAM.eq.'GDLS') then
                     ISpaMaId=0
                     ISpaMaTy=0
                 endif
-*  |  Quenching is activated : calculate quenching factor
-*  |  and store quenched energy in DTQUEN(1, jbk)
-                IF ( LQEMGD ) THEN
-                      QenE=0
-                   RULLL = RULL
-                   CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-                END IF
-                      if(ZFRTTK.gt.1.5) then
-                          JBK=2
-                      else
-                          JBK=1
-                      endif
-                      QenE=QenE+DTQUEN(1,JBK)
-*  |  end quenching
-               call fillspa(NCASE,XSCO,YSCO,ZSCO,
-     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
+C*  |  Quenching is activated : calculate quenching factor
+C*  |  and store quenched energy in DTQUEN(1, jbk)
+C                IF ( LQEMGD ) THEN
+C                      QenE=0
+C                   RULLL = RULL
+C                   CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
+C                END IF
+C                      if(ZFRTTK.gt.1.5) then
+C                          JBK=2
+C                      else
+C                          JBK=1
+C                      endif
+C                      QenE=QenE+DTQUEN(1,JBK)
+C*  |  end quenching
+C               call fillspa(NCASE,XSCO,YSCO,ZSCO,
+C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
       endif
 
       RETURN
@@ -211,6 +211,7 @@ C      if(NRGNAM.eq.'LS'.or.NRGNAM.eq.'GDLS') then
       else
           SPAUSR(2)=10000
       endif
+      DNeuMaE=SPAUSR(2)
 *
       USDP(1)=XSCO 
       USDP(2)=YSCO 

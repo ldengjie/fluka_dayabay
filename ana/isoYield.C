@@ -1,9 +1,9 @@
 {
     int rootNum=6;
-    string dataVer[4]={"whole"};
+    string dataVer[4]={"PART5","PART6","PART9","PART10"};
     string nameStr;
     string isoName[7]={"H","He","Li","Be","B","C","N"};
-    for( int j=0 ; j<1 ; j++ )
+    for( int j=0 ; j<4 ; j++ )
     {
     int adMuonNum=0;
     double adMuonLength=0.;

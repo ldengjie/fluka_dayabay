@@ -1,4 +1,4 @@
-*=== Source of muons at dayabay     
+*=== Source of muons at LA     
 *=== Auther  : lidengjie@ihep.ac.cn 
 *=== Created : Thursday Aug 14 2014 
 *
@@ -57,7 +57,7 @@
          LUSSRC = .TRUE.
 *     *** User initialization ***
         OPEN(UNIT=88,FILE="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaW
-     &ork/dayabay/mountain.DYB",STATUS="OLD")
+     &ork/LA/mountain.LA",STATUS="OLD")
         DO I = 1, NLINES
            READ(88,*) Enrgy(I),Theta(I),Phi(I)
 C           IF(I .LE. 50) THEN
@@ -70,8 +70,8 @@ C           END IF
         CLOSE(89)
 * initial surface 
 *hall
-        OPoMin=[-11,-8,-8]
-        OPoMax=[11,8,33]
+C        OPoMin=[-11,-8,-8]
+C        OPoMax=[11,8,33]
 *rock+waterpool
 C        OPoMin=[-11,-8,-8]
 C        OPoMax=[11,8,8]
@@ -79,8 +79,8 @@ C        OPoMax=[11,8,8]
 C        OPoMin=[-8,-5,-5]
 C        OPoMax=[8,5,5]
 *AD
-C        OPoMin=[-5.5,-2.5,-2.5]
-C        OPoMax=[5.5,2.5,2.5]
+        OPoMin=[-5.5,-2.5,-2.5]
+        OPoMax=[5.5,2.5,2.5]
 
         SVecN=0
         SLen=0
