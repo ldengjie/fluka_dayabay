@@ -47,4 +47,4 @@ while( $i < $dirNum)
     popd
     echo qsub -q dybshortq jobScripts/$dirNamStr/fluka_FAR_$nowJobNum.csh >>../submit.csh.$j
 end
-cd $dataDir
+cd $FLUWORK
