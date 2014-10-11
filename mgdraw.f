@@ -40,18 +40,18 @@
 *
       EXTERNAL TIM1O2, BDNOPT
 
-C      if(NRGNAM.eq.'LS'.or.NRGNAM.eq.'GDLS') then
-      if(MREG.eq.10 .or. MREG.eq.12) then
-         DO I=1,MTRACK
-            if(DTRACK (I).gt.0) then
-                IICode=0
-                if(LTRACK.gt.1) then
-                    ISpaMaId=ISPUSR(2)
-                    ISpaMaTy=ISPUSR(1)
-                else
-                    ISpaMaId=0
-                    ISpaMaTy=0
-                endif
+CC      if(NRGNAM.eq.'LS'.or.NRGNAM.eq.'GDLS') then
+C      if(MREG.eq.10 .or. MREG.eq.12) then
+C         DO I=1,MTRACK
+C            if(DTRACK (I).gt.0) then
+C                IICode=0
+C                if(LTRACK.gt.1) then
+C                    ISpaMaId=ISPUSR(2)
+C                    ISpaMaTy=ISPUSR(1)
+C                else
+C                    ISpaMaId=0
+C                    ISpaMaTy=0
+C                endif
 C*  |  Quenching is activated
 C                IF ( LQEMGD ) THEN
 C                   IF ( MTRACK .GT. 0 ) THEN
@@ -73,9 +73,9 @@ C
 C               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
 C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
 C     &MREG,ISPUSR(5))
-            endif
-         ENDDO
-      endif
+C            endif
+C         ENDDO
+C      endif
 
 *get neutron initial energy at this neutron's first MGDRAW call
       if(JTRACK.EQ.8) then
@@ -103,7 +103,7 @@ C     &MREG,ISPUSR(5))
       if(LTRACK.eq.1) then
       CALL GEOR2N ( MREG,MRGNAM,IERR1)
       CALL GEOR2N ( NEWREG,NRGNAM,IERR2)
-              WRITE(*,*) MRGNAM,'->',NRGNAM
+C              WRITE(*,*) MRGNAM,'->',NRGNAM
       
           IF(DOT_PRODUCT(DetInitP(NEWREG,1:3),DetInitP(NEWREG,1:3))
      &       .eq.0) then
@@ -116,7 +116,7 @@ C     &MREG,ISPUSR(5))
      &                 (XSCO-DetInitP(MREG,1))*(XSCO-DetInitP(MREG,1))+
      &                 (YSCO-DetInitP(MREG,2))*(YSCO-DetInitP(MREG,2))+
      &                 (ZSCO-DetInitP(MREG,3))*(ZSCO-DetInitP(MREG,3)))
-              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
+C              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
           DetInitP(MREG,1:3)=0
       endif
 
@@ -152,15 +152,15 @@ C     &MREG,ISPUSR(5))
 
 *  +-------------------------------------------------------------------*
       ENTRY ENDRAW ( ICODE, MREG, RULL, XSCO, YSCO, ZSCO )
-      if(MREG.eq.10 .or. MREG.eq.12) then
-                IICode=ICODE
-                if(LTRACK.gt.1) then
-                    ISpaMaId=ISPUSR(2)
-                    ISpaMaTy=ISPUSR(1)
-                else
-                    ISpaMaId=0
-                    ISpaMaTy=0
-                endif
+C      if(MREG.eq.10 .or. MREG.eq.12) then
+C                IICode=ICODE
+C                if(LTRACK.gt.1) then
+C                    ISpaMaId=ISPUSR(2)
+C                    ISpaMaTy=ISPUSR(1)
+C                else
+C                    ISpaMaId=0
+C                    ISpaMaTy=0
+C                endif
 C*  |  Quenching is activated : calculate quenching factor
 C*  |  and store quenched energy in DTQUEN(1, jbk)
 C                IF ( LQEMGD ) THEN
@@ -177,7 +177,7 @@ C                      QenE=QenE+DTQUEN(1,JBK)
 C*  |  end quenching
 C               call fillspa(NCASE,XSCO,YSCO,ZSCO,
 C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
-      endif
+C      endif
 
       RETURN
 
