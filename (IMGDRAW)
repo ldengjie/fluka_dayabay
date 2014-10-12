@@ -6,7 +6,7 @@
       INTEGER NowVol
       INTEGER NextSeedNum
       DOUBLE PRECISION ,DIMENSION(3) ::USDP
-      INTEGER USDVol
+      INTEGER USDVol,USDDauVm
 *muon
       INTEGER NeuNum,IsoNum,MuCharge,IEMPTY
       DOUBLE PRECISION :: MuInitT, MuInitE
@@ -16,14 +16,13 @@
 
 
 *neutron
-      PARAMETER ( MxNeuN = 10000)
+      PARAMETER ( MxNeuN = 100000)
       DOUBLE PRECISION,DIMENSION(MxNeuN) :: NeuInitT, NeuInitE
       DOUBLE PRECISION,DIMENSION(MxNeuN) ::NeuGamaE,NeuCapT,NeuMaE
       DOUBLE PRECISION,DIMENSION(MxNeuN,3) ::NeuInitP,NeuCapP
       INTEGER ,DIMENSION(MxNeuN)::NeuMaID,NeuType,NeuGamaN,
-     &NeuCapVm,NeuCapTn,NeuInitVm
+     &NeuCapVm,NeuCapTn,NeuInitVm,NeuDauVm
       DOUBLE PRECISION :: MaxNeuE
-
 
 *save
       COMMON / IMGDRAW / 
@@ -34,5 +33,6 @@
      &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
      &          NeuCapT,NeuGamaE,NeuMaE,
      &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,NeuInitVm,
-     &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol,USDVol
+     &          NeuDauVm,
+     &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol,USDVol,USDDauVm
       SAVE / IMGDRAW /

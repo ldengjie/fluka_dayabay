@@ -38,7 +38,7 @@
 C            WRITE(*,*) 'USRRNC():stable'
         else
             call filliso(EvtID,IZ,IA,X, Y, Z,MREG
-     &,USDP(1),USDP(2),USDP(3),USDVol)
+     &,USDP(1),USDP(2),USDP(3),USDVol,USDDauVm)
 C            WRITE(*,*) 'FillIso : ',EvtID,IZ,IA,X, Y, Z
             IsoNum=IsoNum+1
         endif

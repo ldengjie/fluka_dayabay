@@ -40,23 +40,25 @@
       NeuInitT=0 
       NeuInitE=0 
       NeuInitP=0 
-      NeuCapP=100000 
+      NeuCapP=10000000 
       NeuCapT=0 
       NeuGamaN=0 
       NeuGamaE=0
       NeuMaID=0 
-      NeuMaE=100000 
+      NeuMaE=10000000
       NeuType=0
       NeuCapVm=0
       NeuCapTn=0
       MaxNeuE=0
       NeuInitVm=0
+      NeuDauVm=0
 
 *general
       NRGNAM='VACUUM'
       NowVol=2
       USDP=0
       USDVol=0
+      USDDauVm=0
 
       RETURN
 *=== End of subroutine Usrein =========================================*
