@@ -95,7 +95,9 @@ C      WRITE(*,*) 'MGDRAW'
       WRITE(*,*) 'error:ISPUSR(3).eq.0'
        endif
       endif
-
+* get muon final volume and position
+      MuFinalV=MREG
+      MuFinalP=[XTRACK (NTRACK),YTRACK (NTRACK),ZTRACK (NTRACK)]
       RETURN
 
 *  +-------------------------------------------------------------------*
@@ -125,6 +127,20 @@ C              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
 *  +-------------------------------------------------------------------*
       ENTRY EEDRAW ( ICODE ) 
 *muon 
+      if(MuFinalV>1) then
+          IF(DOT_PRODUCT(DetInitP(MuFinalV,1:3),DetInitP(MuFinalV,1:3))
+     &       .eq.0) then
+          DetLen(MuFinalV)=DetLen(MuFinalV)+sqrt(
+     &(MuFinalP(1)-DetInitP(MuFinalV,1))*
+     &(MuFinalP(1)-DetInitP(MuFinalV,1))+
+     &(MuFinalP(2)-DetInitP(MuFinalV,2))*
+     &(MuFinalP(2)-DetInitP(MuFinalV,2))+
+     &(MuFinalP(3)-DetInitP(MuFinalV,3))*
+     &(MuFinalP(3)-DetInitP(MuFinalV,3)))
+          DetInitP(MuFinalV,1:3)=0
+          endif
+      endif 
+
       call fillmuon(NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
      &MuInitP(2),MuInitP(3),
      &MuInitTP(1),MuInitTP(2),MuInitTP(3),DetLen(3),DetLen(4),
@@ -145,9 +161,15 @@ C        WRITE(*,*) I,NeuInitE(I)
      &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
      &NeuMaID(I),NeuType(I),NeuCapVm(I),NeuCapTn(I),
      &NeuInitVm(I),NeuMaE(I),NeuDauVm(I))
+C      WRITE(*,*) I,NeuDauVm(I)
          endif
           enddo
       endif
+
+C      WRITE(*,*) 'MuFinalV',MuFinalV
+C      DO i=1,15
+C         if(DetLen(i).ne.0) WRITE(*,*) I,DetLen(i)
+C      ENDDO
       RETURN
 
 *  +-------------------------------------------------------------------*
@@ -187,12 +209,14 @@ C        WRITE(*,*) I,NeuInitE(I)
       MuInitE=TKEFLK(1)
       MuInitP=[XFLK(1),YFLK(1),ZFLK(1)]
       MuInitTP=[TXFLK(1),TYFLK(1),TZFLK(1)]
+      DetInitP(2,1:3)=[XFLK(1),YFLK(1),ZFLK(1)]
       if(ILOFLK(1).eq.10) then
          MuCharge=1
       else
          MuCharge=-1
       endif
       EvtID=NCASE
+C      WRITE(*,*) ''
 C      WRITE(*,*) 'SODRAW',NCASE
 
       RETURN

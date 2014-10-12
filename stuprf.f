@@ -39,10 +39,7 @@ C      WRITE(*,*) "Save into stack : ",KPART(NPSECN),'NP : ',NP
                 NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
                 NeuInitVm(NeuNum)=MREG
                 NeuDauVm(NeuNum)=ISPUSR(6)
-C      WRITE(*,*) '    stuprf(',ISPARK(3,NPFLKA),') : find a neutron ',
-C     &'TKI(NPSECN):MaxNeuE',TKI(NPSECN),MaxNeuE,'mother:',ISPUSR(2)
-CC                WRITE(*,*) 'Find a secondary neutron',IJ,ISPUSR(2)
-CC       WRITE(*,*) IJ,SPAUSR(2),NeuMaE(NeuNum)
+C                WRITE(*,*) "neutron origin volume",NeuDauVm(NeuNum)
              endif
           endif
        else
@@ -59,10 +56,7 @@ C         endif
          NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
          NeuInitVm(NeuNum)=MREG
          NeuDauVm(NeuNum)=ISPUSR(6)
-C      WRITE(*,*) '    stuprf(',ISPARK(3,NPFLKA),') : find a neutron ',
-C     &'TKI(NPSECN):',TKI(NPSECN),'mother:',ISPUSR(2)
-CC                WRITE(*,*) 'Find a primary neutron',IJ,ISPUSR(2)
-CC         if(IJ.eq.7) WRITE(*,*) IJ,SPAUSR(2),NeuMaE(NeuNum)
+C                WRITE(*,*) "neutron origin volume",NeuDauVm(NeuNum)
        endif
       endif
 *  Increment the track number and put it into the last flag:

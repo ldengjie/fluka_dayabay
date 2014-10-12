@@ -36,6 +36,8 @@
       MuInitE=0 
       DetLen=0
       DetInitP=0
+      MuFinalP=10000000
+      MuFinalV=0
 *neutron
       NeuInitT=0 
       NeuInitE=0 
