@@ -68,7 +68,7 @@ C                      ENDDO
 C                   END IF
 C                END IF
 C*  |  End of quenching
-
+C
 C               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
 C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
 C     &MREG,ISPUSR(5))
