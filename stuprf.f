@@ -28,7 +28,7 @@ C      WRITE(*,*) "Save into stack : ",KPART(NPSECN),'NP : ',NP
           if(ISPUSR(1).eq.101) then
              if(TKI (NPSECN).ne.MaxNeuE) then
                 NeuNum=NeuNum+1
-*ISPUSR 1.reaction type 2.parent'd id 3.neutron num 4.isotopes num ?.gamma num 
+* ISPUSR 1.reaction type 2.parent'd id 3.neutron num 4.isotopes num 5.initial volume 6.initial volume of muon's daughter ?.gamma num 
 *SPAUSR 1.parent's age 2.parent's energy
                 ISPARK(3,NPFLKA)=NeuNum !then ISPARK->ISPUSR
                 NeuMaID(NeuNum)=IJ
@@ -38,6 +38,7 @@ C      WRITE(*,*) "Save into stack : ",KPART(NPSECN),'NP : ',NP
                 NeuInitE(NeuNum)=0
                 NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
                 NeuInitVm(NeuNum)=MREG
+                NeuDauVm(NeuNum)=ISPUSR(6)
 C      WRITE(*,*) '    stuprf(',ISPARK(3,NPFLKA),') : find a neutron ',
 C     &'TKI(NPSECN):MaxNeuE',TKI(NPSECN),MaxNeuE,'mother:',ISPUSR(2)
 CC                WRITE(*,*) 'Find a secondary neutron',IJ,ISPUSR(2)
@@ -57,6 +58,7 @@ C         endif
          NeuInitE(NeuNum)=0
          NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
          NeuInitVm(NeuNum)=MREG
+         NeuDauVm(NeuNum)=ISPUSR(6)
 C      WRITE(*,*) '    stuprf(',ISPARK(3,NPFLKA),') : find a neutron ',
 C     &'TKI(NPSECN):',TKI(NPSECN),'mother:',ISPUSR(2)
 CC                WRITE(*,*) 'Find a primary neutron',IJ,ISPUSR(2)
