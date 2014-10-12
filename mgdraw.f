@@ -68,7 +68,6 @@ C                      ENDDO
 C                   END IF
 C                END IF
 C*  |  End of quenching
-C
 C               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
 C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
 C     &MREG,ISPUSR(5))
@@ -130,20 +129,20 @@ C              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
      &DetLen(5),DetLen(6),DetLen(7),DetLen(8),DetLen(9),DetLen(10),
      &DetLen(11),DetLen(12),NeuNum,IsoNum)
 *neutron
-      WRITE(*,*) 'fillneu'
+C      WRITE(*,*) 'fillneu'
 
       if(NeuNum.gt.0) then
           DO I=1,NeuNum
           if(NeuInitE(I).eq.0) then
              WRITE(*,*) 'Error:NeuInitE(I).eq.0'
           else
-        WRITE(*,*) I,NeuInitE(I)
+C        WRITE(*,*) I,NeuInitE(I)
         call fillneu(NCASE,NeuInitE(I),NeuInitT(I),
      &NeuInitP(I,1),NeuInitP(I,2),NeuInitP(I,3),
      &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
      &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
      &NeuMaID(I),NeuType(I),NeuCapVm(I),NeuCapTn(I),
-     &NeuInitVm(I),NeuMaE(I))
+     &NeuInitVm(I),NeuMaE(I),NeuDauVm(I))
          endif
           enddo
       endif
@@ -192,6 +191,7 @@ C      endif
          MuCharge=-1
       endif
       EvtID=NCASE
+C      WRITE(*,*) 'SODRAW',NCASE
 
       RETURN
 
@@ -199,9 +199,12 @@ C      endif
       ENTRY USDRAW ( ICODE, MREG, XSCO, YSCO, ZSCO )
 
 *neutron
-* ISPUSR 1.reaction type 2.parent id 3.neutron num 4.isotopes num 5.initial volume ?.gamma num 
+* ISPUSR 1.reaction type 2.parent'd id 3.neutron num 4.isotopes num 5.initial volume 6.initial volume of muon's daughter ?.gamma num 
       ISPUSR(1)=ICODE
       ISPUSR(2)=JTRACK
+      if(LTRACK.eq.1) then 
+         ISPUSR(6)=MREG
+      endif
       NowVol=MREG
 * SPAUSR 1.parent's age 2.parent's energy
       SPAUSR(1)=ATRACK
@@ -215,6 +218,7 @@ C      endif
       USDP(2)=YSCO 
       USDP(3)=ZSCO 
       USDVol=MREG
+      USDDauVm=ISPUSR(6)
 *find maximum energy of secondary neutron
       if(JTRACK.eq.8 .and. ICODE.eq.101) then
          SecNeuNO=0
@@ -225,22 +229,6 @@ C      endif
                if(MaxNeuE.lt.TKI(I)) MaxNeuE=TKI(I)
             endif
          enddo
-C         do I=1,NP
-C            if(KPART(I).eq.8) then
-C             if(TKI(I).ne.MaxNeuE) then
-C                 WRITE(*,*) 'USDRAW(',NeuNum,') : find a neutron ',
-C     &'TKI(I):MaxNeuE',TKI(I),MaxNeuE,'mother:',JTRACK
-C             endif
-C            endif
-C         enddo
-C      endif
-C      if(JTRACK.ne.8)then
-C         do I=1,NP
-C            if(KPART(I).eq.8) then
-C                 WRITE(*,*) 'USDRAW(',NeuNum,') : find a neutron ',
-C     &'TKI(I):',TKI(I),'mother:',JTRACK
-C            endif
-C         enddo
       endif
 
 *neutron capture

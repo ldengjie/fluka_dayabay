@@ -24,7 +24,7 @@ Int_t    MuEventID,MuNumOfNeutron,MuNumOfIsotope,MuMuonCharge=0;
 
 static TTree *IsoTree = 0;
 Double_t IsoDecayLocalX,IsoDecayLocalY,IsoDecayLocalZ,IsoInitLocalX,IsoInitLocalY,IsoInitLocalZ=0;
-Int_t    IsoEventID,IsoZ,IsoA,IsoDecayVolume,IsoInitVolume=0;
+Int_t    IsoEventID,IsoZ,IsoA,IsoDecayVolume,IsoInitVolume,IsoOriginVolumeNumber=0;
 
 static TTree *MichelTree = 0;
 Double_t MiLocalX,MiLocalY,MiLocalZ,MiKineE,MiMichelLocalTime=0;
@@ -36,7 +36,7 @@ Int_t    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,S
 
 static TTree *NeuTree = 0;
 Double_t NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum,NeuMotherEnergy=0;
-Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType,NeuCapVolumeName,NeuCapTargetName,NeuInitVolumeName=0;
+Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType,NeuCapVolumeName,NeuCapTargetName,NeuInitVolumeName,NeuOriginVolumeNumber=0;
 
 //static Results *TheResults = 0;
 
@@ -78,6 +78,7 @@ extern "C" {
 	IsoTree->Branch("A",&IsoA,"A/I");
 	IsoTree->Branch("DecayVolume",&IsoDecayVolume,"DecayVolume/I");
 	IsoTree->Branch("InitVolume",&IsoInitVolume,"InitVolume/I");
+	IsoTree->Branch("OriginVolumeNumber",&IsoOriginVolumeNumber,"OriginVolumeNumber/I");
 	IsoTree->Branch("InitLocalX",&IsoInitLocalX,"InitLocalX/D");
 	IsoTree->Branch("InitLocalY",&IsoInitLocalY,"InitLocalY/D");
 	IsoTree->Branch("InitLocalZ",&IsoInitLocalZ,"InitLocalZ/D");
@@ -125,6 +126,7 @@ extern "C" {
 	NeuTree->Branch("CapVolumeName",&NeuCapVolumeName,"CapVolumeName/I");
 	NeuTree->Branch("CapTargetName",&NeuCapTargetName,"CapTargetName/I");
 	NeuTree->Branch("InitVolumeName",&NeuInitVolumeName,"InitVolumeName/I");
+	NeuTree->Branch("OriginVolumeNumber",&NeuOriginVolumeNumber,"OriginVolumeNumber/I");
 	NeuTree->Branch("MotherKineEnergy",&NeuMotherEnergy,"MotherKineEnergy/D");
 
     printf("%f\n", pluto);
@@ -187,7 +189,7 @@ extern "C" {
 #define filliso FILLISO
 #endif
 extern "C" {
-    void filliso(Int_t &m_IsoEventID,Int_t &m_IsoZ,Int_t &m_IsoA,Double_t &m_IsoDecayLocalX,Double_t &m_IsoDecayLocalY,Double_t &m_IsoDecayLocalZ,Int_t &m_IsoDecayVolume,Double_t &m_IsoInitLocalX,Double_t &m_IsoInitLocalY,Double_t &m_IsoInitLocalZ,Int_t &m_IsoInitVolume)
+    void filliso(Int_t &m_IsoEventID,Int_t &m_IsoZ,Int_t &m_IsoA,Double_t &m_IsoDecayLocalX,Double_t &m_IsoDecayLocalY,Double_t &m_IsoDecayLocalZ,Int_t &m_IsoDecayVolume,Double_t &m_IsoInitLocalX,Double_t &m_IsoInitLocalY,Double_t &m_IsoInitLocalZ,Int_t &m_IsoInitVolume,Int_t &m_IsoOriginVolumeNumber)
   {
 	IsoDecayLocalX = m_IsoDecayLocalX;
 	IsoDecayLocalY = m_IsoDecayLocalY;
@@ -200,6 +202,7 @@ extern "C" {
 	IsoInitLocalY = m_IsoInitLocalY;
 	IsoInitLocalZ = m_IsoInitLocalZ;
     IsoInitVolume = m_IsoInitVolume;
+    IsoOriginVolumeNumber= m_IsoOriginVolumeNumber;
     IsoTree->Fill();
   }
 }
@@ -254,7 +257,7 @@ extern "C" {
 #define fillneu FILLNEU
 #endif
 extern "C" {
-    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName,Int_t &m_NeuCapTargetName,Int_t &m_NeuInitVolumeName,Double_t &m_NeuMotherEnergy)
+    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName,Int_t &m_NeuCapTargetName,Int_t &m_NeuInitVolumeName,Double_t &m_NeuMotherEnergy,Int_t &m_NeuOriginVolumeNumber)
   {
 	NeuInitKineE              = m_NeuInitKineE;
 	NeuInitTime               = m_NeuInitTime;
@@ -273,6 +276,7 @@ extern "C" {
     NeuCapVolumeName          = m_NeuCapVolumeName;
     NeuCapTargetName          = m_NeuCapTargetName;
     NeuInitVolumeName          = m_NeuInitVolumeName;
+    NeuOriginVolumeNumber= m_NeuOriginVolumeNumber;
 	NeuMotherEnergy      = m_NeuMotherEnergy;
     NeuTree->Fill();
   }
