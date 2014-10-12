@@ -8,6 +8,7 @@
     int adMuonNum=0;
     double adMuonLength=0.;
     int neuNum=0;
+    int neuNumInit=0;
     int neuNumOut=0;
     int neuNumIn=0;
     int neuNumD[15]={0};
@@ -107,24 +108,46 @@
             {
                 mt->GetEntry(u);
                 if(muGdLsTrackLength==0) continue;
-                //muIndex.insert(std::pair<int,int>(muEventID,u));
+                //if(muLsTrackLength==0) continue;
+                muIndex.insert(std::pair<int,int>(muEventID,u));
                 adMuonNum++;
                 //adMuonLength+=(muSstTrackLength+muOatTrackLength+muIatTrackLength+muMoTrackLength+muLsTrackLength+muGdLsTrackLength);
                 adMuonLength+=muGdLsTrackLength;
+                //adMuonLength+=muGdLsTrackLength+muLsTrackLength;
             }
 
             for( int r=0 ; r<neutnum ; r++ )
             {
                 neut->GetEntry(r);
-                //if(muIndex.find(neuEventID)==muIndex.end()) continue;
                 neuNumD[14]++;
                 neuNumD[neuInitVolumeName]++;
+
                 if( neuCapVolumeName==12 )
                 {
                     neuNum++;
                     if(neuOriginVolumeNumber!=12) neuNumIn++;
+                    if(neuOriginVolumeNumber==12&&neuInitVolumeName!=12) neuNumIn++;
                 }
-                if(neuOriginVolumeNumber==12 && neuCapVolumeName!=12) neuNumOut++;
+                if(neuOriginVolumeNumber==12 && neuCapVolumeName!=12 && neuInitVolumeName==12) neuNumOut++;
+
+                //if( neuCapVolumeName==12 || neuCapVolumeName==10)
+                //{
+                //neuNum++;
+                //if(neuOriginVolumeNumber!=12 && neuOriginVolumeNumber!=10) neuNumIn++;
+                //}
+                //if((neuOriginVolumeNumber==12 || neuOriginVolumeNumber==10)&& (neuCapVolumeName!=12 && neuCapVolumeName!=10)) neuNumOut++;
+                //if(muIndex.find(neuEventID)==muIndex.end()) continue;
+                if(neuOriginVolumeNumber==12 && neuInitVolumeName==12) neuNumInit++;
+                if(neuOriginVolumeNumber==12 && neuInitVolumeName==12)
+                {
+                    if(muIndex.find(neuEventID)==muIndex.end()) 
+                    {
+                        cout<<"muon didn't pass through GDLS "<<endl;
+                        mt->GetEntry(neuEventID-1);
+                        cout<<"muGdLsTrackLength  : "<<muGdLsTrackLength<<endl;
+                    }
+                    
+                }
             }
 
             for( int i=0 ; i<isotnum ; i++ )
@@ -149,9 +172,10 @@
     //print 
     cout<<"adMuonNum : "<<adMuonNum<<endl;
     cout<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/adMuonNum<<" per muon"<<endl;
-    int neuNumFinal=neuNum+neuNumOut-neuNumIn;
-    cout<<"neuNum  : "<<neuNumFinal<<"="<<neuNum<<"+"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)-"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
-    cout<<"neuNumFinal : "<<neuNumFinal<<"+-"<<sqrt(neuNumFinal)<<"   "<<(double)neuNumFinal/adMuonNum <<" per muon" <<"   neuYield : "<<neuNumFinal/adMuonLength/0.855*1.e5<<"e-05"<<endl;
+    int neuNumCap=neuNum+neuNumOut-neuNumIn;
+    cout<<"neuNumInit  : "<<neuNumInit<<endl;
+    cout<<"neuNum  : "<<neuNumCap<<"="<<neuNum<<"+"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)-"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
+    cout<<"neuNumCap : "<<neuNumCap<<"+-"<<sqrt(neuNumCap)<<"   "<<(double)neuNumCap/adMuonNum <<" per muon" <<"   neuYield : "<<neuNumCap/adMuonLength/0.855*1.e5<<"e-05"<<endl;
     cout<<"Neutrons in initial volume : "<<endl;
     for( int i=0 ; i<15 ; i++ )
     {
@@ -182,8 +206,9 @@
 
     outfile<<"adMuonNum : "<<adMuonNum<<endl;
     outfile<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/adMuonNum<<" per muon"<<endl;
-    outfile<<"neuNum  : "<<neuNumFinal<<"="<<neuNum<<"+"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)-"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
-    outfile<<"neuNumFinal : "<<neuNumFinal<<"+-"<<sqrt(neuNumFinal)<<"   "<<(double)neuNumFinal/adMuonNum <<" per muon" <<"   neuYield : "<<neuNumFinal/adMuonLength/0.855*1.e5<<"e-05"<<endl;
+    outfile<<"neuNumInit  : "<<neuNumInit<<endl;
+    outfile<<"neuNum  : "<<neuNumCap<<"="<<neuNum<<"+"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)-"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
+    outfile<<"neuNumCap : "<<neuNumCap<<"+-"<<sqrt(neuNumCap)<<"   "<<(double)neuNumCap/adMuonNum <<" per muon" <<"   neuYield : "<<neuNumCap/adMuonLength/0.855*1.e5<<"e-05"<<endl;
     outfile<<"Neutrons in initial volume : "<<endl;
     for( int i=0 ; i<15 ; i++ )
     {
