@@ -93,7 +93,9 @@ C      endif
       WRITE(*,*) 'error:ISPUSR(3).eq.0'
        endif
       endif
-
+* get muon final volume and position
+      MuFinalV=MREG
+      MuFinalP=[XTRACK (NTRACK),YTRACK (NTRACK),ZTRACK (NTRACK)]
       RETURN
 
 *  +-------------------------------------------------------------------*
@@ -123,6 +125,20 @@ C              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
 *  +-------------------------------------------------------------------*
       ENTRY EEDRAW ( ICODE ) 
 *muon 
+      if(MuFinalV>1) then
+          IF(DOT_PRODUCT(DetInitP(MuFinalV,1:3),DetInitP(MuFinalV,1:3))
+     &       .eq.0) then
+          DetLen(MuFinalV)=DetLen(MuFinalV)+sqrt(
+     &(MuFinalP(1)-DetInitP(MuFinalV,1))*
+     &(MuFinalP(1)-DetInitP(MuFinalV,1))+
+     &(MuFinalP(2)-DetInitP(MuFinalV,2))*
+     &(MuFinalP(2)-DetInitP(MuFinalV,2))+
+     &(MuFinalP(3)-DetInitP(MuFinalV,3))*
+     &(MuFinalP(3)-DetInitP(MuFinalV,3)))
+          DetInitP(MuFinalV,1:3)=0
+          endif
+      endif 
+
       call fillmuon(NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
      &MuInitP(2),MuInitP(3),
      &MuInitTP(1),MuInitTP(2),MuInitTP(3),DetLen(3),DetLen(4),
@@ -143,39 +159,45 @@ C        WRITE(*,*) I,NeuInitE(I)
      &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
      &NeuMaID(I),NeuType(I),NeuCapVm(I),NeuCapTn(I),
      &NeuInitVm(I),NeuMaE(I),NeuDauVm(I))
+C      WRITE(*,*) I,NeuDauVm(I)
          endif
           enddo
       endif
+
+C      WRITE(*,*) 'MuFinalV',MuFinalV
+C      DO i=1,15
+C         if(DetLen(i).ne.0) WRITE(*,*) I,DetLen(i)
+C      ENDDO
       RETURN
 
 *  +-------------------------------------------------------------------*
       ENTRY ENDRAW ( ICODE, MREG, RULL, XSCO, YSCO, ZSCO )
-C      if(MREG.eq.10 .or. MREG.eq.12) then
-C                IICode=ICODE
-C                if(LTRACK.gt.1) then
-C                    ISpaMaId=ISPUSR(2)
-C                    ISpaMaTy=ISPUSR(1)
-C                else
-C                    ISpaMaId=0
-C                    ISpaMaTy=0
-C                endif
-C*  |  Quenching is activated : calculate quenching factor
-C*  |  and store quenched energy in DTQUEN(1, jbk)
-C                IF ( LQEMGD ) THEN
-C                      QenE=0
-C                   RULLL = RULL
-C                   CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-C                END IF
-C                      if(ZFRTTK.gt.1.5) then
-C                          JBK=2
-C                      else
-C                          JBK=1
-C                      endif
-C                      QenE=QenE+DTQUEN(1,JBK)
-C*  |  end quenching
-C               call fillspa(NCASE,XSCO,YSCO,ZSCO,
-C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
-C      endif
+      if(MREG.eq.10 .or. MREG.eq.12) then
+                IICode=ICODE
+                if(LTRACK.gt.1) then
+                    ISpaMaId=ISPUSR(2)
+                    ISpaMaTy=ISPUSR(1)
+                else
+                    ISpaMaId=0
+                    ISpaMaTy=0
+                endif
+*  |  Quenching is activated : calculate quenching factor
+*  |  and store quenched energy in DTQUEN(1, jbk)
+                IF ( LQEMGD ) THEN
+                      QenE=0
+                   RULLL = RULL
+                   CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
+                END IF
+                      if(ZFRTTK.gt.1.5) then
+                          JBK=2
+                      else
+                          JBK=1
+                      endif
+                      QenE=QenE+DTQUEN(1,JBK)
+*  |  end quenching
+               call fillspa(NCASE,XSCO,YSCO,ZSCO,
+     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
+      endif
 
       RETURN
 
@@ -185,13 +207,13 @@ C      endif
       MuInitE=TKEFLK(1)
       MuInitP=[XFLK(1),YFLK(1),ZFLK(1)]
       MuInitTP=[TXFLK(1),TYFLK(1),TZFLK(1)]
+      DetInitP(2,1:3)=[XFLK(1),YFLK(1),ZFLK(1)]
       if(ILOFLK(1).eq.10) then
          MuCharge=1
       else
          MuCharge=-1
       endif
       EvtID=NCASE
-C      WRITE(*,*) 'SODRAW',NCASE
 
       RETURN
 

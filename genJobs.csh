@@ -5,11 +5,11 @@
 #这次需要运行的run个数
 @ totalRun=5000
 #每个文件夹下run个数
-@ runNumInDir=20
+@ runNumInDir=10
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
-set dataDir=$FLUWORK/data/PART2
+set dataDir=$FLUWORK/data/PART1
 
 if ( -e $dataDir ) then
     rm $dataDir/* -rf
@@ -27,7 +27,7 @@ cd $dataDir/jobScripts
 #while( $i < $dirNum + $existedRun)
 while( $i < $dirNum)
     @ j = $i / 500
-    @ newseed = 1235298764 + $i * $runNumInDir 
+    @ newseed = 1236298764 + $i * $runNumInDir 
     echo $newseed
     @ dirNam = $i * $runNumInDir + 1 + $existedRun
     set dirNamStr = `printf "%06d\n" $dirNam` 
@@ -36,15 +36,21 @@ while( $i < $dirNum)
     pushd $dirNamStr 
     sed -e "s#1235298764#${newseed}#g" $FLUWORK/FAR.inp>FAR.inp
     set nowDir=`pwd`
+    if (  $runNumInDir % 10 == 0 ) then
+        @ n = 1 
+    else
+        @ n = 1 + ( $i % ( 10 / ( $runNumInDir % 10 ) ) ) * 100000 * ( $runNumInDir % 10)
+    endif
     @ i = $i + 1
     set nowJobNum=`printf "%04d\n" $i`
     set wholePath=$nowDir
     sed -e "s#DATADIR#$wholePath#g"\
         -e "s#WORKPATH#$FLUWORK#g"\
         -e "s#STARTRUNNUM#$dirNam#g"\
-        -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_FAR_$nowJobNum.csh
-    echo 1 >NextSeedNum
+        -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_LA_$nowJobNum.csh
+    echo  $n >NextSeedNum
+    echo n: $n
     popd
-    echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_FAR_$nowJobNum.csh >>../submit.csh.$j
+    echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_LA_$nowJobNum.csh >>../submit.csh.$j
 end
 cd $FLUWORK
