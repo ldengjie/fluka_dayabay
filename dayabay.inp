@@ -148,8 +148,6 @@ PHOTONUC       1111.                             3  @LASTMAT          MUMUPAIR
 * ************************************* muon ********************************************
 * activate muon decay,alse for leptons and hadrons
 PHYSICS           1.                                                  DECAYS
-MUPHOTON          1.                             3  @LASTMAT
-PAIRBREM          3.       0.0    0.0003         3  @LASTMAT
 * ************************************* isotopes ****************************************
 * In order to achieve reasonable results for residual nuclei production the new evaporation module must be activated and heavy fragment evaporation should also be activated,Coalescence should also be activated
 PHYSICS           3.                                                  EVAPORAT
@@ -159,12 +157,6 @@ PHYSICS        1000.     1000.     1000.     1000.     1000.     1000.PEATHRES
 * activate radioactive decays
 RADDECAY          2.       -1.        1.       0.00001000010        1.
 
-* *************************************   ions   ****************************************
-* ion electromagnetic dissociation
-PHYSICS           2.                                                  EM-DISSO
-* full transport of all light and heavy ions
-IONTRANS         -2.
-
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 * *********************************** user routines *************************************
 USRICALL
@@ -173,7 +165,7 @@ USERDUMP        100.                 0.0        1.
 USERDUMP      6.5E-3    1.5E-6    3.7E-3    1.5E-6                    UDQUENCH
 USERWEIG                                                 1.0
 * Set the random number seed
-RANDOMIZ          1.1235298764
+RANDOMIZ          1.1236298764
 * Set the number of primary histories to be simulated in the run
 START        100000.
 STOP
