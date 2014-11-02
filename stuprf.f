@@ -23,10 +23,19 @@ C      WRITE(*,*) "Save into stack : ",KPART(NPSECN),'NP : ',NP
 *save initial volume
          ISPARK (5,NPFLKA) = MREG
 *neutron
-      if(KPART(NPSECN).EQ.8) then
+C      if(KPART(NPSECN).EQ.8) then
+C        IF (NeuCount .GE. 1) THEN
+C            WRITE(*,*) 'STU101300NoSubOne'
+C            if(ISPUSR(2).eq.8 .and. TKI (NPSECN).ne.MaxNeuE) then
+C                WRITE(*,*) 'STU101300SubOne'
+C            elseif(ISPUSR(2).ne.8) then
+C                WRITE(*,*) 'STU101300SubOne'
+C            endif
+C        ENDIF
        if(ISPUSR(2).eq.8) then
-          if(ISPUSR(1).eq.101) then
-             if(TKI (NPSECN).ne.MaxNeuE) then
+          if(TKI (NPSECN).ne.MaxNeuE) then
+C              WRITE(*,*) 'SubOneSTU101300',IJ,"ReactionType",ISPUSR(1)
+             if(ISPUSR(1).eq.101) then
                 NeuNum=NeuNum+1
 * ISPUSR 1.reaction type 2.parent'd id 3.neutron num 4.isotopes num 5.initial volume 6.initial volume of muon's daughter ?.gamma num 
 *SPAUSR 1.parent's age 2.parent's energy
@@ -39,10 +48,11 @@ C      WRITE(*,*) "Save into stack : ",KPART(NPSECN),'NP : ',NP
                 NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
                 NeuInitVm(NeuNum)=MREG
                 NeuDauVm(NeuNum)=ISPUSR(6)
-C                WRITE(*,*) "neutron origin volume",NeuDauVm(NeuNum)
+C                WRITE(*,*) 'MotherNumber',IJ,"ReactionType",ISPUSR(1)
              endif
           endif
        else
+C                 WRITE(*,*) 'SubOneSTU101300'
          NeuNum=NeuNum+1
          ISPARK(3,NPFLKA)=NeuNum !then ISPARK->ISPUSR
          NeuMaID(NeuNum)=IJ
@@ -56,7 +66,7 @@ C         endif
          NeuInitP(NeuNum,1:3)=[XX, YY, ZZ]
          NeuInitVm(NeuNum)=MREG
          NeuDauVm(NeuNum)=ISPUSR(6)
-C                WRITE(*,*) "neutron origin volume",NeuDauVm(NeuNum)
+C                WRITE(*,*) 'MotherNumber',IJ,"ReactionType",ISPUSR(1)
        endif
       endif
 *  Increment the track number and put it into the last flag:

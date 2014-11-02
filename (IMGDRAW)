@@ -8,11 +8,13 @@
       DOUBLE PRECISION ,DIMENSION(3) ::USDP
       INTEGER USDVol,USDDauVm
 *muon
-      INTEGER NeuNum,IsoNum,MuCharge,IEMPTY,MuFinalV
+      PARAMETER ( MaxDetN = 1000)
+      INTEGER NeuNum,IsoNum,MuCharge,IEMPTY,MuFinalV,NeuNum2,NeuCount
       DOUBLE PRECISION :: MuInitT, MuInitE
-      DOUBLE PRECISION,DIMENSION(15) ::DetLen
+      DOUBLE PRECISION,DIMENSION(MaxDetN) ::DetLen
       DOUBLE PRECISION,DIMENSION(3) ::MuInitP,MuInitTP,MuFinalP
-      DOUBLE PRECISION,DIMENSION(15,3) :: DetInitP
+      DOUBLE PRECISION,DIMENSION(MaxDetN,3) :: DetInitP
+      INTEGER,DIMENSION(MaxDetN) :: IfDetIP
 
 
 *neutron
@@ -27,12 +29,13 @@
 *save
       COMMON / IMGDRAW / 
      &          NeuNum,IsoNum,MuCharge,EvtID,
-     &          MuInitT, MuInitE,MuInitP,MuInitTP,
+     &          MuInitT, MuInitE,MuInitP,MuInitTP,MuFinalP,
      &          DetInitP,
      &          USDP,DetLen,
      &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
      &          NeuCapT,NeuGamaE,NeuMaE,
      &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,NeuInitVm,
-     &          NeuDauVm,
-     &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol,USDVol,USDDauVm
+     &          NeuDauVm,IfDetIP,
+     &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol,USDVol,USDDauVm,
+     &          NeuNum2,NeuCount,MuFinalV,IEMPTY
       SAVE / IMGDRAW /

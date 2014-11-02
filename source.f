@@ -63,6 +63,7 @@
 C           IF(I .LE. 50) THEN
 C               WRITE(LUNOUT,*) I,Enrgy(I),Theta(I),Phi(I)
 C           END IF
+           Enrgy(I)=260
         END DO
         CLOSE(88)
         OPEN(UNIT=89,FILE="../NextSeedNum",STATUS="OLD")
@@ -70,8 +71,8 @@ C           END IF
         CLOSE(89)
 * initial surface 
 *hall
-        OPoMin=[-11,-8,-8]
-        OPoMax=[11,8,33]
+C        OPoMin=[-11,-8,-8]
+C        OPoMax=[11,8,33]
 *rock+waterpool
 C        OPoMin=[-11,-8,-8]
 C        OPoMax=[11,8,8]
@@ -81,6 +82,9 @@ C        OPoMax=[8,5,5]
 *AD
 C        OPoMin=[-5.5,-2.5,-2.5]
 C        OPoMax=[5.5,2.5,2.5]
+*GDLS
+        OPoMin=[-4.5,-1.5,-1.5]
+        OPoMax=[4.5,1.5,1.5]
 
         SVecN=0
         SLen=0
