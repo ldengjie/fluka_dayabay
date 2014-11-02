@@ -1,6 +1,6 @@
 {
     int rootNum=4000;
-    string dataVer[4]={"PART1"};
+    string dataVer[4]={"PART3"};
     string nameStr;
     //double density=0.8602;
     double density=0.8550;
