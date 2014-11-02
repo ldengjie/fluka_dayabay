@@ -94,8 +94,10 @@ C      endif
        endif
       endif
 * get muon final volume and position
+      if(LTRACK.eq.1) then
       MuFinalV=MREG
       MuFinalP=[XTRACK (NTRACK),YTRACK (NTRACK),ZTRACK (NTRACK)]
+      endif
       RETURN
 
 *  +-------------------------------------------------------------------*
@@ -127,7 +129,7 @@ C              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
 *muon 
       if(MuFinalV>1) then
           IF(DOT_PRODUCT(DetInitP(MuFinalV,1:3),DetInitP(MuFinalV,1:3))
-     &       .eq.0) then
+     &       .ne.0) then
           DetLen(MuFinalV)=DetLen(MuFinalV)+sqrt(
      &(MuFinalP(1)-DetInitP(MuFinalV,1))*
      &(MuFinalP(1)-DetInitP(MuFinalV,1))+

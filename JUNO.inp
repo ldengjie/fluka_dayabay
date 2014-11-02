@@ -19,6 +19,27 @@ SPH vacuum     0.0 0.0 0.0 30000.0
 RCC rccRock    0.0 0.0 -2500. 0.0 0.0 5000. 2500.
 RCC rccWater   0.0 0.0 -2100. 0.0 0.0 4200. 2100.
 SPH sphAd      0.0 0.0 0.0 1780.
+RCC body17     0.0 0.0 -1700. 0.0 0.0 3400.0 1700.0
+RCC body16     0.0 0.0 -1600. 0.0 0.0 3200.0 1600.0
+RCC body15     0.0 0.0 -1500. 0.0 0.0 3000.0 1500.0
+RCC body14     0.0 0.0 -1400. 0.0 0.0 2800.0 1400.0
+RCC body13     0.0 0.0 -1300. 0.0 0.0 2600.0 1300.0
+RCC body12     0.0 0.0 -1200. 0.0 0.0 2400.0 1200.0
+RCC body11     0.0 0.0 -1100. 0.0 0.0 2200.0 1100.0
+RCC body10     0.0 0.0 -1000. 0.0 0.0 2000.0 1000.0
+RCC body09     0.0 0.0 -0900. 0.0 0.0 1800.0 0900.0
+RCC body08     0.0 0.0 -0800. 0.0 0.0 1600.0 0800.0
+RCC body07     0.0 0.0 -0700. 0.0 0.0 1400.0 0700.0
+RCC body06     0.0 0.0 -0600. 0.0 0.0 1200.0 0600.0
+RCC body05     0.0 0.0 -0500. 0.0 0.0 1000.0 0500.0
+RCC body04     0.0 0.0 -0400. 0.0 0.0 0800.0 0400.0
+RCC body03     0.0 0.0 -0300. 0.0 0.0 0600.0 0300.0
+RCC body02     0.0 0.0 -0200. 0.0 0.0 0400.0 0200.0
+RCC body01     0.0 0.0 -0100. 0.0 0.0 0200.0 0100.0
+RCC body50     0.0 0.0 -0050. 0.0 0.0 0100.0 0050.0
+RCC body40     0.0 0.0 -0040. 0.0 0.0 0080.0 0040.0
+RCC body30     0.0 0.0 -0030. 0.0 0.0 0060.0 0030.0
+RCC body20     0.0 0.0 -0020. 0.0 0.0 0040.0 0020.0
 END
 * Black hole
 BLKHOLE      5 +blkHole -vacuum
@@ -26,7 +47,28 @@ BLKHOLE      5 +blkHole -vacuum
 VACUUM       5 +vacuum -rccRock
 STONE        5 +rccRock -rccWater
 WS           5 +rccWater -sphAd
-AD           5 +sphAd
+AD           5 +sphAd -body17
+AD17         5 +body17 -body16
+AD16         5 +body16 -body15
+AD15         5 +body15 -body14
+AD14         5 +body14 -body13
+AD13         5 +body13 -body12
+AD12         5 +body12 -body11
+AD11         5 +body11 -body10
+AD10         5 +body10 -body09
+AD09         5 +body09 -body08
+AD08         5 +body08 -body07
+AD07         5 +body07 -body06
+AD06         5 +body06 -body05
+AD05         5 +body05 -body04
+AD04         5 +body04 -body03
+AD03         5 +body03 -body02
+AD02         5 +body02 -body01
+AD01         5 +body01 -body50
+AD50         5 +body50 -body40
+AD40         5 +body40 -body30
+AD30         5 +body30 -body20
+AD20         5 +body20
 END
 GEOEND
 * ************************************* material ****************************************
@@ -72,6 +114,27 @@ ASSIGNMA      VACUUM    VACUUM
 ASSIGNMA        Rock     STONE
 ASSIGNMA       WATER        WS
 ASSIGNMA          Ls        AD
+ASSIGNMA          Ls      AD17
+ASSIGNMA          Ls      AD16
+ASSIGNMA          Ls      AD15
+ASSIGNMA          Ls      AD14
+ASSIGNMA          Ls      AD13
+ASSIGNMA          Ls      AD12
+ASSIGNMA          Ls      AD11
+ASSIGNMA          Ls      AD10
+ASSIGNMA          Ls      AD09
+ASSIGNMA          Ls      AD08
+ASSIGNMA          Ls      AD07
+ASSIGNMA          Ls      AD06
+ASSIGNMA          Ls      AD05
+ASSIGNMA          Ls      AD04
+ASSIGNMA          Ls      AD03
+ASSIGNMA          Ls      AD02
+ASSIGNMA          Ls      AD01
+ASSIGNMA          Ls      AD50
+ASSIGNMA          Ls      AD40
+ASSIGNMA          Ls      AD30
+ASSIGNMA          Ls      AD20
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 * ************************************* e+e- gamma **************************************
 EMFCUT        -1.E-3     1.E-3        0.        2.  @LASTREG
@@ -100,7 +163,7 @@ USERDUMP        100.                 0.0        1.
 USERDUMP      6.5E-3    1.5E-6    3.7E-3    1.5E-6                    UDQUENCH
 USERWEIG                                                 1.0
 * Set the random number seed
-RANDOMIZ          1.1236298764
+RANDOMIZ          1.1235298764
 * Set the number of primary histories to be simulated in the run
-START        100000.
+START           100.
 STOP
