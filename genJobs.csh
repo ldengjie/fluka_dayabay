@@ -1,15 +1,15 @@
 #/bin/tcsh
 
 #已经运行过的run个数
-@ existedRun=5000
+@ existedRun=0
 #这次需要运行的run个数
-@ totalRun=5000
+@ totalRun=100
 #每个文件夹下run个数
-@ runNumInDir=2
+@ runNumInDir=5
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
-set dataDir=$FLUWORK/data/PART3
+set dataDir=$FLUWORK/data/PART36
 
 if ( -e $dataDir ) then
     rm $dataDir/* -rf
@@ -27,14 +27,14 @@ cd $dataDir/jobScripts
 #while( $i < $dirNum + $existedRun)
 while( $i < $dirNum)
     @ j = $i / 500
-    @ newseed = 1236298764 + $i * $runNumInDir 
+    @ newseed = 1236498764 + $i * $runNumInDir 
     echo $newseed
     @ dirNam = $i * $runNumInDir + 1 + $existedRun
     set dirNamStr = `printf "%06d\n" $dirNam` 
     echo $dirNamStr
     mkdir -p $dirNamStr
     pushd $dirNamStr 
-    sed -e "s#1235298764#${newseed}#g" $FLUWORK/LA.inp>LA.inp
+    sed -e "s#1236498764#${newseed}#g" $FLUWORK/LA.inp>LA.inp
     set nowDir=`pwd`
     if (  $runNumInDir % 10 == 0 ) then
         @ n = 1 
