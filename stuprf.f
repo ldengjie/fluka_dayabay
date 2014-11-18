@@ -23,7 +23,7 @@ C      WRITE(*,*) "Save into stack : ",KPART(NPSECN),'NP : ',NP
 *save initial volume
          ISPARK (5,NPFLKA) = MREG
 *neutron
-C      if(KPART(NPSECN).EQ.8) then
+      if(KPART(NPSECN).EQ.8) then
 C        IF (NeuCount .GE. 1) THEN
 C            WRITE(*,*) 'STU101300NoSubOne'
 C            if(ISPUSR(2).eq.8 .and. TKI (NPSECN).ne.MaxNeuE) then

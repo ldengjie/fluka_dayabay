@@ -230,8 +230,8 @@ C      WRITE(*,*) 'ValidS:',(ValidS(I),I=1,MaxP)
                PRVec(2)=FLRNDM(DUMMY)
                PRVec(3)=FLRNDM(DUMMY)
 *  !!! initial position
-               DIniPo=((SPoMin(I,1:3)+PRVec*SLen(I,1:3))+(-100*ProVec))
-     &                *100
+               DIniPo=((SPoMin(I,1:3)+PRVec*SLen(I,1:3))+
+     &(-10000*ProVec))
 C               WRITE(*,*) ISrsNum,'if initial position : ',
 C     &                    (DIniPo(J),j=1,3)
                EXIT 

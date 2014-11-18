@@ -1,15 +1,15 @@
 #/bin/tcsh
 
 #已经运行过的run个数
-@ existedRun=35000
+@ existedRun=000
 #这次需要运行的run个数
-@ totalRun=200
+@ totalRun=1000
 #每个文件夹下run个数
 @ runNumInDir=1
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
-set dataDir=$FLUWORK/data/PART35
+set dataDir=$FLUWORK/data/PART36
 
 if ( -e $dataDir ) then
     rm $dataDir/* -rf
@@ -47,10 +47,10 @@ while( $i < $dirNum)
     sed -e "s#DATADIR#$wholePath#g"\
         -e "s#WORKPATH#$FLUWORK#g"\
         -e "s#STARTRUNNUM#$dirNam#g"\
-        -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_juno_$nowJobNum.csh
+        -e "s#-M10#-M$runNumInDir#g" $FLUWORK/jobScriptsTemp.csh>fluka_dyb_$nowJobNum.csh
     echo  $n >NextSeedNum
     echo n: $n
     popd
-    echo qsub -q junoq jobScripts/$dirNamStr/fluka_juno_$nowJobNum.csh >>../submit.csh.$j
+    echo qsub -q dybshortq jobScripts/$dirNamStr/fluka_dyb_$nowJobNum.csh >>../submit.csh.$j
 end
 cd $dataDir 

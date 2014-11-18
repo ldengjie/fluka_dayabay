@@ -19,7 +19,13 @@ static TFile *RootFile = 0;
 //static TTree *RootTree = 0;
 //
 static TTree *MuonTree = 0;
-Double_t MuInitKineE,MuInitTime,MuInitLocalX,MuInitLocalY,MuInitLocalZ,MuInitLocalXCos,MuInitLocalYCos,MuInitLocalZCos,MuAirTrackLength,MuStoneTrackLength,MuOwsTrackLength,MuIwsTrackLength,MuSstTrackLength,MuMoTrackLength,MuOatTrackLength,MuLsTrackLength,MuIatTrackLength,MuGdLsTrackLength=0.;
+Double_t MuInitKineE,MuInitTime,MuInitLocalX,MuInitLocalY,MuInitLocalZ,MuInitLocalXCos,MuInitLocalYCos,MuInitLocalZCos,MuAirTrackLength,MuStoneTrackLength,MuOwsTrackLength,MuIwsTrackLength=0.;
+double MuSstTrackLength[4]={0.};
+double MuMoTrackLength[4]={0.};
+double MuOatTrackLength[4]={0.};
+double MuLsTrackLength[4]={0.};
+double MuIatTrackLength[4]={0.};
+double MuGdLsTrackLength[4]={0.};
 Int_t    MuEventID,MuNumOfNeutron,MuNumOfIsotope,MuMuonCharge=0;
 
 static TTree *IsoTree = 0;
@@ -57,14 +63,14 @@ extern "C" {
 	MuonTree->Branch("InitLocalZCos",&MuInitLocalZCos,"InitLocalZCos/D");
 	MuonTree->Branch("AirTrackLength",&MuAirTrackLength,"AirTrackLength/D");
 	MuonTree->Branch("StoneTrackLength",&MuStoneTrackLength,"StoneTrackLength/D");
-	MuonTree->Branch("OatTrackLength",&MuOatTrackLength,"OatTrackLength/D");
-	MuonTree->Branch("IatTrackLength",&MuIatTrackLength,"IatTrackLength/D");
-	MuonTree->Branch("SstTrackLength",&MuSstTrackLength,"SstTrackLength/D");
+	MuonTree->Branch("OatTrackLength",&MuOatTrackLength,"OatTrackLength[4]/D");
+	MuonTree->Branch("IatTrackLength",&MuIatTrackLength,"IatTrackLength[4]/D");
+	MuonTree->Branch("SstTrackLength",&MuSstTrackLength,"SstTrackLength[4]/D");
 	MuonTree->Branch("OwsTrackLength",&MuOwsTrackLength,"OwsTrackLength/D");
 	MuonTree->Branch("IwsTrackLength",&MuIwsTrackLength,"IwsTrackLength/D");
-	MuonTree->Branch("MoTrackLength",&MuMoTrackLength,"MoTrackLength/D");
-	MuonTree->Branch("LsTrackLength",&MuLsTrackLength,"LsTrackLength/D");
-	MuonTree->Branch("GdLsTrackLength",&MuGdLsTrackLength,"GdLsTrackLength/D");
+	MuonTree->Branch("MoTrackLength",&MuMoTrackLength,"MoTrackLength[4]/D");
+	MuonTree->Branch("LsTrackLength",&MuLsTrackLength,"LsTrackLength[4]/D");
+	MuonTree->Branch("GdLsTrackLength",&MuGdLsTrackLength,"GdLsTrackLength[4]/D");
 	MuonTree->Branch("NumOfNeutron",&MuNumOfNeutron,"NumOfNeutron/I");
 	MuonTree->Branch("NumOfIsotope",&MuNumOfIsotope,"NumOfIsotope/I");
 	MuonTree->Branch("MuonCharge",&MuMuonCharge,"MuonCharge/I");
@@ -154,7 +160,7 @@ extern "C" {
 #define fillmuon FILLMUON
 #endif
 extern "C" {
-  void fillmuon( Int_t &m_MuEventID,Int_t &m_MuMuonCharge,Double_t &m_MuInitKineE,Double_t &m_MuInitTime,Double_t &m_MuInitLocalX,Double_t &m_MuInitLocalY,Double_t &m_MuInitLocalZ,Double_t &m_MuInitLocalXCos,Double_t &m_MuInitLocalYCos,Double_t &m_MuInitLocalZCos,Double_t &m_MuAirTrackLength,Double_t &m_MuStoneTrackLength,Double_t &m_MuOwsTrackLength,Double_t &m_MuIwsTrackLength,Double_t &m_MuSstTrackLength,Double_t &m_MuMoTrackLength,Double_t &m_MuOatTrackLength,Double_t &m_MuLsTrackLength,Double_t &m_MuIatTrackLength,Double_t &m_MuGdLsTrackLength,Int_t &m_MuNumOfNeutron,Int_t &m_MuNumOfIsotope)
+  void fillmuon( Int_t &m_MuEventID,Int_t &m_MuMuonCharge,Double_t &m_MuInitKineE,Double_t &m_MuInitTime,Double_t &m_MuInitLocalX,Double_t &m_MuInitLocalY,Double_t &m_MuInitLocalZ,Double_t &m_MuInitLocalXCos,Double_t &m_MuInitLocalYCos,Double_t &m_MuInitLocalZCos,Double_t &m_MuAirTrackLength,Double_t &m_MuStoneTrackLength,Double_t &m_MuOwsTrackLength,Double_t &m_MuIwsTrackLength,Double_t m_MuSstTrackLength[4],Double_t m_MuMoTrackLength[4],Double_t m_MuOatTrackLength[4],Double_t m_MuLsTrackLength[4],Double_t m_MuIatTrackLength[4],Double_t m_MuGdLsTrackLength[4],Int_t &m_MuNumOfNeutron,Int_t &m_MuNumOfIsotope)
   {
 	MuEventID         = m_MuEventID;
 	MuInitKineE       = m_MuInitKineE;
@@ -165,16 +171,20 @@ extern "C" {
 	MuInitLocalXCos   = m_MuInitLocalXCos;
 	MuInitLocalYCos   = m_MuInitLocalYCos;
 	MuInitLocalZCos   = m_MuInitLocalZCos;
-	MuSstTrackLength  = m_MuSstTrackLength;
 	MuAirTrackLength  = m_MuAirTrackLength;
 	MuStoneTrackLength  = m_MuStoneTrackLength;
-	MuOatTrackLength  = m_MuOatTrackLength;
-	MuIatTrackLength  = m_MuIatTrackLength;
 	MuOwsTrackLength  = m_MuOwsTrackLength;
 	MuIwsTrackLength  = m_MuIwsTrackLength;
-	MuMoTrackLength   = m_MuMoTrackLength;
-	MuLsTrackLength   = m_MuLsTrackLength;
-	MuGdLsTrackLength = m_MuGdLsTrackLength;
+    for( int i=0 ; i<4 ; i++ )
+    {
+        MuSstTrackLength[i]  = m_MuSstTrackLength[i];
+        MuOatTrackLength[i]  = m_MuOatTrackLength[i];
+        MuIatTrackLength[i]  = m_MuIatTrackLength[i];
+        MuMoTrackLength[i]   = m_MuMoTrackLength[i];
+        MuLsTrackLength[i]   = m_MuLsTrackLength[i];
+        MuGdLsTrackLength[i] = m_MuGdLsTrackLength[i];
+    }
+    
 	MuNumOfNeutron    = m_MuNumOfNeutron;
 	MuNumOfIsotope    = m_MuNumOfIsotope;
 	MuMuonCharge      = m_MuMuonCharge     ;

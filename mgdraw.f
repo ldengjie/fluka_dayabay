@@ -41,41 +41,41 @@
       EXTERNAL TIM1O2, BDNOPT
 
 C      WRITE(*,*) 'MGDRAW'
-C      if(MREG.eq.10 .or. MREG.eq.12) then
-C         DO I=1,MTRACK
-C            if(DTRACK (I).gt.0) then
-C                IICode=0
-C                if(LTRACK.gt.1) then
-C                    ISpaMaId=ISPUSR(2)
-C                    ISpaMaTy=ISPUSR(1)
-C                else
-C                    ISpaMaId=0
-C                    ISpaMaTy=0
-C                endif
-C*  |  Quenching is activated
-C                IF ( LQEMGD ) THEN
-C                   IF ( MTRACK .GT. 0 ) THEN
-C                      QenE=0
-C                      RULLL  = ZERZER
-C                      CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-C                      if(ZFRTTK.gt.1.5) then
-C                          JBK=2
-C                      else
-C                          JBK=1
-C                      endif
-C                      DO J=1,MTRACK
-C                          QenE=QenE+DTQUEN(J,JBK)
-C                      ENDDO
-C                   END IF
-C                END IF
-C*  |  End of quenching
-C
-C               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
-C     &MREG,ISPUSR(5))
-C            endif
-C         ENDDO
-C      endif
+      if(MREG.eq.10 .or. MREG.eq.12) then
+         DO I=1,MTRACK
+            if(DTRACK (I).gt.0) then
+                IICode=0
+                if(LTRACK.gt.1) then
+                    ISpaMaId=ISPUSR(2)
+                    ISpaMaTy=ISPUSR(1)
+                else
+                    ISpaMaId=0
+                    ISpaMaTy=0
+                endif
+*  |  Quenching is activated
+                IF ( LQEMGD ) THEN
+                   IF ( MTRACK .GT. 0 ) THEN
+                      QenE=0
+                      RULLL  = ZERZER
+                      CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
+                      if(ZFRTTK.gt.1.5) then
+                          JBK=2
+                      else
+                          JBK=1
+                      endif
+                      DO J=1,MTRACK
+                          QenE=QenE+DTQUEN(J,JBK)
+                      ENDDO
+                   END IF
+                END IF
+*  |  End of quenching
+
+               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
+     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
+     &MREG,ISPUSR(5))
+            endif
+         ENDDO
+      endif
 
 *get neutron initial energy at this neutron's first MGDRAW call
       if(JTRACK.EQ.8) then
@@ -118,8 +118,21 @@ C     &       .eq.0) then
               WRITE(*,*) 'ERROR : DetInitP .NE.  0',NEWREG,
      &'IfDetIP',IfDetIP(NEWREG)
           end if
+          
+          if(MREG.ge.7) then
+              if(XSCO.lt.0) then
+                  NDet=1
+              else
+                  NDet=2
+              endif
+              if(YSCO.gt.300) then
+                  NDet=NDet+2
+              endif
+          else
+              NDet=1
+          endif
 
-          DetLen(MREG)=DetLen(MREG)+sqrt(
+          DetLen(MREG,NDet)=DetLen(MREG,NDet)+sqrt(
      &                 (XSCO-DetInitP(MREG,1))*(XSCO-DetInitP(MREG,1))+
      &                 (YSCO-DetInitP(MREG,2))*(YSCO-DetInitP(MREG,2))+
      &                 (ZSCO-DetInitP(MREG,3))*(ZSCO-DetInitP(MREG,3)))
@@ -150,7 +163,19 @@ C          endif
 C          IF(DOT_PRODUCT(DetInitP(MuFinalV,1:3),DetInitP(MuFinalV,1:3))
 C     &       .ne.0) then
           if(IfDetIP(MuFinalV).eq.1) then
-          DetLen(MuFinalV)=DetLen(MuFinalV)+sqrt(
+          if(MuFinalV.ge.7) then
+              if(MuFinalP(1).lt.0) then
+                  NDet=1
+              else
+                  NDet=2
+              endif
+              if(MuFinalP(2).gt.300) then
+                  NDet=NDet+2
+              endif
+          else
+              NDet=1
+          endif
+          DetLen(MuFinalV,NDet)=DetLen(MuFinalV,NDet)+sqrt(
      &(MuFinalP(1)-DetInitP(MuFinalV,1))*
      &(MuFinalP(1)-DetInitP(MuFinalV,1))+
      &(MuFinalP(2)-DetInitP(MuFinalV,2))*
@@ -169,9 +194,10 @@ C      ENDDO
 
       call fillmuon(NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
      &MuInitP(2),MuInitP(3),
-     &MuInitTP(1),MuInitTP(2),MuInitTP(3),DetLen(3),DetLen(4),
-     &DetLen(5),DetLen(6),DetLen(7),DetLen(8),DetLen(9),DetLen(10),
-     &DetLen(11),DetLen(12),NeuNum,IsoNum)
+     &MuInitTP(1),MuInitTP(2),MuInitTP(3),DetLen(3,1),DetLen(4,1),
+     &DetLen(5,1),DetLen(6,1),DetLen(7,1:4),DetLen(8,1:4),
+     &DetLen(9,1:4),DetLen(10,1:4),
+     &DetLen(11,1:4),DetLen(12,1:4),NeuNum,IsoNum)
 *neutron
 C      if(NeuNum.gt.0 .or. NeuNum2.gt.0) then
 C        WRITE(*,*) '>>>EEDRAW(',NCASE,') NeuNum:',NeuNum,
@@ -207,32 +233,32 @@ C      WRITE(*,*) I,NeuDauVm(I)
 
 *  +-------------------------------------------------------------------*
       ENTRY ENDRAW ( ICODE, MREG, RULL, XSCO, YSCO, ZSCO )
-C      if(MREG.eq.10 .or. MREG.eq.12) then
-C                IICode=ICODE
-C                if(LTRACK.gt.1) then
-C                    ISpaMaId=ISPUSR(2)
-C                    ISpaMaTy=ISPUSR(1)
-C                else
-C                    ISpaMaId=0
-C                    ISpaMaTy=0
-C                endif
-C*  |  Quenching is activated : calculate quenching factor
-C*  |  and store quenched energy in DTQUEN(1, jbk)
-C                IF ( LQEMGD ) THEN
-C                      QenE=0
-C                   RULLL = RULL
-C                   CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-C                END IF
-C                      if(ZFRTTK.gt.1.5) then
-C                          JBK=2
-C                      else
-C                          JBK=1
-C                      endif
-C                      QenE=QenE+DTQUEN(1,JBK)
-C*  |  end quenching
-C               call fillspa(NCASE,XSCO,YSCO,ZSCO,
-C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
-C      endif
+      if(MREG.eq.10 .or. MREG.eq.12) then
+                IICode=ICODE
+                if(LTRACK.gt.1) then
+                    ISpaMaId=ISPUSR(2)
+                    ISpaMaTy=ISPUSR(1)
+                else
+                    ISpaMaId=0
+                    ISpaMaTy=0
+                endif
+*  |  Quenching is activated : calculate quenching factor
+*  |  and store quenched energy in DTQUEN(1, jbk)
+                IF ( LQEMGD ) THEN
+                      QenE=0
+                   RULLL = RULL
+                   CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
+                END IF
+                      if(ZFRTTK.gt.1.5) then
+                          JBK=2
+                      else
+                          JBK=1
+                      endif
+                      QenE=QenE+DTQUEN(1,JBK)
+*  |  end quenching
+               call fillspa(NCASE,XSCO,YSCO,ZSCO,
+     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
+      endif
 C
       RETURN
 
@@ -321,36 +347,36 @@ C       END IF
 
 
 * Loop over Secondaries.
-      nn=0     
-      hikin=0
-      nocount=9999
-      do ip = 1, NP
-        if(kpart(ip).eq.8) nn=nn+1
-      enddo
-
-      if (nn.gt.0 .and. jtrack.eq.8) then
-          do ip=1,np
-            if(kpart(ip).eq.8 .and. tki(ip).gt.hikin) then 
-               nocount=ip
-               hikin=tki(ip)
-            endif
-          enddo 
-      do ip=1,np
-              if(ip.ne.nocount .and. kpart(ip).eq.8) then
-                  write(*,*) 'ye',icode, jtrack, xsco, ysco, zsco, 
-     +                          tki(ip), wei(ip),
-     +                          cxr(ip), cyr(ip), czr(ip)
-              endif
-          enddo  
-      else if (nn.gt.0) then 
-          do ip=1,np
-              if (kpart(ip).eq.8) then
-                  write(*,*) 'ye',icode, jtrack, xsco, ysco, zsco, 
-     +                          tki(ip), wei(ip),
-     +                          cxr(ip), cyr(ip), czr(ip)
-             endif
-          enddo
-      endif
+C      nn=0     
+C      hikin=0
+C      nocount=9999
+C      do ip = 1, NP
+C        if(kpart(ip).eq.8) nn=nn+1
+C      enddo
+C
+C      if (nn.gt.0 .and. jtrack.eq.8) then
+C          do ip=1,np
+C            if(kpart(ip).eq.8 .and. tki(ip).gt.hikin) then 
+C               nocount=ip
+C               hikin=tki(ip)
+C            endif
+C          enddo 
+C      do ip=1,np
+C              if(ip.ne.nocount .and. kpart(ip).eq.8) then
+C                  write(*,*) 'ye',icode, jtrack, xsco, ysco, zsco, 
+C     +                          tki(ip), wei(ip),
+C     +                          cxr(ip), cyr(ip), czr(ip)
+C              endif
+C          enddo  
+C      else if (nn.gt.0) then 
+C          do ip=1,np
+C              if (kpart(ip).eq.8) then
+C                  write(*,*) 'ye',icode, jtrack, xsco, ysco, zsco, 
+C     +                          tki(ip), wei(ip),
+C     +                          cxr(ip), cyr(ip), czr(ip)
+C             endif
+C          enddo
+C      endif
 
 *neutron capture
       if(JTRACK.eq.8 .and. ICODE.eq.300)then

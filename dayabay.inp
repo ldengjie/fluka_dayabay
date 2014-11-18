@@ -165,7 +165,7 @@ USERDUMP        100.                 0.0        1.
 USERDUMP      6.5E-3    1.5E-6    3.7E-3    1.5E-6                    UDQUENCH
 USERWEIG                                                 1.0
 * Set the random number seed
-RANDOMIZ          1.1236298764
+RANDOMIZ          1.1235498764
 * Set the number of primary histories to be simulated in the run
-START         10000.
+START        100000.
 STOP
