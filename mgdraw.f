@@ -40,40 +40,40 @@
 *
       EXTERNAL TIM1O2, BDNOPT
 
-C      if(MREG.eq.10 .or. MREG.eq.12) then
-C         DO I=1,MTRACK
-C            if(DTRACK (I).gt.0) then
-C                IICode=0
-C                if(LTRACK.gt.1) then
-C                    ISpaMaId=ISPUSR(2)
-C                    ISpaMaTy=ISPUSR(1)
-C                else
-C                    ISpaMaId=0
-C                    ISpaMaTy=0
-C                endif
-C*  |  Quenching is activated
-C                IF ( LQEMGD ) THEN
-C                   IF ( MTRACK .GT. 0 ) THEN
-C                      QenE=0
-C                      RULLL  = ZERZER
-C                      CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-C                      if(ZFRTTK.gt.1.5) then
-C                          JBK=2
-C                      else
-C                          JBK=1
-C                      endif
-C                      DO J=1,MTRACK
-C                          QenE=QenE+DTQUEN(J,JBK)
-C                      ENDDO
-C                   END IF
-C                END IF
-C*  |  End of quenching
-C               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
-C     &MREG,ISPUSR(5))
-C            endif
-C         ENDDO
-C      endif
+      if(MREG.eq.10 .or. MREG.eq.12) then
+         DO I=1,MTRACK
+            if(DTRACK (I).gt.0) then
+                IICode=0
+                if(LTRACK.gt.1) then
+                    ISpaMaId=ISPUSR(2)
+                    ISpaMaTy=ISPUSR(1)
+                else
+                    ISpaMaId=0
+                    ISpaMaTy=0
+                endif
+*  |  Quenching is activated
+                IF ( LQEMGD ) THEN
+                   IF ( MTRACK .GT. 0 ) THEN
+                      QenE=0
+                      RULLL  = ZERZER
+                      CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
+                      if(ZFRTTK.gt.1.5) then
+                          JBK=2
+                      else
+                          JBK=1
+                      endif
+                      DO J=1,MTRACK
+                          QenE=QenE+DTQUEN(J,JBK)
+                      ENDDO
+                   END IF
+                END IF
+*  |  End of quenching
+               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
+     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
+     &MREG,ISPUSR(5))
+            endif
+         ENDDO
+      endif
 
 *get neutron initial energy at this neutron's first MGDRAW call
       if(JTRACK.EQ.8) then
@@ -94,8 +94,10 @@ C      endif
        endif
       endif
 * get muon final volume and position
+      if(LTRACK.eq.1) then
       MuFinalV=MREG
       MuFinalP=[XTRACK (NTRACK),YTRACK (NTRACK),ZTRACK (NTRACK)]
+      endif
       RETURN
 
 *  +-------------------------------------------------------------------*
@@ -127,7 +129,7 @@ C              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
 *muon 
       if(MuFinalV>1) then
           IF(DOT_PRODUCT(DetInitP(MuFinalV,1:3),DetInitP(MuFinalV,1:3))
-     &       .eq.0) then
+     &       .ne.0) then
           DetLen(MuFinalV)=DetLen(MuFinalV)+sqrt(
      &(MuFinalP(1)-DetInitP(MuFinalV,1))*
      &(MuFinalP(1)-DetInitP(MuFinalV,1))+
