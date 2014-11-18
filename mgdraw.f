@@ -95,8 +95,8 @@
       endif
 * get muon final volume and position
       if(LTRACK.eq.1) then
-      MuFinalV=MREG
-      MuFinalP=[XTRACK (NTRACK),YTRACK (NTRACK),ZTRACK (NTRACK)]
+         MuFinalV=MREG
+         MuFinalP(1:3)=[XTRACK(NTRACK),YTRACK(NTRACK),ZTRACK(NTRACK)]
       endif
       RETURN
 
@@ -107,20 +107,44 @@
       CALL GEOR2N ( NEWREG,NRGNAM,IERR2)
 C              WRITE(*,*) MRGNAM,'->',NRGNAM
       
-          IF(DOT_PRODUCT(DetInitP(NEWREG,1:3),DetInitP(NEWREG,1:3))
-     &       .eq.0) then
+C          IF(DOT_PRODUCT(DetInitP(NEWREG,1:3),DetInitP(NEWREG,1:3))
+C     &       .eq.0) then
+          if(IfDetIP(NEWREG).eq.0) then
               DetInitP(NEWREG,1:3)=[XSCO, YSCO, ZSCO]
+              IfDetIP(NEWREG)=1
           else
-              WRITE(*,*) 'ERROR : DetInitP .NE. 0',NEWREG
+              WRITE(*,*) 'ERROR : DetInitP .NE.  0',NEWREG,
+     &'IfDetIP',IfDetIP(NEWREG)
           end if
+          
+          if(MREG.ge.7) then
+              if(XSCO.lt.0) then
+                  NDet=1
+              else
+                  NDet=2
+              endif
+              if(YSCO.gt.300) then
+                  NDet=NDet+2
+              endif
+          else
+              NDet=1
+          endif
 
-          DetLen(MREG)=DetLen(MREG)+sqrt(
+          DetLen(MREG,NDet)=DetLen(MREG,NDet)+sqrt(
      &                 (XSCO-DetInitP(MREG,1))*(XSCO-DetInitP(MREG,1))+
      &                 (YSCO-DetInitP(MREG,2))*(YSCO-DetInitP(MREG,2))+
      &                 (ZSCO-DetInitP(MREG,3))*(ZSCO-DetInitP(MREG,3)))
 C              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
           DetInitP(MREG,1:3)=0
+          IfDetIP(MREG)=0
       endif
+C      if(JTRACK.eq.8) then
+C          if(NEWREG.eq.1) then
+C              NeuNum2=NeuNum2+1
+C              WRITE(*,*) '  BXD NeuNum2:',NeuNum2,'ISPUSR(3):',
+C     &ISPUSR(3),MREG,'->',NEWREG
+C          endif
+C      endif
 
       RETURN
 
@@ -128,26 +152,63 @@ C              WRITE(*,*) 'DetLen(',MREG,') : ',DetLen(MREG)
       ENTRY EEDRAW ( ICODE ) 
 *muon 
       if(MuFinalV>1) then
-          IF(DOT_PRODUCT(DetInitP(MuFinalV,1:3),DetInitP(MuFinalV,1:3))
-     &       .ne.0) then
-          DetLen(MuFinalV)=DetLen(MuFinalV)+sqrt(
+C          if(MuFinalV.eq.3) then
+C           WRITE(*,*) DetInitP(MuFinalV,1),'->',MuFinalP(1)
+C           WRITE(*,*) DetInitP(MuFinalV,2),'->',MuFinalP(2)
+C           WRITE(*,*) DetInitP(MuFinalV,3),'->',MuFinalP(3)
+C           WRITE(*,*) 'IfDetIP(MuFinalV)',IfDetIP(MuFinalV)
+C          endif
+C          IF(DOT_PRODUCT(DetInitP(MuFinalV,1:3),DetInitP(MuFinalV,1:3))
+C     &       .ne.0) then
+          if(IfDetIP(MuFinalV).eq.1) then
+          if(MuFinalV.ge.7) then
+              if(MuFinalP(1).lt.0) then
+                  NDet=1
+              else
+                  NDet=2
+              endif
+              if(MuFinalP(2).gt.300) then
+                  NDet=NDet+2
+              endif
+          else
+              NDet=1
+          endif
+          DetLen(MuFinalV,NDet)=DetLen(MuFinalV,NDet)+sqrt(
      &(MuFinalP(1)-DetInitP(MuFinalV,1))*
      &(MuFinalP(1)-DetInitP(MuFinalV,1))+
      &(MuFinalP(2)-DetInitP(MuFinalV,2))*
      &(MuFinalP(2)-DetInitP(MuFinalV,2))+
      &(MuFinalP(3)-DetInitP(MuFinalV,3))*
      &(MuFinalP(3)-DetInitP(MuFinalV,3)))
+C          WRITE(*,*) 'fix',MuFinalV
           DetInitP(MuFinalV,1:3)=0
+          IfDetIP(MuFinalV)=0
           endif
       endif 
+C      WRITE(*,*) 'MuFinalV',MuFinalV
+C      DO i=1,15
+C         if(DetLen(i).ne.0) WRITE(*,*) I,DetLen(i)
+C      ENDDO
 
       call fillmuon(NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
      &MuInitP(2),MuInitP(3),
-     &MuInitTP(1),MuInitTP(2),MuInitTP(3),DetLen(3),DetLen(4),
-     &DetLen(5),DetLen(6),DetLen(7),DetLen(8),DetLen(9),DetLen(10),
-     &DetLen(11),DetLen(12),NeuNum,IsoNum)
+     &MuInitTP(1),MuInitTP(2),MuInitTP(3),DetLen(3,1),DetLen(4,1),
+     &DetLen(5,1),DetLen(6,1),DetLen(7,1:4),DetLen(8,1:4),
+     &DetLen(9,1:4),DetLen(10,1:4),
+     &DetLen(11,1:4),DetLen(12,1:4),NeuNum,IsoNum)
 *neutron
-C      WRITE(*,*) 'fillneu'
+C      if(NeuNum.gt.0 .or. NeuNum2.gt.0) then
+C        WRITE(*,*) '>>>EEDRAW(',NCASE,') NeuNum:',NeuNum,
+C     &' NeuNum2:',NeuNum2
+C          DO I=1,NeuNum
+C        WRITE(*,*) I,NeuInitE(I),NeuInitT(I),
+C     &NeuInitP(I,1),NeuInitP(I,2),NeuInitP(I,3),
+C     &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
+C     &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
+C     &NeuMaID(I),NeuType(I),NeuCapVm(I),NeuCapTn(I),
+C     &NeuInitVm(I),NeuMaE(I),NeuDauVm(I)
+C          enddo
+C      endif
 
       if(NeuNum.gt.0) then
           DO I=1,NeuNum
@@ -166,10 +227,6 @@ C      WRITE(*,*) I,NeuDauVm(I)
           enddo
       endif
 
-C      WRITE(*,*) 'MuFinalV',MuFinalV
-C      DO i=1,15
-C         if(DetLen(i).ne.0) WRITE(*,*) I,DetLen(i)
-C      ENDDO
       RETURN
 
 *  +-------------------------------------------------------------------*
@@ -200,7 +257,7 @@ C      ENDDO
                call fillspa(NCASE,XSCO,YSCO,ZSCO,
      &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
       endif
-
+C
       RETURN
 
 *  +-------------------------------------------------------------------*
@@ -210,6 +267,7 @@ C      ENDDO
       MuInitP=[XFLK(1),YFLK(1),ZFLK(1)]
       MuInitTP=[TXFLK(1),TYFLK(1),TZFLK(1)]
       DetInitP(2,1:3)=[XFLK(1),YFLK(1),ZFLK(1)]
+      IfDetIP(2)=1
       if(ILOFLK(1).eq.10) then
          MuCharge=1
       else
@@ -226,6 +284,9 @@ C      ENDDO
 * ISPUSR 1.reaction type 2.parent'd id 3.neutron num 4.isotopes num 5.initial volume 6.initial volume of muon's daughter ?.gamma num 
       ISPUSR(1)=ICODE
       ISPUSR(2)=JTRACK
+C      if(JTRACK.eq.7) then
+C          WRITE(*,*) 'gamma Reaction Type',ICODE
+C      endif
       if(LTRACK.eq.1) then 
          ISPUSR(6)=MREG
       endif
@@ -243,8 +304,11 @@ C      ENDDO
       USDP(3)=ZSCO 
       USDVol=MREG
       USDDauVm=ISPUSR(6)
+
+
 *find maximum energy of secondary neutron
-      if(JTRACK.eq.8 .and. ICODE.eq.101) then
+C      if(JTRACK.eq.8 .and. ICODE.eq.101) then
+      if(JTRACK.eq.8 ) then
          SecNeuNO=0
          MaxNeuE=0
          do I=1,NP
@@ -254,6 +318,61 @@ C      ENDDO
             endif
          enddo
       endif
+
+C      NeuCount = 0
+C      do  ip = 1, NP
+C      IF (KPART(ip) .EQ. 8) THEN
+C          NeuCount = NeuCount + 1
+C      END IF
+C      enddo 
+C      IF (JTRACK .EQ. 8) THEN
+C          NeuCount = NeuCount - 1
+C      END IF
+C      IF (NeuCount.GE.1) THEN
+C          do  ip = 1, NP
+C          IF (KPART(ip) .EQ. 8) THEN
+C               WRITE(*, *) 'USDLI', NCASE, JTRACK, ICODE, TKI(ip)
+C              IF (JTRACK .EQ. 8 .and. TKI(ip).ne.MaxNeuE) THEN
+C                  WRITE(*, *) 'USSubOne', NCASE, JTRACK, ICODE, TKI(ip)
+C              elseif(JTRACK.ne.8) then
+C                  WRITE(*, *) 'USSubOne', NCASE, JTRACK, ICODE, TKI(ip)
+C              ENDIF
+C          END IF
+C      enddo 
+C       END IF
+
+
+* Loop over Secondaries.
+C      nn=0     
+C      hikin=0
+C      nocount=9999
+C      do ip = 1, NP
+C        if(kpart(ip).eq.8) nn=nn+1
+C      enddo
+C
+C      if (nn.gt.0 .and. jtrack.eq.8) then
+C          do ip=1,np
+C            if(kpart(ip).eq.8 .and. tki(ip).gt.hikin) then 
+C               nocount=ip
+C               hikin=tki(ip)
+C            endif
+C          enddo 
+C      do ip=1,np
+C              if(ip.ne.nocount .and. kpart(ip).eq.8) then
+C                  write(*,*) 'ye',icode, jtrack, xsco, ysco, zsco, 
+C     +                          tki(ip), wei(ip),
+C     +                          cxr(ip), cyr(ip), czr(ip)
+C              endif
+C          enddo  
+C      else if (nn.gt.0) then 
+C          do ip=1,np
+C              if (kpart(ip).eq.8) then
+C                  write(*,*) 'ye',icode, jtrack, xsco, ysco, zsco, 
+C     +                          tki(ip), wei(ip),
+C     +                          cxr(ip), cyr(ip), czr(ip)
+C             endif
+C          enddo
+C      endif
 
 *neutron capture
       if(JTRACK.eq.8 .and. ICODE.eq.300)then
@@ -294,6 +413,26 @@ C             WRITE(*,*) 'Neutron captured on :',MMTRCK
           END DO 
           
       endif
+C      if(JTRACK.eq.8) then
+C          NoNeu=0
+C          IsGa=1
+C         do I=1,NP
+C            if(KPART(I).eq.8) then
+C                NoNeu=1
+C            endif
+C            if(KPART(I).ne.7) then
+C                IsGa=0
+C            endif
+C         enddo
+C          if(NoNeu.eq.0 .and. IsGa.eq.1 .and. NP.gt.0) then
+C              NeuNum2=NeuNum2+1
+C              WRITE(*,*) '  USD ',ICODE,' NeuNum2:',NeuNum2,
+C     &'ISPUSR(3):',ISPUSR(3)
+C         do I=1,NP
+C                WRITE(*,*) '    ',KPART(I)
+C         enddo
+C          endif
+C      endif
 
       RETURN
 *=== End of subrutine Mgdraw ==========================================*
