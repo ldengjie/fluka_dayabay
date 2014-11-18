@@ -3,13 +3,13 @@
 #已经运行过的run个数
 @ existedRun=0
 #这次需要运行的run个数
-@ totalRun=100
+@ totalRun=50
 #每个文件夹下run个数
-@ runNumInDir=5
+@ runNumInDir=2
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
-set dataDir=$FLUWORK/data/PART36
+set dataDir=$FLUWORK/data/PART37
 
 if ( -e $dataDir ) then
     rm $dataDir/* -rf
@@ -26,8 +26,8 @@ cd $dataDir/jobScripts
 @ j=0
 #while( $i < $dirNum + $existedRun)
 while( $i < $dirNum)
-    @ j = $i / 500
-    @ newseed = 1236498764 + $i * $runNumInDir 
+    @ j = $i / 499
+    @ newseed = 1235498764 + $i * $runNumInDir 
     echo $newseed
     @ dirNam = $i * $runNumInDir + 1 + $existedRun
     set dirNamStr = `printf "%06d\n" $dirNam` 
@@ -53,4 +53,4 @@ while( $i < $dirNum)
     popd
     echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_LA_$nowJobNum.csh >>../submit.csh.$j
 end
-cd $FLUWORK
+cd $dataDir 

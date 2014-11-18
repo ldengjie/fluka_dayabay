@@ -31,13 +31,16 @@
 
 *muon
       NeuNum=0 
+      NeuNum2=0 
       IsoNum=0 
       MuInitT=0 
       MuInitE=0 
       DetLen=0
       DetInitP=0
+      IfDetIP=0
       MuFinalP=10000000
       MuFinalV=0
+
 *neutron
       NeuInitT=0 
       NeuInitE=0 

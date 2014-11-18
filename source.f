@@ -63,6 +63,7 @@
 C           IF(I .LE. 50) THEN
 C               WRITE(LUNOUT,*) I,Enrgy(I),Theta(I),Phi(I)
 C           END IF
+           Enrgy(I)=260
         END DO
         CLOSE(88)
         OPEN(UNIT=89,FILE="../NextSeedNum",STATUS="OLD")
@@ -70,8 +71,8 @@ C           END IF
         CLOSE(89)
 * initial surface 
 *hall
-C        OPoMin=[-11,-8,-8]
-C        OPoMax=[11,8,33]
+        OPoMin=[-11,-8,-8]
+        OPoMax=[11,8,33]
 *rock+waterpool
 C        OPoMin=[-11,-8,-8]
 C        OPoMax=[11,8,8]
@@ -79,8 +80,11 @@ C        OPoMax=[11,8,8]
 C        OPoMin=[-8,-5,-5]
 C        OPoMax=[8,5,5]
 *AD
-        OPoMin=[-5.5,-2.5,-2.5]
-        OPoMax=[5.5,2.5,2.5]
+C        OPoMin=[-5.5,-2.5,-2.5]
+C        OPoMax=[5.5,2.5,2.5]
+*GDLS
+C        OPoMin=[-4.5,-1.5,-1.5]
+C        OPoMax=[4.5,1.5,1.5]
 
         SVecN=0
         SLen=0
@@ -226,8 +230,8 @@ C      WRITE(*,*) 'ValidS:',(ValidS(I),I=1,MaxP)
                PRVec(2)=FLRNDM(DUMMY)
                PRVec(3)=FLRNDM(DUMMY)
 *  !!! initial position
-               DIniPo=((SPoMin(I,1:3)+PRVec*SLen(I,1:3))+(-100*ProVec))
-     &                *100
+               DIniPo=((SPoMin(I,1:3)+PRVec*SLen(I,1:3))+
+     &(-10000*ProVec))
 C               WRITE(*,*) ISrsNum,'if initial position : ',
 C     &                    (DIniPo(J),j=1,3)
                EXIT 
