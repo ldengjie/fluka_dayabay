@@ -1,15 +1,23 @@
-#/bin/tcsh
+#!/bin/tcsh
 
 #已经运行过的run个数
 @ existedRun=0
 #这次需要运行的run个数
+<<<<<<< HEAD
 @ totalRun=50
+=======
+@ totalRun=10
+>>>>>>> master
 #每个文件夹下run个数
 @ runNumInDir=2
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
+<<<<<<< HEAD
 set dataDir=$FLUWORK/data/PART37
+=======
+set dataDir=$FLUWORK/data/TEST
+>>>>>>> master
 
 if ( -e $dataDir ) then
     rm $dataDir/* -rf
