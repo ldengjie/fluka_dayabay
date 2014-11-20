@@ -43,7 +43,7 @@
       SAVE LFIRST, Enrgy, Theta, Phi, SVecN,SPoMin, SLen
 *
       DIMENSION OPoMin(3),OPoMax(3),ProVec(3),ValidS(MaxP),
-     &          DIniPo(3),SecTag(MaxP),PRVec(3)
+     &          DIniPo(3),SecTag(MaxP),PRVec(3),D1P(3),D2P(3)
 *
 *======================================================================*
       NOMORE = 0
@@ -70,17 +70,17 @@ C           END IF
         CLOSE(89)
 * initial surface 
 *hall
-        OPoMin=[-11,-8,-8]
-        OPoMax=[11,14,33]
+        OPoMin=[-1100,-800,-800]
+        OPoMax=[1100,1400,3300]
 *rock+waterpool
-C        OPoMin=[-11,-8,-8]
-C        OPoMax=[11,14,8]
+C        OPoMin=[-1100,-800,-800]
+C        OPoMax=[1100,1400,800]
 *waterpool
-C        OPoMin=[-8,-5,-5]
-C        OPoMax=[8,11,5]
+C        OPoMin=[-800,-500,-500]
+C        OPoMax=[800,1100,500]
 *AD
-C        OPoMin=[-5.5,-2.5,-2.5]
-C        OPoMax=[5.5,8.5,2.5]
+C        OPoMin=[-550,-250,-250]
+C        OPoMax=[550,850,250]
 
         SVecN=0
         SLen=0
@@ -129,13 +129,7 @@ C        OPoMax=[5.5,8.5,2.5]
 * Npflka is the stack counter: of course any time source is called it
 * must be =0
       NPFLKA = NPFLKA + 1
-      if(ISrsNum.eq.0 .or. ISrsNum.gt.NLINES) then
-          ISrsNum=1
-      endif
-C           IF(ISrsNum .LT. NextSeedNum+50) THEN
-C               WRITE(*,*) ISrsNum,Enrgy(ISrsNum),
-C     &Theta(ISrsNum),Phi(ISrsNum)
-C           END IF
+
 * Wt is the weight of the particle
       WTFLK  (NPFLKA) = 1 
       WEIPRI = WEIPRI + WTFLK (NPFLKA)
@@ -178,44 +172,66 @@ C           END IF
       AKNSHR (NPFLKA) = -TWOTWO
 * Group number for "low" energy neutrons, set to 0 anyway
       IGROUP (NPFLKA) = 0
-* Kinetic energy of the particle (GeV)
-      TKEFLK (NPFLKA) = Enrgy(ISrsNum)
-* Particle momentum
-      PMOFLK (NPFLKA) = SQRT ( TKEFLK (NPFLKA) * ( TKEFLK (NPFLKA)
-     &                       + TWOTWO * AM (ILOFLK(NPFLKA)) ) )
 
+*==================================================
+
+      IDo=1
+      DO WHILE(IDo.eq.1)
+      if(ISrsNum.eq.0 .or. ISrsNum.gt.NLINES) then
+          ISrsNum=1
+      endif
 *==
 *  incident direction vector
-      ProVec(1) = SIN (Theta(ISrsNum)/PIPIPI)*COS ( Phi(ISrsNum)/PIPIPI)
-      ProVec(2) = SIN (Theta(ISrsNum)/PIPIPI)*SIN ( Phi(ISrsNum)/PIPIPI)
-      ProVec(3) = -COS (Theta(ISrsNum)/PIPIPI)
+      DTheta=PIPIPI-PIPIPI*Theta(ISrsNum)/180
+      DPhi  =PIPIPI/2 - PIPIPI*Phi(ISrsNum)/180
+      if(DPhi.lt.0) then
+          DPhi=DPhi+2*PIPIPI
+      endif
+      DPhi=DPhi+(56.7+180)*PIPIPI/180
+      if(DPhi.gt.(2*PIPIPI)) then
+          DPhi=DPhi-2*PIPIPI
+      endif
+
+      ProVec(1) = SIN (DTheta)*COS (DPhi)
+      ProVec(2) = SIN (DTheta)*SIN (DPhi)
+      ProVec(3) = COS (DTheta)
 
 *  total valid surface area
       TVaiS = 0
+      TS = 0
       SecTag = 0
       DO I = 1,MaxP
-         TotS=1
+         PerS=1
          DO J=1,3
             IF ( SLen(I,J) .NE. 0 ) THEN
                DLenT=SLen(I,J) 
             ELSE
                DLenT=1
             END IF
-            TotS = TotS*DLenT
+            PerS = PerS*DLenT
          END DO
          ValidS(I) = DOT_PRODUCT(SVecN(I,1:3),ProVec)/
      &               SQRT(DOT_PRODUCT(SVecN(I,1:3),SVecN(I,1:3))*
-     &               DOT_PRODUCT(ProVec,ProVec)) * (-TotS)
+     &               DOT_PRODUCT(ProVec,ProVec)) * (-PerS)
          IF (ValidS(I) .GT. 0) THEN
             SecTag(I) = 1 
             TVaiS = TVaiS + ValidS(I)
+            TS=TS+PerS
          END IF
       END DO
-C      WRITE(*,*) 'TVaiS:' ,TVaiS
-C      WRITE(*,*) 'ValidS:',(ValidS(I),I=1,MaxP)
 
 *  uniform sampling 
       SR = FLRNDM(DUMMY)
+      if(SR.ge.(TVaiS/TS)) then !drop this muon,loop next muon
+          IDo=1
+          ISrsNum=ISrsNum+1
+      else
+          IDo=0
+      endif
+      ENDDO
+
+C      WRITE(*,*) 'NPFLKA/ISrsNum',NPFLKA,'/',ISrsNum
+
       SRFlag = 0
       DO I = 1,MaxP
          IF ( SecTag(I) .EQ. 1 ) THEN
@@ -226,15 +242,54 @@ C      WRITE(*,*) 'ValidS:',(ValidS(I),I=1,MaxP)
                PRVec(2)=FLRNDM(DUMMY)
                PRVec(3)=FLRNDM(DUMMY)
 *  !!! initial position
-               DIniPo=((SPoMin(I,1:3)+PRVec*SLen(I,1:3))+
-     &(-10000*ProVec))
-C               WRITE(*,*) ISrsNum,'if initial position : ',
-C     &                    (DIniPo(J),j=1,3)
+C      WRITE(*,*) SPoMin(I,1), SPoMin(I,2), SPoMin(I,3),
+C     &PRVec(1),PRVec(2),PRVec(3),SLen(I,1),SLen(I,2),SLen(I,3)
+               DIniPo(1)=SPoMin(I,1)+PRVec(1)*SLen(I,1)
+               DIniPo(2)=SPoMin(I,2)+PRVec(2)*SLen(I,2)
+               DIniPo(3)=SPoMin(I,3)+PRVec(3)*SLen(I,3)
+               D1P(1:3)=DIniPo(1:3)
+               DIniPo=DIniPo+(-10000*ProVec)
                EXIT 
             END IF
          END IF 
       END DO
+      DEnrgy= Enrgy(ISrsNum)
 C      WRITE(*,*) ISrsNum,'initial position : ',(DIniPo(J),j=1,3)
+      ISrsNum=ISrsNum+1
+      NextSeedNum=ISrsNum
+C test if pass through LS
+C      if(D1P(3).gt.200) then
+C          D2P(1:3)=D1P(1:3)+(D1P(3)-200)*ProVec/(-ProVec(3))
+C          if(((D2P(1)-300)*(D2P(1)-300)+D2P(2)*D2P(2)).le.40000 .or.
+C     &((D2P(1)-(-300))*(D2P(1)-(-300))+D2P(2)*D2P(2)).le.40000) then
+C              WRITE(*,*) 'pass through LS'
+C          else
+C              D2P(1:3)=D1P(1:3)+(D1P(3)-(-200))*ProVec/(-ProVec(3))
+C          if(((D2P(1)-300)*(D2P(1)-300)+D2P(2)*D2P(2)).le.40000 .or.
+C     &((D2P(1)-(-300))*(D2P(1)-(-300))+D2P(2)*D2P(2)).le.40000) then
+C              WRITE(*,*) 'pass through LS'
+C              endif
+C          endif
+C      endif
+C      if(D1P(3).le.200 .and. D1P(3).ge.(-200)) then
+C          D2P(1:3)=D1P(1:3)+(D1P(3)-(-200))*ProVec/(-ProVec(3))
+C          if(((D2P(1)-300)*(D2P(1)-300)+D2P(2)*D2P(2)).le.40000 .or.
+C     &((D2P(1)-(-300))*(D2P(1)-(-300))+D2P(2)*D2P(2)).le.40000) then
+C              WRITE(*,*) 'pass through LS'
+C              endif
+C      endif
+
+C      WRITE(*,*) 'source',DIniPo(1),DIniPo(2),DIniPo(3),
+C     &ProVec(1),ProVec(2),ProVec(3),D1P(1),D1P(2),D1P(3)
+C      WRITE(*,*) 'source',D1P(1),D1P(2),D1P(3)
+
+
+*==================================================
+* Kinetic energy of the particle (GeV)
+      TKEFLK (NPFLKA) = DEnrgy
+* Particle momentum
+      PMOFLK (NPFLKA) = SQRT ( TKEFLK (NPFLKA) * ( TKEFLK (NPFLKA)
+     &                       + TWOTWO * AM (ILOFLK(NPFLKA)) ) )
 
 
 * Cosines (tx,ty,tz)
@@ -276,8 +331,6 @@ C     &                       - TYFLK (NPFLKA)**2 ) !==ProVec(3)
       NLATTC (NPFLKA) = MLATTC
       CMPATH (NPFLKA) = ZERZER
       CALL SOEVSV
-      ISrsNum=ISrsNum+1
-      NextSeedNum=ISrsNum
       RETURN
 *=== End of subroutine Source =========================================*
       END

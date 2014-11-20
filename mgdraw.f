@@ -33,7 +33,7 @@
       INCLUDE '(RESNUC)'
       INCLUDE '(EVTFLG)'
 
-      DIMENSION KA (4), KZ (4), BRDAUG (4), T12DAU (4)
+      DIMENSION KA (4), KZ (4), BRDAUG (4), T12DAU (4),D2P(3)
       DOUBLE PRECISION HafTime
 *
       DIMENSION DTQUEN ( MXTRCK, MAXQMG )
@@ -103,9 +103,21 @@
 *  +-------------------------------------------------------------------*
       ENTRY BXDRAW ( ICODE, MREG, NEWREG, XSCO, YSCO, ZSCO )
       if(LTRACK.eq.1) then
-      CALL GEOR2N ( MREG,MRGNAM,IERR1)
-      CALL GEOR2N ( NEWREG,NRGNAM,IERR2)
-C              WRITE(*,*) MRGNAM,'->',NRGNAM
+C      CALL GEOR2N ( MREG,MRGNAM,IERR1)
+C      CALL GEOR2N ( NEWREG,NRGNAM,IERR2)
+C              WRITE(*,*) MRGNAM,'->',NRGNAM,XSCO, YSCO, ZSCO
+C      if(NEWREG.eq.10) then
+C      WRITE(*,*) 'MuInitTP', MuInitTP(1),MuInitTP(2),MuInitTP(3)
+C          WRITE(*,*) 'LSPosIn',XSCO, YSCO, ZSCO
+C          Dtx=XSCO-MuInitP(1)
+C          Dty=YSCO-MuInitP(2)
+C          Dtz=ZSCO-MuInitP(3)
+C          Dtl=SQRT(Dtx*Dtx+Dty*Dty+Dtz*Dtz)
+C          WRITE(*,*) 'Cos',Dtx/Dtl,Dty/Dtl,Dtz/Dtl
+C      endif
+C      if(MREG.eq.10) then
+C          WRITE(*,*) 'LSPosOut',XSCO, YSCO, ZSCO
+C      endif
       
 C          IF(DOT_PRODUCT(DetInitP(NEWREG,1:3),DetInitP(NEWREG,1:3))
 C     &       .eq.0) then
@@ -190,6 +202,9 @@ C      DO i=1,15
 C         if(DetLen(i).ne.0) WRITE(*,*) I,DetLen(i)
 C      ENDDO
 
+C      if(DetLen(10,1).gt.0 .or. DetLen(10,2).gt.0) then
+C          WRITE(*,*) 'mLS',DetLen(10,1),DetLen(10,2)
+C      endif
       call fillmuon(NCASE,MuCharge,MuInitE,MuInitT,MuInitP(1),
      &MuInitP(2),MuInitP(3),
      &MuInitTP(1),MuInitTP(2),MuInitTP(3),DetLen(3,1),DetLen(4,1),
@@ -274,6 +289,68 @@ C
          MuCharge=-1
       endif
       EvtID=NCASE
+CC Z
+C      if(ZFLK(1).ge.3300)then
+C          D2P=MuInitP+MuInitTP*(ZFLK(1)-3300)/(-MuInitTP(3))
+CC          WRITE(*,*) 'MuInitP(3):D2P(3)',MuInitP(3),D2P(3)
+C          if((D2P(1).le.1100 .and. (D2P(1).ge.(-1100))) .and.
+C     &    (D2P(2).le.800 .and. (D2P(2).ge.(-800)))) then
+C          WRITE(*,*) 'InitPZ',D2P(1),D2P(2),D2P(3)
+C          endif
+C      endif
+CC X
+C      if(MuInitTP(1).lt.0 .and. XFLK(1).ge.1100) then
+C          D2P=MuInitP+MuInitTP*(XFLK(1)-1100)/(-MuInitTP(1))
+C          if((D2P(3).le.3300 .and. (D2P(3).ge.(-3300))) .and.
+C     &    (D2P(2).le.800 .and. (D2P(2).ge.(-800)))) then
+C          WRITE(*,*) 'InitPX1',D2P(1),D2P(2),D2P(3)
+C          endif
+C      endif
+C      if(MuInitTP(1).gt.0 .and. XFLK(1).le.-1100) then
+C          D2P=MuInitP+MuInitTP*(-1100-XFLK(1))/MuInitTP(1)
+C          if((D2P(3).le.3300 .and. (D2P(3).ge.(-3300))) .and.
+C     &    (D2P(2).le.800 .and. (D2P(2).ge.(-800)))) then
+C          WRITE(*,*) 'InitPX2',D2P(1),D2P(2),D2P(3)
+C          endif
+C      endif
+CC Y
+C      if(MuInitTP(2).lt.0 .and. YFLK(1).ge.800) then
+C          D2P=MuInitP+MuInitTP*(YFLK(1)-800)/(-MuInitTP(2))
+C          if((D2P(3).le.3300 .and. (D2P(3).ge.(-3300))) .and.
+C     &    (D2P(1).le.1100 .and. (D2P(1).ge.(-1100)))) then
+C          WRITE(*,*) 'InitPY1',D2P(1),D2P(2),D2P(3)
+C          endif
+C      endif
+C      if(MuInitTP(2).gt.0 .and. YFLK(1).le.-800) then
+C          D2P=MuInitP+MuInitTP*(-800-YFLK(1))/MuInitTP(2)
+C          if((D2P(3).le.3300 .and. (D2P(3).ge.(-3300))) .and.
+C     &    (D2P(1).le.1100 .and. (D2P(1).ge.(-1100)))) then
+C          WRITE(*,*) 'InitPY2',D2P(1),D2P(2),D2P(3)
+C          endif
+C      endif
+CC test if pass through LS
+C      if(MuInitP(3).gt.200) then
+C          D2P(1:3)=MuInitP(1:3)+(MuInitP(3)-200)*MuInitTP/(-MuInitTP(3))
+C          if(((D2P(1)-300)*(D2P(1)-300)+D2P(2)*D2P(2)).le.40000 .or.
+C     &((D2P(1)-(-300))*(D2P(1)-(-300))+D2P(2)*D2P(2)).le.40000) then
+C              WRITE(*,*) 'bLS',D2P(1),D2P(2),D2P(3)
+C          else
+C      D2P(1:3)=MuInitP(1:3)+(MuInitP(3)-(-200))*MuInitTP/(-MuInitTP(3))
+C          if(((D2P(1)-300)*(D2P(1)-300)+D2P(2)*D2P(2)).le.40000 .or.
+C     &((D2P(1)-(-300))*(D2P(1)-(-300))+D2P(2)*D2P(2)).le.40000) then
+C              WRITE(*,*) 'bLS',D2P(1),D2P(2),D2P(3)
+C              endif
+C          endif
+C      endif
+C      if(MuInitP(3).le.200 .and. MuInitP(3).ge.(-200)) then
+C      D2P(1:3)=MuInitP(1:3)+(MuInitP(3)-(-200))*MuInitTP/(-MuInitTP(3))
+C          if(((D2P(1)-300)*(D2P(1)-300)+D2P(2)*D2P(2)).le.40000 .or.
+C     &((D2P(1)-(-300))*(D2P(1)-(-300))+D2P(2)*D2P(2)).le.40000) then
+C              WRITE(*,*) 'bLS',D2P(1),D2P(2),D2P(3)
+C              endif
+C      endif
+C
+C      WRITE(*,*) 'SODRAW',NCASE
 
       RETURN
 

@@ -33,16 +33,12 @@
         //loop for counting
         //for( int i=rootNum-200+1; i<rootNum+1; i++ )
                 for( int i=1; i<rootNum+1; i++ )
-        //for( int i=1 ; i<167; i++ )
         {
-            //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/fluSim_%06d.root",dataVer[j].c_str(),i);
             nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/FAR/data/%s/rootFile/fluSim_%06d.root",dataVer[j].c_str(),i);
-            //nameStr=Form("/publicfs/dyb/data/userdata/lidj/flukaWork/dayabay/data/PART10/rootFile/%d.root",i);
-            //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/%s/fluSim_%06d.root",dataVer[j].c_str(),i);
-            if( i%100==0 )
-            {
+            //if( i%100==0 )
+            //{
                 std::cout<<"filename : "<<nameStr<<endl;
-            } 
+                //} 
             TFile* f= new TFile(nameStr.c_str());
             if( f->IsZombie() )
             {
