@@ -63,7 +63,6 @@
 C           IF(I .LE. 50) THEN
 C               WRITE(LUNOUT,*) I,Enrgy(I),Theta(I),Phi(I)
 C           END IF
-           Enrgy(I)=260
         END DO
         CLOSE(88)
         OPEN(UNIT=89,FILE="../NextSeedNum",STATUS="OLD")
