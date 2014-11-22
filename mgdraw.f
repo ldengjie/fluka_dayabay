@@ -41,41 +41,41 @@
       EXTERNAL TIM1O2, BDNOPT
 
 C      WRITE(*,*) 'MGDRAW'
-      if(MREG.eq.10 .or. MREG.eq.12) then
-         DO I=1,MTRACK
-            if(DTRACK (I).gt.0) then
-                IICode=0
-                if(LTRACK.gt.1) then
-                    ISpaMaId=ISPUSR(2)
-                    ISpaMaTy=ISPUSR(1)
-                else
-                    ISpaMaId=0
-                    ISpaMaTy=0
-                endif
-*  |  Quenching is activated
-                IF ( LQEMGD ) THEN
-                   IF ( MTRACK .GT. 0 ) THEN
-                      QenE=0
-                      RULLL  = ZERZER
-                      CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-                      if(ZFRTTK.gt.1.5) then
-                          JBK=2
-                      else
-                          JBK=1
-                      endif
-                      DO J=1,MTRACK
-                          QenE=QenE+DTQUEN(J,JBK)
-                      ENDDO
-                   END IF
-                END IF
-*  |  End of quenching
-
-               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
-     &MREG,ISPUSR(5))
-            endif
-         ENDDO
-      endif
+C      if(MREG.eq.10 .or. MREG.eq.12) then
+C         DO I=1,MTRACK
+C            if(DTRACK (I).gt.0) then
+C                IICode=0
+C                if(LTRACK.gt.1) then
+C                    ISpaMaId=ISPUSR(2)
+C                    ISpaMaTy=ISPUSR(1)
+C                else
+C                    ISpaMaId=0
+C                    ISpaMaTy=0
+C                endif
+C*  |  Quenching is activated
+C                IF ( LQEMGD ) THEN
+C                   IF ( MTRACK .GT. 0 ) THEN
+C                      QenE=0
+C                      RULLL  = ZERZER
+C                      CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
+C                      if(ZFRTTK.gt.1.5) then
+C                          JBK=2
+C                      else
+C                          JBK=1
+C                      endif
+C                      DO J=1,MTRACK
+C                          QenE=QenE+DTQUEN(J,JBK)
+C                      ENDDO
+C                   END IF
+C                END IF
+C*  |  End of quenching
+C
+C               call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
+C     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
+C     &MREG,ISPUSR(5))
+C            endif
+C         ENDDO
+C      endif
 
 *get neutron initial energy at this neutron's first MGDRAW call
       if(JTRACK.EQ.8) then
@@ -248,32 +248,32 @@ C      WRITE(*,*) I,NeuDauVm(I)
 
 *  +-------------------------------------------------------------------*
       ENTRY ENDRAW ( ICODE, MREG, RULL, XSCO, YSCO, ZSCO )
-      if(MREG.eq.10 .or. MREG.eq.12) then
-                IICode=ICODE
-                if(LTRACK.gt.1) then
-                    ISpaMaId=ISPUSR(2)
-                    ISpaMaTy=ISPUSR(1)
-                else
-                    ISpaMaId=0
-                    ISpaMaTy=0
-                endif
-*  |  Quenching is activated : calculate quenching factor
-*  |  and store quenched energy in DTQUEN(1, jbk)
-                IF ( LQEMGD ) THEN
-                      QenE=0
-                   RULLL = RULL
-                   CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
-                END IF
-                      if(ZFRTTK.gt.1.5) then
-                          JBK=2
-                      else
-                          JBK=1
-                      endif
-                      QenE=QenE+DTQUEN(1,JBK)
-*  |  end quenching
-               call fillspa(NCASE,XSCO,YSCO,ZSCO,
-     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
-      endif
+C      if(MREG.eq.10 .or. MREG.eq.12) then
+C                IICode=ICODE
+C                if(LTRACK.gt.1) then
+C                    ISpaMaId=ISPUSR(2)
+C                    ISpaMaTy=ISPUSR(1)
+C                else
+C                    ISpaMaId=0
+C                    ISpaMaTy=0
+C                endif
+C*  |  Quenching is activated : calculate quenching factor
+C*  |  and store quenched energy in DTQUEN(1, jbk)
+C                IF ( LQEMGD ) THEN
+C                      QenE=0
+C                   RULLL = RULL
+C                   CALL QUENMG ( ICODE, MREG, RULLL, DTQUEN )
+C                END IF
+C                      if(ZFRTTK.gt.1.5) then
+C                          JBK=2
+C                      else
+C                          JBK=1
+C                      endif
+C                      QenE=QenE+DTQUEN(1,JBK)
+C*  |  end quenching
+C               call fillspa(NCASE,XSCO,YSCO,ZSCO,
+C     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
+C      endif
 C
       RETURN
 
