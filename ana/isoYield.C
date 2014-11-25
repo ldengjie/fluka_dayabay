@@ -1,6 +1,6 @@
 {
-    int rootNum=150;
-    string dataVer[4]={"PART37"};
+    int rootNum=1000;
+    string dataVer[4]={"PART2"};
     string nameStr;
     //double density=0.8602;
     double muonRate=21.*0.6;
@@ -25,8 +25,15 @@
         TH1D* eng=new TH1D("eng","energy of neutron",1000,0,1);
         TH1D* eng2=new TH1D("eng2","energy of neutron",2000,0,20);
         TH2D* xy=new TH2D("xy","xy of neutron",300,-600,600,800,-400,400);
-        TH2D* rz=new TH2D("rz","rz of neutron",600,0,600,800,-400,400);
-        TCanvas* c=new TCanvas("c","c",1300,900);
+        TH2D* rz=new TH2D("rz","rz of neutron",250,0,250,500,-250,250);
+        TH2D* rzNoW=new TH2D("rzNoW","rzNoW of neutron",250,0,250,500,-250,250);
+        TH1D* hr=new TH1D("hr","r of neutron",250,0,250);
+        TH1D* hz=new TH1D("hz","z of neutron",500,-250,250);
+        TH1D* inVol=new TH1D("inVol","volume of spill-in neutron",12,0,12);
+        TH2D* inVolvsClass=new TH2D("inVolvsClass","volume of spill-in neutron",12,0,12,5,0,5);
+        TH1D* inVolforCap=new TH1D("inVolforCap","volume of spill-in neutron",12,0,12);
+        TH2D* inVolvsClassforCap=new TH2D("inVolvsClassforCap","volume of spill-in neutron",12,0,12,5,0,5);
+        TCanvas* c=new TCanvas("c","c",1400,700);
         c->Divide(3,2);
 
 
@@ -55,6 +62,9 @@
                 double muInitLocalYCos;
                 double muInitLocalZCos;
                 double muAirTrackLength;
+                double muStoneTrackLength;
+                double muOwsTrackLength;
+                double muIwsTrackLength;
                 double muSstTrackLength[4];
                 double muOatTrackLength[4];
                 double muIatTrackLength[4];
@@ -69,6 +79,9 @@
                 mt->SetBranchAddress("InitLocalYCos",&muInitLocalYCos);
                 mt->SetBranchAddress("InitLocalZCos",&muInitLocalZCos);
                 mt->SetBranchAddress("AirTrackLength",&muAirTrackLength);
+                mt->SetBranchAddress("StoneTrackLength",&muStoneTrackLength);
+                mt->SetBranchAddress("OwsTrackLength",&muOwsTrackLength);
+                mt->SetBranchAddress("IwsTrackLength",&muIwsTrackLength);
                 mt->SetBranchAddress("SstTrackLength",muSstTrackLength);
                 mt->SetBranchAddress("OatTrackLength",muOatTrackLength);
                 mt->SetBranchAddress("IatTrackLength",muIatTrackLength);
@@ -204,9 +217,56 @@
                             eng->Fill(neuInitKineE);
                             eng2->Fill(neuInitKineE*1000);
                             xy->Fill(neuInitLocalX,neuInitLocalY);
-                            rz->Fill(sqrt(neuInitLocalX*neuInitLocalX+neuInitLocalY*neuInitLocalY),neuInitLocalZ);
+                            double centerX=300*pow(-1,initDet%2);
+                            double centerY=initDet>2?-600:0;
+                            double lengthX=neuInitLocalX-centerX;
+                            double lengthY=neuInitLocalY-centerY;
+                            double radius=sqrt(lengthX*lengthX+lengthY*lengthY);
+                            //cout<<"initDet,neuInitLocalX,neuInitLocalY,centerX,centerY,radius  : "<<initDet<<","<<neuInitLocalX<<","<<neuInitLocalY<<","<<centerX<<","<<centerY<<","<<radius<<endl;
+
+                            rz->Fill(radius,neuInitLocalZ,1/radius);
+                            rzNoW->Fill(radius,neuInitLocalZ);
+                            hz->Fill(neuInitLocalZ);
+                            //hr->Fill(radius,radius); 
+                            hr->Fill(radius,1/radius); 
                         }
-                        if((neuCapVolumeName== 12&&muGdLsTrackLength[capDet-1]>0)  && !(neuInitVolumeName== 12 &&muGdLsTrackLength[initDet-1]>0)) neuNumIn++;
+                        if((neuCapVolumeName== 12&&muGdLsTrackLength[capDet-1]>0)  && !(neuInitVolumeName== 12 &&muGdLsTrackLength[initDet-1]>0))
+                        {
+                          neuNumIn++;   
+                          int muClass=4;
+                          if( muStoneTrackLength>0. && !(muOwsTrackLength>0. || muIwsTrackLength>0.) )
+                          {
+                              muClass=3;
+                          }
+                          if( (muOwsTrackLength>0. || muIwsTrackLength>0.) && !( muSstTrackLength[0]>0. ||  muSstTrackLength[1]>0. || muSstTrackLength[2]>0. || muSstTrackLength[3]>0.))
+                          {
+                              muClass=2;
+                          }
+                          if( muSstTrackLength[0]>0. ||  muSstTrackLength[1]>0. || muSstTrackLength[2]>0. || muSstTrackLength[3]>0.)
+                          {
+                              muClass=1;
+                          }
+                          inVol->Fill(neuInitVolumeName);
+                          inVolvsClass->Fill(neuInitVolumeName,muClass);
+                        }
+                        if((neuCapVolumeName== 12)  && !(neuInitVolumeName== 12))
+                        {
+                          int muClass=4;
+                          if( muStoneTrackLength>0. && !(muOwsTrackLength>0. || muIwsTrackLength>0.) )
+                          {
+                              muClass=3;
+                          }
+                          if( (muOwsTrackLength>0. || muIwsTrackLength>0.) && !( muSstTrackLength[0]>0. ||  muSstTrackLength[1]>0. || muSstTrackLength[2]>0. || muSstTrackLength[3]>0.))
+                          {
+                              muClass=2;
+                          }
+                          if( muSstTrackLength[0]>0. ||  muSstTrackLength[1]>0. || muSstTrackLength[2]>0. || muSstTrackLength[3]>0.)
+                          {
+                              muClass=1;
+                          }
+                          inVolforCap->Fill(neuInitVolumeName);
+                          inVolvsClassforCap->Fill(neuInitVolumeName,muClass);
+                        }
                         if(!(neuCapVolumeName== 12 &&muGdLsTrackLength[capDet-1]>0) && (neuInitVolumeName== 12 &&muGdLsTrackLength[initDet-1]>0)) neuNumOut++;
                     }
 
@@ -284,21 +344,28 @@
         }
         //in
 
+        //c->cd(1);
+        //dis->GetXaxis()->SetTitle(" /cm");
+        //dis->Draw();
+        //gPad->SetLogy();
         c->cd(1);
-        dis->GetXaxis()->SetTitle(" /cm");
-        dis->Draw();
-        gPad->SetLogy();
+        //eng->GetXaxis()->SetTitle(" /GeV");
+        //eng->Draw();
+        //gPad->SetLogy();
+        hz->Draw();
         c->cd(2);
-        eng->GetXaxis()->SetTitle(" /GeV");
-        eng->Draw();
-        gPad->SetLogy();
+        //eng2->GetXaxis()->SetTitle(" /MeV");
+        //eng2->Draw();
+        hr->Draw();
         c->cd(3);
-        eng2->GetXaxis()->SetTitle(" /MeV");
-        eng2->Draw();
+        xy->Draw("COLZ");
         c->cd(4);
-        xy->Draw();
+        rz->Draw("COLZ");
         c->cd(5);
-        rz->Draw();
+        rzNoW->Draw("COLZ");
+        //inVolforCap->Draw();
+        c->cd(6);
+        //inVolvsClassforCap->Draw("TEXT");
         nameStr=Form("c_%s.eps",dataVer[j].c_str());
         c->SaveAs(nameStr.c_str());
 
@@ -311,8 +378,8 @@
         //int neuNumCap=neuNum+neuNumOut-neuNumIn;
         //cout<<"neuNumInit  : "<<neuNumInit<<endl;
         cout<<"neuNum2  : "<<neuNum2<<endl;
-        cout<<"neuNum  : "<<neuNum<<"="<<neuNum<<"+"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)-"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
-        cout<<"neuNum : "<<neuNum<<"+-"<<sqrt(neuNum)<<"   "<<(double)neuNum/adMuonNum <<" per muon" <<"   neuYield : "<<neuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<neuNum/liveTime<<" /day = "<<neuNum/liveTime/86400<<" Hz"<<endl;
+        cout<<"capNeuNum  : "<<neuNum-neuNumOut+neuNumIn<<"="<<neuNum<<"-"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)+"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
+        cout<<"InitNeuNum : "<<neuNum<<"+-"<<sqrt(neuNum)<<"   "<<(double)neuNum/adMuonNum <<" per muon" <<"   neuYield : "<<neuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<neuNum/liveTime<<" /day = "<<neuNum/liveTime/86400<<" Hz"<<endl;
         cout<<"Neutrons in initial volume : "<<endl;
         for( int i=0 ; i<15 ; i++ )
         {
