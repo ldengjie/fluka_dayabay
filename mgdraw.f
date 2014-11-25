@@ -39,7 +39,6 @@
       DIMENSION DTQUEN ( MXTRCK, MAXQMG )
 *
       EXTERNAL TIM1O2, BDNOPT
-C
 C      if(MREG.eq.10 .or. MREG.eq.12) then
 C         DO I=1,MTRACK
 C            if(DTRACK (I).gt.0) then

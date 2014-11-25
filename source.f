@@ -222,7 +222,7 @@ C        OPoMax=[550,850,250]
 
 *  uniform sampling 
       SR = FLRNDM(DUMMY)
-      if(SR.ge.(TVaiS/TS)) then !drop this muon,loop next muon
+      if(SR.gt.(TVaiS/TS)) then !drop this muon,loop next muon
           IDo=1
           ISrsNum=ISrsNum+1
       else
@@ -236,7 +236,7 @@ C      WRITE(*,*) 'NPFLKA/ISrsNum',NPFLKA,'/',ISrsNum
       DO I = 1,MaxP
          IF ( SecTag(I) .EQ. 1 ) THEN
             SRFlag = SRFlag + ValidS(I)/TS
-            IF (SR .LT. SRFlag) THEN
+            IF (SR .LE. SRFlag) THEN
 *  find right surface
                PRVec(1)=FLRNDM(DUMMY)
                PRVec(2)=FLRNDM(DUMMY)

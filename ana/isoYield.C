@@ -1,6 +1,6 @@
 {
-    int rootNum=4000;
-    string dataVer[4]={"PART1"};
+    int rootNum=1000;
+    string dataVer[4]={"PART2"};
     string nameStr;
     //double density=0.8602;
     double muonRate=1.*0.6;
@@ -21,24 +21,30 @@
         int isoNumIn[150][300]={0};
         int neuVolume[15][15][15]={0};
         int In1,In2,In3,Out4,Out5,Cap6,Oth7,Oth8=0;
-                TH1D* dis=new TH1D("dis","distance between neutron and muon track",100,0,1000);
-                TH1D* eng=new TH1D("eng","energy of neutron",1000,0,1);
-                TH1D* eng2=new TH1D("eng2","energy of neutron",2000,0,20);
-                TH2D* xy=new TH2D("xy","xy of neutron",300,-600,600,800,-400,400);
-                TH2D* rz=new TH2D("rz","rz of neutron",600,0,600,800,-400,400);
-                //TCanvas* c=new TCanvas("c","c",300,900);
-                //c->Divide(3,2);
+        TH1D* dis=new TH1D("dis","distance between neutron and muon track",100,0,1000);
+        TH1D* eng=new TH1D("eng","energy of neutron",1000,0,1);
+        TH1D* eng2=new TH1D("eng2","energy of neutron",2000,0,20);
+        TH2D* xy=new TH2D("xy","xy of neutron",300,-600,600,800,-400,400);
+        TH2D* rz=new TH2D("rz","rz of neutron",250,0,250,500,-250,250);
+        TH2D* rzNoW=new TH2D("rzNoW","rzNoW of neutron",250,0,250,500,-250,250);
+        TH1D* hr=new TH1D("hr","r of neutron",250,0,250);
+        TH1D* hz=new TH1D("hz","z of neutron",500,-250,250);
+        TH1D* inVol=new TH1D("inVol","volume of spill-in neutron",12,0,12);
+        TH2D* inVolvsClass=new TH2D("inVolvsClass","volume of spill-in neutron",12,0,12,5,0,5);
+        TH1D* inVolforCap=new TH1D("inVolforCap","volume of spill-in neutron",12,0,12);
+        TH2D* inVolvsClassforCap=new TH2D("inVolvsClassforCap","volume of spill-in neutron",12,0,12,5,0,5);
+        TCanvas* c=new TCanvas("c","c",1400,700);
+        c->Divide(3,2);
 
 
         //loop for counting
-        //for( int i=rootNum-200+1; i<rootNum+1; i++ )
-                for( int i=1; i<rootNum+1; i++ )
+        for( int i=1; i<rootNum+1; i++ )
         {
             nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/FAR/data/%s/rootFile/fluSim_%06d.root",dataVer[j].c_str(),i);
             //if( i%100==0 )
             //{
-                std::cout<<"filename : "<<nameStr<<endl;
-                //} 
+            std::cout<<"filename : "<<nameStr<<endl;
+            //} 
             TFile* f= new TFile(nameStr.c_str());
             if( f->IsZombie() )
             {
@@ -56,12 +62,15 @@
                 double muInitLocalYCos;
                 double muInitLocalZCos;
                 double muAirTrackLength;
-                double muSstTrackLength;
-                double muOatTrackLength;
-                double muIatTrackLength;
-                double muMoTrackLength;
-                double muLsTrackLength;
-                double muGdLsTrackLength;
+                double muStoneTrackLength;
+                double muOwsTrackLength;
+                double muIwsTrackLength;
+                double muSstTrackLength[4];
+                double muOatTrackLength[4];
+                double muIatTrackLength[4];
+                double muMoTrackLength[4];
+                double muLsTrackLength[4];
+                double muGdLsTrackLength[4];
                 mt->SetBranchAddress("EventID",&muEventID);
                 mt->SetBranchAddress("InitLocalX",&muInitLocalX);
                 mt->SetBranchAddress("InitLocalY",&muInitLocalY);
@@ -70,12 +79,15 @@
                 mt->SetBranchAddress("InitLocalYCos",&muInitLocalYCos);
                 mt->SetBranchAddress("InitLocalZCos",&muInitLocalZCos);
                 mt->SetBranchAddress("AirTrackLength",&muAirTrackLength);
-                mt->SetBranchAddress("SstTrackLength",&muSstTrackLength);
-                mt->SetBranchAddress("OatTrackLength",&muOatTrackLength);
-                mt->SetBranchAddress("IatTrackLength",&muIatTrackLength);
-                mt->SetBranchAddress("MoTrackLength",&muMoTrackLength);
-                mt->SetBranchAddress("LsTrackLength",&muLsTrackLength);
-                mt->SetBranchAddress("GdLsTrackLength",&muGdLsTrackLength);
+                mt->SetBranchAddress("StoneTrackLength",&muStoneTrackLength);
+                mt->SetBranchAddress("OwsTrackLength",&muOwsTrackLength);
+                mt->SetBranchAddress("IwsTrackLength",&muIwsTrackLength);
+                mt->SetBranchAddress("SstTrackLength",muSstTrackLength);
+                mt->SetBranchAddress("OatTrackLength",muOatTrackLength);
+                mt->SetBranchAddress("IatTrackLength",muIatTrackLength);
+                mt->SetBranchAddress("MoTrackLength",muMoTrackLength);
+                mt->SetBranchAddress("LsTrackLength",muLsTrackLength);
+                mt->SetBranchAddress("GdLsTrackLength",muGdLsTrackLength);
 
                 TTree* neut= (TTree*)f->Get("Neutron");
                 int neutnum=neut->GetEntries();
@@ -126,21 +138,26 @@
                 for( int u=0 ; u<mtnum ; u++ )
                 {
                     mt->GetEntry(u);
-                    if(muGdLsTrackLength==0) continue;
-                    //if(muAirTrackLength==0) continue;
-                    muIndex.insert(std::pair<int,int>(muEventID,u));
-                    adMuonNum++;
-                    //adMuonLength+=(muSstTrackLength+muOatTrackLength+muIatTrackLength+muMoTrackLength+muLsTrackLength+muGdLsTrackLength);
-                    adMuonLength+=muGdLsTrackLength;
-                    //adMuonLength+=muAirTrackLength;
-                    //adMuonLength+=muGdLsTrackLength+muLsTrackLength;
+                    bool passGdLs=0;
+                    for( int ai=0 ; ai<4 ; ai++ )
+                    {
+                        if(muGdLsTrackLength[ai]==0) continue;
+                        passGdLs=1;
+                        adMuonNum++;
+                        adMuonLength+=muGdLsTrackLength[ai];
+                    }
+                    if( passGdLs )
+                    {
+                        muIndex.insert(std::pair<int,int>(muEventID,u));
+                    }
+
                 }
 
                 //cout<<"neutnum  : "<<neutnum<<endl;
                 for( int r=0 ; r<neutnum ; r++ )
                 {
                     neut->GetEntry(r);
-                
+
                     if(muIndex.find(neuEventID)==muIndex.end()) continue;
                     //if(muIndex.find(neuEventID)==muIndex.end()) 
                     //{
@@ -162,27 +179,96 @@
                     neuVolume[neuOriginVolumeNumber][neuInitVolumeName][neuCapVolumeName]++;
 
 
-                    if( neuInitVolumeName== 12  )
-                    { 
-                        neuNum++;
-                        if( neuMotherInteractionType==300 )
+                    int initDet;
+                    if( neuInitVolumeName== 12 )
+                    {
+                        initDet=neuInitLocalX>0?2:1;
+                        if( neuInitLocalY>300 )
                         {
-                            cout<<"MotherInteractionType  : "<<neuMotherInteractionType<<endl;
-                            neuNum2++;
+                            initDet+=2;
                         }
-                        mt->GetEntry(neuEventID-1);
-                        double disV=sqrt(
-                                (muInitLocalYCos*(neuInitLocalZ-muInitLocalZ)-muInitLocalZCos*(neuInitLocalY-muInitLocalY))*(muInitLocalYCos*(neuInitLocalZ-muInitLocalZ)-muInitLocalZCos*(neuInitLocalY-muInitLocalY))+
-                                (muInitLocalXCos*(neuInitLocalZ-muInitLocalZ)-muInitLocalZCos*(neuInitLocalX-muInitLocalX))*(muInitLocalXCos*(neuInitLocalZ-muInitLocalZ)-muInitLocalZCos*(neuInitLocalX-muInitLocalX))+
-                                (muInitLocalXCos*(neuInitLocalY-muInitLocalY)-muInitLocalYCos*(neuInitLocalX-muInitLocalX))*(muInitLocalXCos*(neuInitLocalY-muInitLocalY)-muInitLocalYCos*(neuInitLocalX-muInitLocalX)));
-                        dis->Fill(disV);
-                        eng->Fill(neuInitKineE);
-                        eng2->Fill(neuInitKineE*1000);
-                        xy->Fill(neuInitLocalX,neuInitLocalY);
-                        rz->Fill(sqrt(neuInitLocalX*neuInitLocalX+neuInitLocalY*neuInitLocalY),neuInitLocalZ);
                     }
-                    if(neuCapVolumeName== 12  &&neuInitVolumeName!= 12 ) neuNumIn++;
-                    if(neuCapVolumeName!= 12  && neuInitVolumeName== 12 ) neuNumOut++;
+                    int capDet;
+                    if( neuCapVolumeName== 12 )
+                    {
+                        capDet=neuInitLocalX>0?2:1;
+                        if( neuInitLocalY>300 )
+                        {
+                            capDet+=2;
+                        }
+                    }
+                    mt->GetEntry(neuEventID-1);
+                    if( muGdLsTrackLength[0]>0||  muGdLsTrackLength[1]>0|| muGdLsTrackLength[2]>0|| muGdLsTrackLength[3]>0)
+                    {
+                        if( neuInitVolumeName== 12  && muGdLsTrackLength[initDet-1]>0)
+                        { 
+
+                            neuNum++;
+                            if( neuMotherInteractionType==300 )
+                            {
+                                cout<<"MotherInteractionType  : "<<neuMotherInteractionType<<endl;
+                                neuNum2++;
+                            }
+                            double disV=sqrt(
+                                    (muInitLocalYCos*(neuInitLocalZ-muInitLocalZ)-muInitLocalZCos*(neuInitLocalY-muInitLocalY))*(muInitLocalYCos*(neuInitLocalZ-muInitLocalZ)-muInitLocalZCos*(neuInitLocalY-muInitLocalY))+
+                                    (muInitLocalXCos*(neuInitLocalZ-muInitLocalZ)-muInitLocalZCos*(neuInitLocalX-muInitLocalX))*(muInitLocalXCos*(neuInitLocalZ-muInitLocalZ)-muInitLocalZCos*(neuInitLocalX-muInitLocalX))+
+                                    (muInitLocalXCos*(neuInitLocalY-muInitLocalY)-muInitLocalYCos*(neuInitLocalX-muInitLocalX))*(muInitLocalXCos*(neuInitLocalY-muInitLocalY)-muInitLocalYCos*(neuInitLocalX-muInitLocalX)));
+                            dis->Fill(disV);
+                            eng->Fill(neuInitKineE);
+                            eng2->Fill(neuInitKineE*1000);
+                            xy->Fill(neuInitLocalX,neuInitLocalY);
+                            double centerX=300*pow(-1,initDet%2);
+                            double centerY=initDet>2?-600:0;
+                            double lengthX=neuInitLocalX-centerX;
+                            double lengthY=neuInitLocalY-centerY;
+                            double radius=sqrt(lengthX*lengthX+lengthY*lengthY);
+                            //cout<<"initDet,neuInitLocalX,neuInitLocalY,centerX,centerY,radius  : "<<initDet<<","<<neuInitLocalX<<","<<neuInitLocalY<<","<<centerX<<","<<centerY<<","<<radius<<endl;
+
+                            rz->Fill(radius,neuInitLocalZ,1/radius);
+                            rzNoW->Fill(radius,neuInitLocalZ);
+                            hz->Fill(neuInitLocalZ);
+                            //hr->Fill(radius,radius); 
+                            hr->Fill(radius,1/radius); 
+                        }
+                        if((neuCapVolumeName== 12&&muGdLsTrackLength[capDet-1]>0)  && !(neuInitVolumeName== 12 &&muGdLsTrackLength[initDet-1]>0))
+                        {
+                          neuNumIn++;   
+                          int muClass=4;
+                          if( muStoneTrackLength>0. && !(muOwsTrackLength>0. || muIwsTrackLength>0.) )
+                          {
+                              muClass=3;
+                          }
+                          if( (muOwsTrackLength>0. || muIwsTrackLength>0.) && !( muSstTrackLength[0]>0. ||  muSstTrackLength[1]>0. || muSstTrackLength[2]>0. || muSstTrackLength[3]>0.))
+                          {
+                              muClass=2;
+                          }
+                          if( muSstTrackLength[0]>0. ||  muSstTrackLength[1]>0. || muSstTrackLength[2]>0. || muSstTrackLength[3]>0.)
+                          {
+                              muClass=1;
+                          }
+                          inVol->Fill(neuInitVolumeName);
+                          inVolvsClass->Fill(neuInitVolumeName,muClass);
+                        }
+                        if((neuCapVolumeName== 12)  && !(neuInitVolumeName== 12))
+                        {
+                          int muClass=4;
+                          if( muStoneTrackLength>0. && !(muOwsTrackLength>0. || muIwsTrackLength>0.) )
+                          {
+                              muClass=3;
+                          }
+                          if( (muOwsTrackLength>0. || muIwsTrackLength>0.) && !( muSstTrackLength[0]>0. ||  muSstTrackLength[1]>0. || muSstTrackLength[2]>0. || muSstTrackLength[3]>0.))
+                          {
+                              muClass=2;
+                          }
+                          if( muSstTrackLength[0]>0. ||  muSstTrackLength[1]>0. || muSstTrackLength[2]>0. || muSstTrackLength[3]>0.)
+                          {
+                              muClass=1;
+                          }
+                          inVolforCap->Fill(neuInitVolumeName);
+                          inVolvsClassforCap->Fill(neuInitVolumeName,muClass);
+                        }
+                        if(!(neuCapVolumeName== 12 &&muGdLsTrackLength[capDet-1]>0) && (neuInitVolumeName== 12 &&muGdLsTrackLength[initDet-1]>0)) neuNumOut++;
+                    }
 
                     //if( neuCapVolumeName== 12  )
                     //{
@@ -209,20 +295,47 @@
                     //}
                 }
 
-
                 for( int is=0 ; is<isotnum ; is++ )
                 {
                     isot->GetEntry(is);
                     if(muIndex.find(isoEventID)==muIndex.end()) continue;
-                    if( isoDecayVolume== 12  )
+                    //if( isoDecayVolume== 12  )
+                    //{
+                    //isoNum[isoZ][isoA]++;
+                    ////if(isoOriginVolumeNumber!= 12 ) isoNumIn[isoZ][isoA]++;
+                    ////if(isoOriginVolumeNumber== 12 &&isoInitVolume!= 12 ) isoNumIn[isoZ][isoA]++;//==zero
+                    //}
+                    ////if(isoOriginVolumeNumber== 12  && isoDecayVolume!= 12 &&isoInitVolume== 12 ) isoNumOut[isoZ][isoA]++;
+                    //if(isoDecayVolume== 12 &&isoInitVolume!= 12 )isoNumIn[isoZ][isoA]++;
+                    //if(isoDecayVolume!= 12 &&isoInitVolume== 12 ) isoNumOut[isoZ][isoA]++;
+                    int initDet;
+                    if( isoDecayVolume== 12 )
                     {
-                        isoNum[isoZ][isoA]++;
-                        //if(isoOriginVolumeNumber!= 12 ) isoNumIn[isoZ][isoA]++;
-                        //if(isoOriginVolumeNumber== 12 &&isoInitVolume!= 12 ) isoNumIn[isoZ][isoA]++;//==zero
-                        if(isoInitVolume!= 12 ) isoNumIn[isoZ][isoA]++;
+                        initDet=neuInitLocalX>0?2:1;
+                        if( neuInitLocalY>300 )
+                        {
+                            initDet+=2;
+                        }
                     }
-                    //if(isoOriginVolumeNumber== 12  && isoDecayVolume!= 12 &&isoInitVolume== 12 ) isoNumOut[isoZ][isoA]++;
-                    if(isoDecayVolume!= 12 &&isoInitVolume== 12 ) isoNumOut[isoZ][isoA]++;
+                    int capDet;
+                    if( isoDecayVolume== 12 )
+                    {
+                        capDet=neuInitLocalX>0?2:1;
+                        if( neuInitLocalY>300 )
+                        {
+                            capDet+=2;
+                        }
+                    }
+                    mt->GetEntry(neuEventID-1);
+                    if( muGdLsTrackLength[0]>0||  muGdLsTrackLength[1]>0|| muGdLsTrackLength[2]>0|| muGdLsTrackLength[3]>0)
+                    {
+                        if( isoDecayVolume== 12  && muGdLsTrackLength[initDet-1]>0)
+                        { 
+                            isoNum[isoZ][isoA]++;
+                        }
+                        if((isoDecayVolume== 12&&muGdLsTrackLength[capDet-1]>0)  && !(isoDecayVolume== 12 &&muGdLsTrackLength[initDet-1]>0)) isoNumIn[isoZ][isoA]++; 
+                        if(!(isoDecayVolume== 12 &&muGdLsTrackLength[capDet-1]>0) && (isoDecayVolume== 12 &&muGdLsTrackLength[initDet-1]>0)) isoNumOut[isoZ][isoA]++;
+                    }
                 }
 
                 f->Close();
@@ -235,19 +348,26 @@
         //dis->GetXaxis()->SetTitle(" /cm");
         //dis->Draw();
         //gPad->SetLogy();
-        //c->cd(2);
+        c->cd(1);
         //eng->GetXaxis()->SetTitle(" /GeV");
         //eng->Draw();
         //gPad->SetLogy();
-        //c->cd(3);
+        hz->Draw();
+        c->cd(2);
         //eng2->GetXaxis()->SetTitle(" /MeV");
         //eng2->Draw();
-        //c->cd(4);
-        //xy->Draw();
-        //c->cd(5);
-        //rz->Draw();
-        //nameStr=Form("c_%s.eps",dataVer[j].c_str());
-        //c->SaveAs(nameStr.c_str());
+        hr->Draw();
+        c->cd(3);
+        xy->Draw("COLZ");
+        c->cd(4);
+        rz->Draw("COLZ");
+        c->cd(5);
+        rzNoW->Draw("COLZ");
+        //inVolforCap->Draw();
+        c->cd(6);
+        //inVolvsClassforCap->Draw("TEXT");
+        nameStr=Form("c_%s.eps",dataVer[j].c_str());
+        c->SaveAs(nameStr.c_str());
 
         nameStr=Form("result_%s.txt",dataVer[j].c_str());
         cout<<"nameStr "<<nameStr<<endl;
@@ -258,8 +378,8 @@
         //int neuNumCap=neuNum+neuNumOut-neuNumIn;
         //cout<<"neuNumInit  : "<<neuNumInit<<endl;
         cout<<"neuNum2  : "<<neuNum2<<endl;
-        cout<<"neuNum  : "<<neuNum<<"="<<neuNum<<"+"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)-"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
-        cout<<"neuNum : "<<neuNum<<"+-"<<sqrt(neuNum)<<"   "<<(double)neuNum/adMuonNum <<" per muon" <<"   neuYield : "<<neuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<neuNum/liveTime<<" /day = "<<neuNum/liveTime/86400<<" Hz"<<endl;
+        cout<<"capNeuNum  : "<<neuNum-neuNumOut+neuNumIn<<"="<<neuNum<<"-"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)+"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
+        cout<<"InitNeuNum : "<<neuNum<<"+-"<<sqrt(neuNum)<<"   "<<(double)neuNum/adMuonNum <<" per muon" <<"   neuYield : "<<neuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<neuNum/liveTime<<" /day = "<<neuNum/liveTime/86400<<" Hz"<<endl;
         cout<<"Neutrons in initial volume : "<<endl;
         for( int i=0 ; i<15 ; i++ )
         {
