@@ -3,7 +3,7 @@
     string dataVer[4]={"PART1"};
     string nameStr;
     //double density=0.8602;
-    double muonRate=3.;
+    double muonRate=1.*0.6;
     double density=0.8550;
     string isoName[7]={"H","He","Li","Be","B","C","N"};
     for( int j=0 ; j<1 ; j++ )
