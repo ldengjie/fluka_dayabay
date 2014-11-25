@@ -190,7 +190,7 @@ C        OPoMax=[450,150,150]
       if(DPhi.lt.0) then
           DPhi=DPhi+2*PIPIPI
       endif
-      DPhi=DPhi+(56.7+180)*PIPIPI/180
+      DPhi=DPhi+(79.6)*PIPIPI/180
       if(DPhi.gt.(2*PIPIPI)) then
           DPhi=DPhi-2*PIPIPI
       endif
@@ -238,7 +238,7 @@ C      WRITE(*,*) 'NPFLKA/ISrsNum',NPFLKA,'/',ISrsNum
       SRFlag = 0
       DO I = 1,MaxP
          IF ( SecTag(I) .EQ. 1 ) THEN
-            SRFlag = SRFlag + ValidS(I)/TVaiS
+            SRFlag = SRFlag + ValidS(I)/TS
             IF (SR .LT. SRFlag) THEN
 *  find right surface
                PRVec(1)=FLRNDM(DUMMY)
