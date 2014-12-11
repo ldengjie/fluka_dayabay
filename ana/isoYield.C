@@ -40,7 +40,6 @@
         for( int i=1; i<rootNum+1; i++ )
         {
             nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/%s/rootFile/fluSim_%06d.root",dataVer[j].c_str(),i);
-=======
             //if( i%100==0 )
             //{
             std::cout<<"filename : "<<nameStr<<endl;
@@ -362,10 +361,11 @@
         c->cd(4);
         rz->Draw("COLZ");
         c->cd(5);
-        rzNoW->Draw("COLZ");
+        //rzNoW->Draw("COLZ");
         //inVolforCap->Draw();
+        inVolvsClass->Draw("TEXT");
         c->cd(6);
-        //inVolvsClassforCap->Draw("TEXT");
+        inVolvsClassforCap->Draw("TEXT");
         nameStr=Form("c_%s.eps",dataVer[j].c_str());
         c->SaveAs(nameStr.c_str());
 
