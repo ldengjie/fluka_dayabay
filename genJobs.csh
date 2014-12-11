@@ -26,7 +26,7 @@ cd $dataDir/jobScripts
 @ j=0
 #while( $i < $dirNum + $existedRun)
 while( $i < $dirNum)
-    @ j = $i /120 
+    @ j = $i / 120
     @ newseed = 1235598764 + $i * $runNumInDir 
     echo $newseed
     @ dirNam = $i * $runNumInDir + 1 + $existedRun

@@ -70,7 +70,7 @@
 *  |  End of quenching
 
                call fillspa(NCASE,XTRACK (I),YTRACK (I),ZTRACK (I),
-     &DTRACK (I),ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
+     &DTRACK (I),ATRACK*1.e9,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,
      &MREG,ISPUSR(5))
             endif
          ENDDO
@@ -232,10 +232,10 @@ C      endif
              WRITE(*,*) 'Error:NeuInitE(I).eq.0'
           else
 C        WRITE(*,*) I,NeuInitE(I)
-        call fillneu(NCASE,NeuInitE(I),NeuInitT(I),
+        call fillneu(NCASE,NeuInitE(I),NeuInitT(I)*1.e9,
      &NeuInitP(I,1),NeuInitP(I,2),NeuInitP(I,3),
      &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
-     &NeuCapT(I),NeuGamaE(I),NeuGamaN(I),
+     &NeuCapT(I)*1.e9,NeuGamaE(I),NeuGamaN(I),
      &NeuMaID(I),NeuType(I),NeuCapVm(I),NeuCapTn(I),
      &NeuInitVm(I),NeuMaE(I),NeuDauVm(I))
 C      WRITE(*,*) I,NeuDauVm(I)
@@ -271,7 +271,8 @@ C      WRITE(*,*) I,NeuDauVm(I)
                       QenE=QenE+DTQUEN(1,JBK)
 *  |  end quenching
                call fillspa(NCASE,XSCO,YSCO,ZSCO,
-     &RULL,ATRACK,QenE,JTRACK,IICode,ISpaMaId,ISpaMaTy,MREG,ISPUSR(5))
+     &RULL,ATRACK*1.e9,QenE,JTRACK,IICode,ISpaMaId,
+     &ISpaMaTy,MREG,ISPUSR(5))
       endif
 
       RETURN
@@ -487,7 +488,8 @@ C             WRITE(*,*) 'Neutron captured on :',MMTRCK
       if((JTRACK.eq.10 .or. JTRACK.eq.11) .and. ICODE.eq.102) then
           DO IP = 1, NP 
              if(KPART(IP).eq.3) then
-      call fillmi(NCASE,TKI(IP),AGESEC(IP)+ATRACK,XSCO,YSCO,ZSCO,MREG)
+      call fillmi(NCASE,TKI(IP),(AGESEC(IP)+ATRACK)*1.e9,
+     &XSCO,YSCO,ZSCO,MREG)
              endif
           END DO 
           

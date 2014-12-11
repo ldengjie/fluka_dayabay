@@ -126,6 +126,7 @@ COMPOUND      -0.024    SODIUM    -0.045  POTASSIU                    Rock
 ASSIGNMA    BLCKHOLE   BLKHOLE
 ASSIGNMA      VACUUM    VACUUM
 ASSIGNMA         AIR       AIR
+**ASSIGNMA        GdLs       AIR
 ASSIGNMA        Rock     STONE
 ASSIGNMA       WATER       OWS
 ASSIGNMA       WATER       IWS
@@ -135,6 +136,14 @@ ASSIGNMA     Acrylic       OAT
 ASSIGNMA          Ls        LS
 ASSIGNMA     Acrylic       IAT
 ASSIGNMA        GdLs      GDLS
+**ASSIGNMA        GdLs       OWS
+**ASSIGNMA        GdLs       IWS
+**ASSIGNMA        GdLs       SST
+**ASSIGNMA        GdLs        MO
+**ASSIGNMA        GdLs       OAT
+**ASSIGNMA        GdLs        LS
+**ASSIGNMA        GdLs       IAT
+**ASSIGNMA        GdLs      GDLS
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7.. 
 * ************************************* e+e- gamma **************************************
 EMFCUT        -1.E-3     1.E-3        0.        2.  @LASTREG
