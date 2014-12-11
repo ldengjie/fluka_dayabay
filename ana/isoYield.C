@@ -1,6 +1,6 @@
 {
-    int rootNum=1000;
-    string dataVer[4]={"PART2"};
+    int rootNum=2000;
+    string dataVer[4]={"PART1"};
     string nameStr;
     //double density=0.8602;
     double muonRate=1.*0.6;
@@ -362,10 +362,11 @@
         c->cd(4);
         rz->Draw("COLZ");
         c->cd(5);
-        rzNoW->Draw("COLZ");
+        //rzNoW->Draw("COLZ");
         //inVolforCap->Draw();
+        inVolvsClass->Draw("TEXT");
         c->cd(6);
-        //inVolvsClassforCap->Draw("TEXT");
+        inVolvsClassforCap->Draw("TEXT");
         nameStr=Form("c_%s.eps",dataVer[j].c_str());
         c->SaveAs(nameStr.c_str());
 
