@@ -2,10 +2,10 @@
     int rootNum=4000;
     string dataVer[4]={"PART10"};
     string nameStr;
-    //double density=0.8602;
     double GdMuonRate=15.*0.6;
     double density=0.8550;
     string isoName[7]={"H","He","Li","Be","B","C","N"};
+    int muonSel=10;
     for( int anaDet=12 ; anaDet<13 ; anaDet+=2 )
     {
         int GdMuonNum=0;
@@ -49,7 +49,7 @@
         //loop for counting
         for( int i=1; i<rootNum+1; i++ )
         {
-            nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/%s/rootFile/fluSim_%06d.root",dataVer[j].c_str(),i);
+            nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/%s/rootFile/fluSim_%06d.root",dataVer[0].c_str(),i);
             //if( i%100==0 )
             //{
             std::cout<<"filename : "<<nameStr<<endl;
@@ -170,6 +170,10 @@
                     //cout<<"muIwsTrackLength  : "<<muIwsTrackLength<<endl;
                     for( int mi=0 ; mi<4 ; mi++ )
                     {
+                        muTrackLength[3][mi] =muAirTrackLength;
+                        muTrackLength[4][mi] =muStoneTrackLength;
+                        muTrackLength[5][mi] =muIwsTrackLength;
+                        muTrackLength[6][mi] =muOwsTrackLength;
                         muTrackLength[7][mi] =muSstTrackLength[mi] ;
                         muTrackLength[8][mi] =muMoTrackLength[mi]  ;
                         muTrackLength[9][mi] =muOatTrackLength[mi] ;
@@ -198,7 +202,7 @@
                     }
                     for( int ai=0 ; ai<4 ; ai++ )
                     {
-                        if(muTrackLength[10][ai]==0) continue;
+                        if(muTrackLength[muonSel][ai]==0) continue;
                         passLs=1;
                         muNeuMul.insert(std::pair<int,int>(muEventID*10+ai+1,0));
                     }
@@ -296,6 +300,10 @@
                     mt->GetEntry(neuEventID-1);
                     for( int mi=0 ; mi<4 ; mi++ )
                     {
+                        muTrackLength[3][mi] =muAirTrackLength;
+                        muTrackLength[4][mi] =muStoneTrackLength;
+                        muTrackLength[5][mi] =muIwsTrackLength;
+                        muTrackLength[6][mi] =muOwsTrackLength;
                         muTrackLength[7][mi]=muSstTrackLength[mi];
                         muTrackLength[8][mi]=muMoTrackLength[mi];
                         muTrackLength[9][mi]=muOatTrackLength[mi];
@@ -304,10 +312,10 @@
                         muTrackLength[12][mi]=muGdLsTrackLength[mi];
 
                     }
-                    if( muTrackLength[10][0]>0||  muTrackLength[10][1]>0|| muTrackLength[10][2]>0|| muTrackLength[10][3]>0)
+                    if( muTrackLength[muonSel][0]>0||  muTrackLength[muonSel][1]>0|| muTrackLength[muonSel][2]>0|| muTrackLength[muonSel][3]>0)
                         //if(1)
                     {
-                        if( neuCapVolumeName>= anaDet  && muTrackLength[10][capDet-1]>0 )
+                        if( neuCapVolumeName>= anaDet  && muTrackLength[muonSel][capDet-1]>0 )
                         {
                             if( muNeuMul.find(neuEventID*10+initDet)!=muNeuMul.end() )
                             {
@@ -324,7 +332,7 @@
                                 //cout<<neuEventID<<"  : "<<neuCapGammaESum<<" "<<neuCapTime<<" "<<neuCapLocalX<<","<<neuCapLocalY<<","<<neuCapLocalZ <<endl;
                             }
                         }
-                        if( neuInitVolumeName>= anaDet  && muTrackLength[10][initDet-1]>0)
+                        if( neuInitVolumeName>= anaDet  && muTrackLength[muonSel][initDet-1]>0)
                             //if( neuInitVolumeName>= anaDet  )
                         { 
 
@@ -361,7 +369,7 @@
                             hr->Fill(radius,weight); 
                             RvsCom->Fill(neuInitLocalZ,neuOriginVolumeNumber);
                         }
-                        if((neuCapVolumeName>= anaDet&&muTrackLength[10][capDet-1]>0)  && !(neuInitVolumeName>= anaDet &&muTrackLength[10][initDet-1]>0))
+                        if((neuCapVolumeName>= anaDet&&muTrackLength[muonSel][capDet-1]>0)  && !(neuInitVolumeName>= anaDet &&muTrackLength[muonSel][initDet-1]>0))
                             //if((neuCapVolumeName>= anaDet)  && !(neuInitVolumeName>= anaDet ))
                         {
                           neuNumIn++;   
@@ -399,7 +407,7 @@
                           inVolforCap->Fill(neuInitVolumeName);
                           inVolvsClassforCap->Fill(neuInitVolumeName,muClass);
                         }
-                        if(!(neuCapVolumeName>= anaDet &&muTrackLength[10][capDet-1]>0) && (neuInitVolumeName>= anaDet &&muTrackLength[10][initDet-1]>0)) neuNumOut++;
+                        if(!(neuCapVolumeName>= anaDet &&muTrackLength[muonSel][capDet-1]>0) && (neuInitVolumeName>= anaDet &&muTrackLength[muonSel][initDet-1]>0)) neuNumOut++;
                         //if(!(neuCapVolumeName>= anaDet ) && (neuInitVolumeName>= anaDet )) neuNumOut++;
                     }
 
@@ -472,14 +480,14 @@
                         muTrackLength[12][mi]=muGdLsTrackLength[mi];
 
                     }
-                    if( muTrackLength[10][0]>0||  muTrackLength[10][1]>0|| muTrackLength[10][2]>0|| muTrackLength[10][3]>0)
+                    if( muTrackLength[muonSel][0]>0||  muTrackLength[muonSel][1]>0|| muTrackLength[muonSel][2]>0|| muTrackLength[muonSel][3]>0)
                     {
-                        if( isoDecayVolume>= anaDet  && muTrackLength[10][initDet-1]>0)
+                        if( isoDecayVolume>= anaDet  && muTrackLength[muonSel][initDet-1]>0)
                         { 
                             isoNum[isoZ][isoA]++;
                         }
-                        if((isoDecayVolume>= anaDet&&muTrackLength[10][capDet-1]>0)  && !(isoDecayVolume>= anaDet &&muTrackLength[10][initDet-1]>0)) isoNumIn[isoZ][isoA]++; 
-                        if(!(isoDecayVolume>= anaDet &&muTrackLength[10][capDet-1]>0) && (isoDecayVolume>= anaDet &&muTrackLength[10][initDet-1]>0)) isoNumOut[isoZ][isoA]++;
+                        if((isoDecayVolume>= anaDet&&muTrackLength[muonSel][capDet-1]>0)  && !(isoDecayVolume>= anaDet &&muTrackLength[muonSel][initDet-1]>0)) isoNumIn[isoZ][isoA]++; 
+                        if(!(isoDecayVolume>= anaDet &&muTrackLength[muonSel][capDet-1]>0) && (isoDecayVolume>= anaDet &&muTrackLength[muonSel][initDet-1]>0)) isoNumOut[isoZ][isoA]++;
                     }
                 }
 
@@ -557,7 +565,7 @@
         legend->Draw("same");
         
         //inVolvsClassforCap->Draw("TEXT");
-        nameStr=Form("c_%s_Det%d.eps",dataVer[0].c_str(),anaDet);
+        nameStr=Form("c_%s_Det%d_Sel%d.eps",dataVer[0].c_str(),anaDet,muonSel);
         c->SaveAs(nameStr.c_str());
         delete dis;
         delete eng;
@@ -573,7 +581,7 @@
         delete inVolvsClassforCap;
         delete c;
 
-        nameStr=Form("result_%s_Det%d.txt",dataVer[0].c_str(),anaDet);
+        nameStr=Form("result_%s_Det%d_Sel%d.txt",dataVer[0].c_str(),anaDet,muonSel);
         cout<<"nameStr "<<nameStr<<endl;
         cout<<"anaDet  : "<<anaDet<<endl;
         //print 
