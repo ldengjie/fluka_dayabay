@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/brn/tcsh
 
 #已经运行过的run个数
 @ existedRun=4000
