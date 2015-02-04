@@ -119,7 +119,7 @@
                 mt->SetBranchAddress("MoTrackLength",muMoTrackLength);
                 mt->SetBranchAddress("LsTrackLength",muLsTrackLength);
                 mt->SetBranchAddress("GdLsTrackLength",muGdLsTrackLength);
-                neut->SetBranchAddress("NumOfNeutron",&muNumOfNeutron);
+                mt->SetBranchAddress("NumOfNeutron",&muNumOfNeutron);
 
                 TTree* neut= (TTree*)f->Get("Neutron");
                 int neutnum=neut->GetEntries();
