@@ -17,7 +17,7 @@
         double quenchedDepE;
         double time;
         int det;
-        double tag;
+        double InitVolume;
         double firstHitTime;
         //int capVol;
         //int genVol;
@@ -53,16 +53,19 @@
     int mimicAdMuon=0;
     int errorNum=0;
     TH1F* NeuLikeT2Admuon=new TH1F("NeuLikeT2Admuon","time interval between neutron-like and previous admuon",500,0,500.e3);//s
-
+    TH2F* muonClassVsInitDetMimic=new TH2F("muonClassVsInitDetMimic","muonClassVsInitDetMimic",13,0,13,13,0,13); 
+    TH2F* muonClassVsInitDetReal=new TH2F("muonClassVsInitDetReal","muonClassVsInitDetReal",13,0,13,13,0,13); 
+    map<string,int> mimicMuonNum;
+    map<string,int> adMuonNum;
     string nameStr;
-    for( int fi=2001 ; fi<=2200 ; fi++ )
+    for( int fi=2001 ; fi<=8000 ; fi++ )
     {
         struct timeval allStartTime,allFinishTime;
         double timeInterval=0.;
         gettimeofday( &allStartTime, NULL );
         //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/PART10/rootFile/fluSim_%06d.root",fi);
         nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/PART10/rootFile/fluSim_%06d_sort.root",fi);
-        cout<<"nameStr  : "<<nameStr<<endl;
+        //cout<<"nameStr  : "<<nameStr<<endl;
         TFile* f= new TFile(nameStr.c_str());
         if( f->IsZombie() )
         {
@@ -87,6 +90,7 @@
         double muInitLocalZCos;
         double muAirTrackLength;
         double muOwsTrackLength;
+        double muStoneTrackLength;
         double muIwsTrackLength;
         double muSstTrackLength[4];
         double muOatTrackLength[4];
@@ -103,6 +107,7 @@
         mt->SetBranchAddress("InitLocalYCos",&muInitLocalYCos);
         mt->SetBranchAddress("InitLocalZCos",&muInitLocalZCos);
         mt->SetBranchAddress("AirTrackLength",&muAirTrackLength);
+        mt->SetBranchAddress("StoneTrackLength",&muStoneTrackLength);
         mt->SetBranchAddress("OwsTrackLength",&muOwsTrackLength);
         mt->SetBranchAddress("IwsTrackLength",&muIwsTrackLength);
         mt->SetBranchAddress("SstTrackLength",muSstTrackLength);
@@ -163,6 +168,7 @@
         double spaTime;
         double squenchedDepE;
         int svolume;
+        int sInitvolume;
         int sFlukaNumber;
         int sEnergyDepositedType;
         int sMotherFlukaNumber;
@@ -170,6 +176,7 @@
         st->SetBranchAddress("EventID",&sEventID);
         st->SetBranchAddress("x",&sx);
         st->SetBranchAddress("Volume",&svolume);
+        st->SetBranchAddress("InitVolume",&sInitvolume);
         st->SetBranchAddress("y",&sy);
         st->SetBranchAddress("z",&sz);
         st->SetBranchAddress("dE",&sdE);
@@ -184,6 +191,7 @@
         //event constructor
         vector<event> eventBuf;
         int _eventID=0;
+        int _InitVolume=0;
         double _x=0.;
         double _y=0.;
         double _z=0.;
@@ -223,6 +231,7 @@
                 event eventTmp;
                 eventTmp.EventID=_eventID;
                 eventTmp.x=_x;
+                eventTmp.InitVolume=_InitVolume;
                 eventTmp.y=_y;
                 eventTmp.z=_z;
                 eventTmp.dE=_dE;
@@ -246,6 +255,7 @@
             {
                 _time=spaTime; 
                 _x=sx;
+                _InitVolume=sInitvolume;
                 _y=sy;
                 _z=sz;
             }
@@ -328,7 +338,7 @@
                     {
                         double time2muon=eventBuf[i].time-spaAdMuonMap[eventBuf[i].det-1][eventBuf[i].EventID];
                         NeuLikeT2Admuon->Fill(time2muon);
-                        if( time2muon>=10.e3 && time2muon<=200.e3 )
+                        if( time2muon>=20.e3 && time2muon<=500.e3 )
                         {
                             signalNum++;
                             //cout<<" "<<endl;
@@ -346,11 +356,44 @@
                                 showNum++;
                             }
                             //cout<<" "<<endl;
+                                int muonClass=0;
+                                if(muAirTrackLength                      !=0.) muonClass=3; 
+                                if(muStoneTrackLength                    !=0.) muonClass=4; 
+                                if(muOwsTrackLength                      !=0.) muonClass=5; 
+                                if(muIwsTrackLength                      !=0.) muonClass=6; 
+                                if(muSstTrackLength[eventBuf[i].det-1]   !=0.) muonClass=7; 
+                                if(muMoTrackLength[eventBuf[i].det-1]    !=0.) muonClass=8; 
+                                if(muOatTrackLength[eventBuf[i].det-1]   !=0.) muonClass=9; 
+                                if(muLsTrackLength[eventBuf[i].det-1]    !=0.) muonClass=10; 
+                                if(muIatTrackLength[eventBuf[i].det-1]   !=0.) muonClass=11; 
+                                if(muGdLsTrackLength[eventBuf[i].det-1]  !=0.) muonClass=12; 
+                                nameStr=Form("%d-%d",fi,eventBuf[i].EventID);
+                                muonClassVsInitDetMimic->Fill(muonClass,eventBuf[i].InitVolume);
                             if( muLsTrackLength[eventBuf[i].det-1]==0. )
                             {
                                 mimicSignalNum++;
+                                if( mimicMuonNum.find(nameStr)!= mimicMuonNum.end() )
+                                {
+                                     mimicMuonNum[nameStr]++;
+                                }else
+                                {
+                                     mimicMuonNum.insert(std::pair<string,int>(nameStr,1));
+                                }
+
                                 //cout<<"mimicSignal "<<endl;
+                            }else
+                            {
+                                //muonClassVsInitDetReal->Fill(muonClass,eventBuf[i].InitVolume);
+                                if( adMuonNum.find(nameStr)!= adMuonNum.end() )
+                                {
+                                     adMuonNum[nameStr]++;
+                                }else
+                                {
+                                     adMuonNum.insert(std::pair<string,int>(nameStr,1));
+                                }
+                                
                             }
+
                             for( map<string,double>::iterator it=eventBuf[i].com.begin() ; it!=eventBuf[i].com.end() ; it++ )
                             {
                                 if( it->first!="3-0-8-300" && it->first!="3-22-8-300"&& it->first!="7-22-8-300"&&it->first!="4-0-8-300" && it->first!="4-22-8-300" )
@@ -421,6 +464,14 @@
     //cout<<"yield  : "<<(double)(signalNum-bkgNum)*(1-0.078)/0.862/(0.836*0.917*0.838)/(adNum*0.6*218)/0.855<<endl;
     //cout<<"spa yield  : "<<(double)(signalNum-bkgNum)*(1-(double)mimicSignalNum/signalNum)/(0.836*0.917*0.838)/(adNum*0.6*218)/0.855<<endl;
 
+    muonClassVsInitDetMimic->SetBinContent(1,1,mimicMuonNum.size());
+    muonClassVsInitDetMimic->SetBinContent(2,2,adMuonNum.size());
+    muonClassVsInitDetMimic->SetStats(FALSE);
+    TCanvas* c=new TCanvas("c","c",800,600);
+    muonClassVsInitDetMimic->Draw("TEXT");
+    c->SaveAs("muonClassVsInitDet.eps");
+    //muonClassVsInitDetReal->Draw("TEXTsame");
+    //muonClassVsInitDetReal->Draw("TEXT");
     //return 1;
 }
 
