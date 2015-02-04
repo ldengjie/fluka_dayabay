@@ -18,7 +18,6 @@
     for( int im=0;im<4;im++  )
     {
 
-        xi_th[im]=new TH1D("CapTimeMinusInitTime","CapTimeMinusInitTime",2000,0,2.e6);
         int muonSel=muSelList[im];
         int GdMuonNum=0;
         double adMuonLength=0.;
@@ -34,7 +33,13 @@
         int isoNum[150][300]={0};
         int isoNumOut[150][300]={0};
         int isoNumIn[150][300]={0};
-        TH1D* dis=new TH1D("dis","distance between neutron and muon track",100,0,1000);
+                    int desMuInducedIsoNum[150][300]={0};
+                    int desMuInducedNeuNum=0;
+                    int desMuInducedNeuInitVol[15]={0};
+        nameStr=Form("histo_%s_Det%d_Sel%d.root",dataVer[0].c_str(),anaDet,muonSel);
+        TFile* fout=new TFile(nameStr.c_str(),"recreate");
+        xi_th[im]=new TH1D("CapTimeMinusInitTime","CapTimeMinusInitTime",2000,0,2.e6);
+        TH1D* dis=new TH1D("dis","distance between neutron and muon track",1000,0,1000);
         TH1D* eng=new TH1D("eng","energy of neutron",1000,0,1);
         TH1D* eng2=new TH1D("eng2","energy of neutron",2000,0,20);
         TH2D* xy=new TH2D("xy","xy of neutron",300,-600,600,800,-400,400);
@@ -51,8 +56,12 @@
         TH2D* rzAll=new TH2D("rzAll","rz of all neutron",300,0,300,4100,-800,3300);
         TH1D* hrAll=new TH1D("hrAll","rAll of neutron",300,0,300);
         TH1D* hzAll=new TH1D("hzAll","zAll of neutron",410,-800,3300);
-        TH1D* NeuMultiplicity=new TH1D("NeuMultiplicity","neutron multiplicity for each ad muon",500,0,500);
         TH1D* NeuT2Admuon=new TH1D("NeuT2Admuon","time interval between neutron and previous admuon",500,0,500.e3);
+        TH1D* capDis=new TH1D("capDis","distance between neutron captured positon and muon track",1000,0,1000);
+        TH1D* capT2Admuon=new TH1D("capT2Admuon","time interval between neutron captured time and previous admuon",500,0,500.e3);
+        TH1D* capEng2=new TH1D("capEng2","energy of neutron",2000,0,20);
+        TH1D* NeuMultiplicity=new TH1D("NeuMultiplicity","neutron multiplicity for each ad muon",500,0,500);
+        TH1D* NeuMultiplicityAfterCut=new TH1D("NeuMultiplicityAfterCut","neutron multiplicity for each ad muon",500,0,500);
         TCanvas* c=new TCanvas("c","c",1200,900);
         c->Divide(3,3);
 
@@ -92,6 +101,7 @@
                 double muLsTrackLength[4];
                 double muGdLsTrackLength[4];
                 double muTrackLength[15][4]={0.};
+                int muNumOfNeutron;
                 mt->SetBranchAddress("EventID",&muEventID);
                 mt->SetBranchAddress("InitLocalX",&muInitLocalX);
                 mt->SetBranchAddress("InitLocalY",&muInitLocalY);
@@ -109,6 +119,7 @@
                 mt->SetBranchAddress("MoTrackLength",muMoTrackLength);
                 mt->SetBranchAddress("LsTrackLength",muLsTrackLength);
                 mt->SetBranchAddress("GdLsTrackLength",muGdLsTrackLength);
+                neut->SetBranchAddress("NumOfNeutron",&muNumOfNeutron);
 
                 TTree* neut= (TTree*)f->Get("Neutron");
                 int neutnum=neut->GetEntries();
@@ -170,6 +181,7 @@
 
                 map<int,int> muIndex;
                 map<int,int> muNeuMul;
+                map<int,int> muNeuMulAfterCut;
                 for( int u=0 ; u<mtnum ; u++ )
                 {
                     mt->GetEntry(u);
@@ -189,6 +201,7 @@
                     }
 
                     bool passLs=0;
+                    bool passWp=0;
                     for( int ai=0 ; ai<4 ; ai++ )
                     {
                         if( muTrackLength[10][ai]>0 )
@@ -201,13 +214,17 @@
                         {
                             adMuonLength+=muTrackLength[di][ai];
                         }
-                        
+
+                    }
+                    if( muTrackLength[5][0]!=0 )
+                    {
+                        muNeuMul.insert(std::pair<int,int>(muEventID*10+0+1,0));
+                        muNeuMulAfterCut.insert(std::pair<int,int>(muEventID*10+0+1,0));
                     }
                     for( int ai=0 ; ai<4 ; ai++ )
                     {
                         if(muTrackLength[muonSel][ai]==0) continue;
                         passLs=1;
-                        muNeuMul.insert(std::pair<int,int>(muEventID*10+ai+1,0));
                     }
                     if( passLs )
                     {
@@ -275,11 +292,21 @@
                     }
                     if( muTrackLength[muonSel][0]>0||  muTrackLength[muonSel][1]>0|| muTrackLength[muonSel][2]>0|| muTrackLength[muonSel][3]>0)
                     {
+                        if( neuOriginVolumeNumber>=anaDet)
+                        {
+                            desMuInducedNeuNum++;
+                            desMuInducedNeuInitVol[neuInitVolumeName]++;
+                        }
+                        //captured in GDLS
                         if( neuCapVolumeName>= anaDet  && muTrackLength[muonSel][capDet-1]>0 )
                         {
-                            if( muNeuMul.find(neuEventID*10+initDet)!=muNeuMul.end() )
+                            if( muNeuMul.find(neuEventID*10+1)!=muNeuMul.end() )
                             {
-                                muNeuMul[neuEventID*10+initDet]++;
+                                muNeuMul[neuEventID*10+1]++;
+                                if( neuCapTime>=20.e3 && neuCapTime<=500.e3 )
+                                {
+                                    muNeuMulAfterCut[neuEventID*10+1]++;
+                                }
                             }
                             if( neuCapGammaESum>0.006 && neuCapGammaESum<0.012 && neuCapTime>10.e3 &&neuCapTime<200.e3)
                             {
@@ -289,8 +316,16 @@
                             {
                                 neuGdCapNum++;
                                 xi_th[im]->Fill(neuCapTime-neuInitTime);
+                                double disV=sqrt(
+                                        (muInitLocalYCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalY-muInitLocalY))*(muInitLocalYCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalY-muInitLocalY))+
+                                        (muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))+
+                                        (muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX)));
+                            capDis->Fill(disV);
+                            capT2Admuon->Fill(neuCapTime);
+                            capEng2->Fill(neuCapGammaESum*1000);
                             }
                         }
+                        //initialized in GDLS
                         if( neuInitVolumeName>= anaDet  && muTrackLength[muonSel][initDet-1]>0)
                         { 
 
@@ -325,6 +360,7 @@
                             hr->Fill(radius,weight); 
                             RvsCom->Fill(neuInitLocalZ,neuOriginVolumeNumber);
                         }
+                        //spill in
                         if((neuCapVolumeName>= anaDet&&muTrackLength[muonSel][capDet-1]>0)  && !(neuInitVolumeName>= anaDet &&muTrackLength[muonSel][initDet-1]>0))
                         {
                           neuNumIn++;   
@@ -362,11 +398,35 @@
                           inVolforCap->Fill(neuInitVolumeName);
                           inVolvsClassforCap->Fill(neuInitVolumeName,muClass);
                         }
+                        //spill out
                         if(!(neuCapVolumeName>= anaDet &&muTrackLength[muonSel][capDet-1]>0) && (neuInitVolumeName>= anaDet &&muTrackLength[muonSel][initDet-1]>0)) neuNumOut++;
+                    }else
+                    {
+                        if( neuOriginVolumeNumber>=anaDet)
+                        {
+                           cout<<"ERROR:~~~~~~~~~~~~~~~~neuOriginVolumeNumber>=anaDet~~~ "<<endl; 
+                        }
                     }
 
 
+
                 }
+
+                for( map<int,int>::iterator it=muNeuMul.begin() ; it!=muNeuMul.end() ; it++ )
+                {
+                    if( it->second>0 )
+                    {
+                        NeuMultiplicity->Fill(it->second);
+                    }
+                }
+                for( map<int,int>::iterator it=muNeuMulAfterCut.begin() ; it!=muNeuMulAfterCut.end() ; it++ )
+                {
+                    if( it->second>0 )
+                    {
+                        NeuMultiplicityAfterCut->Fill(it->second);
+                    }
+                }
+                
 
                 for( int is=0 ; is<isotnum ; is++ )
                 {
@@ -407,6 +467,10 @@
                     }
                     if( muTrackLength[muonSel][0]>0||  muTrackLength[muonSel][1]>0|| muTrackLength[muonSel][2]>0|| muTrackLength[muonSel][3]>0)
                     {
+                    if( isoOriginVolumeNumber>=anaDet )
+                    {
+                        desMuInducedIsoNum[isoZ][isoA]++;
+                    }
                         if( isoDecayVolume>= anaDet  && muTrackLength[muonSel][capDet-1]>0)
                         { 
                             isoNum[isoZ][isoA]++;
@@ -417,6 +481,12 @@
                         }
                         if((isoDecayVolume>= anaDet&&muTrackLength[muonSel][capDet-1]>0)  && !(isoInitVolume>= anaDet &&muTrackLength[muonSel][initDet-1]>0)) isoNumIn[isoZ][isoA]++; 
                         if(!(isoDecayVolume>= anaDet &&muTrackLength[muonSel][capDet-1]>0) && (isoInitVolume>= anaDet &&muTrackLength[muonSel][initDet-1]>0)) isoNumOut[isoZ][isoA]++;
+                    }else
+                    {
+                        if( isoOriginVolumeNumber>=anaDet)
+                        {
+                           cout<<"ERROR:~~~~~~~~~~~~~~~~isoOriginVolumeNumber>=anaDet~~~ "<<endl; 
+                        }
                     }
                 }
 
@@ -508,6 +578,15 @@
         cout<<"neuGdCapNumAfter: "<<neuGdCapNumAfter<<endl;
         cout<<"capNeuNum  : "<<neuNum-neuNumOut+neuNumIn<<"="<<neuNum<<"-"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)+"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
         cout<<"InitNeuNum : "<<neuNum<<"+-"<<sqrt(neuNum)<<"   "<<(double)neuNum/GdMuonNum <<" per muon" <<"   neuYield : "<<neuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<neuNum/liveTime<<" /day = "<<neuNum/liveTime/86400<<" Hz"<<endl;
+        cout<<"desMuInducedNeuNum from GDLS : "<<desMuInducedNeuNum<<"+-"<<sqrt(desMuInducedNeuNum)<<"   "<<(double)desMuInducedNeuNum/GdMuonNum <<" per muon" <<"   neuYield : "<<desMuInducedNeuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<desMuInducedNeuNum/liveTime<<" /day = "<<desMuInducedNeuNum/liveTime/86400<<" Hz"<<endl;
+        for( int i=0 ; i<15 ; i++ )
+        {
+            if( desMuInducedNeuInitVol[i]!=0 )
+            {
+                cout<<" "<<i<<"  : "<<desMuInducedNeuInitVol[i]<<" "<<(double)desMuInducedNeuInitVol[i]/desMuInducedNeuNum<<"  "<<(double)desMuInducedNeuInitVol[i]/(0.0151706*GdMuonNum)<<endl;
+            }
+        }
+        
         neuYield[im]=neuNum/adMuonLength/density;
         //cout<<"Neutrons in initial volume : "<<endl;
         //for( int i=0 ; i<15 ; i++ )
@@ -524,10 +603,10 @@
                 if(isoNumFinal==0) continue;
                 if( isoNum[z][a]!=0 )
                 {
-                    cout<<"    "<<isoName[z-1]<<a<<" : "<<isoNumFinal <<" spill-out:"<<isoNumOut[z][a]<<"("<<(double)isoNumOut[z][a]/isoNum[z][a]*100 <<"%) spill-in:"<<isoNumIn[z][a]<<"("<<(double)isoNumIn[z][a]/isoNum[z][a]*100 <<"%)"<<"   isoYield : "<<isoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<" isoRate: "<<isoNum[z][a]/liveTime<<" /day = "<<isoNum[z][a]/liveTime/86400<<" Hz"<<endl;
+                    cout<<"    "<<isoName[z-1]<<a<<" : "<<isoNumFinal <<" spill-out:"<<isoNumOut[z][a]<<"("<<(double)isoNumOut[z][a]/isoNum[z][a]*100 <<"%) spill-in:"<<isoNumIn[z][a]<<"("<<(double)isoNumIn[z][a]/isoNum[z][a]*100 <<"%)"<<"   isoYield : "<<isoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<" isoRate: "<<isoNum[z][a]/liveTime<<" /day = "<<isoNum[z][a]/liveTime/86400<<" Hz | "<<desMuInducedIsoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<endl;
                 } else
                 {
-                    cout<<"    "<<isoName[z-1]<<a<<" : "<<isoNumFinal <<" spill-out:"<<isoNumOut[z][a]<<"(100%) spill-in:"<<isoNumIn[z][a]<<"(0%)"<<"   isoYield : "<<isoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<" isoRate: "<<isoNum[z][a]/liveTime<< " /day = "<<isoNum[z][a]/liveTime/86400<<" Hz"<<endl;
+                    cout<<"    "<<isoName[z-1]<<a<<" : "<<isoNumFinal <<" spill-out:"<<isoNumOut[z][a]<<"(100%) spill-in:"<<isoNumIn[z][a]<<"(0%)"<<"   isoYield : "<<isoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<" isoRate: "<<isoNum[z][a]/liveTime<< " /day = "<<isoNum[z][a]/liveTime/86400<<" Hz | "<<desMuInducedIsoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<endl;
                 }
             }
         }
@@ -537,19 +616,24 @@
 
         outfile.open(nameStr.c_str());
 
+        outfile<<"nameStr "<<nameStr<<endl;
+        outfile<<"anaDet  : "<<anaDet<<endl;
+        outfile<<"muonSel: "<<muonSel<<endl;
+        //print 
+        outfile<<"xi_spill  : "<<xi_spill[im]<<endl;
+        outfile<<"xi_Gd: "<<xi_Gd[im]<<endl;
+        outfile<<"xi_time: "<<xi_time[im]<<endl;
+        outfile<<"xi_mu: "<<xi_mu[im]<<endl;
         outfile<<"GdMuonNum : "<<GdMuonNum<<" liveTime : "<<liveTime<< " days"<<endl;
         outfile<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/GdMuonNum<<" per muon"<<endl;
-        re_GdMuonNum=GdMuonNum;
-        re_adMuonLength=adMuonLength;
-        outfile<<"neuNum  : "<<neuNum<<"="<<neuNum<<"+"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)-"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
-        outfile<<"neuNum : "<<neuNum<<"+-"<<sqrt(neuNum)<<"   "<<(double)neuNum/GdMuonNum <<" per muon" <<"   neuYield : "<<neuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<neuNum/liveTime<<" /day = "<<neuNum/liveTime/86400<<" Hz"<<endl;
-        outfile<<"Neutrons in initial volume : "<<endl;
-        for( int i=0 ; i<15 ; i++ )
-        {
-            if(neuNumD[i]!=0) outfile<<"    "<<i<<" : "<<neuNumD[i]<<endl;
-        }
+        outfile<<"neuGdCapNum: "<<neuGdCapNum<<endl;
+        outfile<<"neuGdCapNumAfter: "<<neuGdCapNumAfter<<endl;
+        outfile<<"capNeuNum  : "<<neuNum-neuNumOut+neuNumIn<<"="<<neuNum<<"-"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)+"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
+        outfile<<"InitNeuNum : "<<neuNum<<"+-"<<sqrt(neuNum)<<"   "<<(double)neuNum/GdMuonNum <<" per muon" <<"   neuYield : "<<neuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<neuNum/liveTime<<" /day = "<<neuNum/liveTime/86400<<" Hz"<<endl;
+        outfile<<"desMuInducedNeuNum from GDLS : "<<desMuInducedNeuNum<<"+-"<<sqrt(desMuInducedNeuNum)<<"   "<<(double)desMuInducedNeuNum/GdMuonNum <<" per muon" <<"   neuYield : "<<desMuInducedNeuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<desMuInducedNeuNum/liveTime<<" /day = "<<desMuInducedNeuNum/liveTime/86400<<" Hz"<<endl;
 
         outfile<<"isoNum : "<<endl;
+
         for( int z=1 ; z<=7 ; z++ )
         {
             for( int a=1 ; a<300 ; a++ )
@@ -558,16 +642,16 @@
                 if(isoNumFinal==0) continue;
                 if( isoNum[z][a]!=0 )
                 {
-                    outfile<<"    "<<isoName[z-1]<<a<<" : "<<isoNumFinal <<" spill-out:"<<isoNumOut[z][a]<<"("<<(double)isoNumOut[z][a]/isoNum[z][a]*100 <<"%) spill-in:"<<isoNumIn[z][a]<<"("<<(double)isoNumIn[z][a]/isoNum[z][a]*100 <<"%)"<<"   isoYield : "<<isoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<" isoRate: "<<isoNum[z][a]/liveTime<<" /day = "<<isoNum[z][a]/liveTime/86400<<" Hz"<<endl;
+                    outfile<<"    "<<isoName[z-1]<<a<<" : "<<isoNumFinal <<" spill-out:"<<isoNumOut[z][a]<<"("<<(double)isoNumOut[z][a]/isoNum[z][a]*100 <<"%) spill-in:"<<isoNumIn[z][a]<<"("<<(double)isoNumIn[z][a]/isoNum[z][a]*100 <<"%)"<<"   isoYield : "<<isoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<" isoRate: "<<isoNum[z][a]/liveTime<<" /day = "<<isoNum[z][a]/liveTime/86400<<" Hz | "<<desMuInducedIsoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<endl;
                 } else
                 {
-                    outfile<<"    "<<isoName[z-1]<<a<<" : "<<isoNumFinal <<" spill-out:"<<isoNumOut[z][a]<<"(100%) spill-in:"<<isoNumIn[z][a]<<"(0%)"<<"   isoYield : "<<isoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<" isoRate: "<<isoNum[z][a]/liveTime<< " /day = "<<isoNum[z][a]/liveTime/86400<<" Hz"<<endl;
+                    outfile<<"    "<<isoName[z-1]<<a<<" : "<<isoNumFinal <<" spill-out:"<<isoNumOut[z][a]<<"(100%) spill-in:"<<isoNumIn[z][a]<<"(0%)"<<"   isoYield : "<<isoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<" isoRate: "<<isoNum[z][a]/liveTime<< " /day = "<<isoNum[z][a]/liveTime/86400<<" Hz | "<<desMuInducedIsoNum[z][a]/adMuonLength/density*1.e7<<"e-07"<<endl;
                 }
             }
         }
-
         outfile<<" "<<endl;
         outfile.close();
+        fout->Write();
         delete dis;
         delete eng;
         delete eng2;
@@ -584,14 +668,19 @@
         delete rzAll;
         delete hrAll;
         delete hzAll;
-        delete NeuMultiplicity;
         delete NeuT2Admuon;
         delete RvsCom;
         delete xi_th[im];
+        delete NeuMultiplicity;
+        delete capT2Admuon;
+        delete capDis;
+        delete capEng2;
+        
         for( int yi=1 ; yi<=12 ; yi++ )
         {
             delete RvsComX[yi-1];
         }
+        delete fout;
     }
     cout<<"======== xi when muon pass through LS ======== "<<endl;
     cout<<"xi_geo  : "<<neuYield[1]/neuYield[0]<<endl;

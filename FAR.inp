@@ -4,12 +4,12 @@ Far EH1 muon simulation
 GLOBAL         1000.       -1.       0.0        1.        1.
 * Set the defaults for precision simulations
 DEFAULTS                                                              PRECISIO
-* ************************************* sources *****************************************
+* ************************************ sources *****************************************
 * Maxmium energy of muon is 8764.80967GeV
 BEAM         -8888.0                                                  MUON+
 * call source.f
 SOURCE
-* ************************************* geometry ****************************************
+* ************************************ geometry ****************************************
 GEOBEGIN                                                              COMBNAME
     0    0          
 * BlackHole,mandatory
@@ -82,11 +82,13 @@ IAT          5 +ad1rcc2 -ad1rcc1 |+ad2rcc2 -ad2rcc1|+ad3rcc2 -ad3rcc1|+ad4rcc2 -
 GDLS         5 +ad1rcc1 |+ad2rcc1|+ad3rcc1|+ad4rcc1
 END
 GEOEND
-* ************************************* material ****************************************
+* ************************************ material ****************************************
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 MATERIAL          6.   12.0107     2.265       15.                    ICARBON
 LOW-MAT      ICARBON        6.       -3.      296.                    CARBON
-MATERIAL          1.    1.0079    0.0708       16.                    IH
+MATERIAL          1.    1.0079    0.0708       16.                    WH
+LOW-MAT           WH        1.       -2.      296.                    HYDROGEN
+MATERIAL          1.    1.0079    0.0708       17.                    IH
 LOW-MAT           IH        1.       -3.      296.                    HYDROGEN
 MATERIAL         64.              7.9004                              GADOLINI
 MATERIAL         25.                7.44                              MANGANES
@@ -107,7 +109,7 @@ COMPOUND   -1.248E-4    CARBON -0.755267  NITROGEN -0.231781    OXYGENAIR
 COMPOUND   -0.012827     ARGON                                        AIR
 * Water
 MATERIAL                             1.0                              WATER
-COMPOUND         2.0  HYDROGEN       1.0    OXYGEN                    WATER
+COMPOUND         2.0        WH       1.0    OXYGEN                    WATER
 * GdLiquidScintillator
 MATERIAL                           0.855                              GdLs
 COMPOUND     -0.8535   ICARBON   -0.1288        IH   -0.0003  NITROGENGdLs
@@ -138,33 +140,33 @@ COMPOUND      -0.024    SODIUM    -0.045  POTASSIU                    Rock
 ASSIGNMA    BLCKHOLE   BLKHOLE
 ASSIGNMA      VACUUM    VACUUM
 ASSIGNMA         AIR       AIR
-**ASSIGNMA        GdLs       AIR
-ASSIGNMA        Rock     STONE
-ASSIGNMA       WATER       OWS
-ASSIGNMA       WATER       IWS
-ASSIGNMA       Steel       SST
-ASSIGNMA          Mo        MO
-ASSIGNMA     Acrylic       OAT
-ASSIGNMA          Ls        LS
-ASSIGNMA     Acrylic       IAT
-ASSIGNMA        GdLs      GDLS
-**ASSIGNMA        GdLs       OWS
-**ASSIGNMA        GdLs       IWS
-**ASSIGNMA        GdLs       SST
-**ASSIGNMA        GdLs        MO
-**ASSIGNMA        GdLs       OAT
-**ASSIGNMA        GdLs        LS
-**ASSIGNMA        GdLs       IAT
+**ASSIGNMA        Rock     STONE
+**ASSIGNMA       WATER       OWS
+**ASSIGNMA       WATER       IWS
+**ASSIGNMA       Steel       SST
+**ASSIGNMA          Mo        MO
+**ASSIGNMA     Acrylic       OAT
+**ASSIGNMA          Ls        LS
+**ASSIGNMA     Acrylic       IAT
 **ASSIGNMA        GdLs      GDLS
+ASSIGNMA          Ls     STONE
+ASSIGNMA          Ls       OWS
+ASSIGNMA          Ls       IWS
+ASSIGNMA          Ls       SST
+ASSIGNMA          Ls        MO
+ASSIGNMA          Ls       OAT
+ASSIGNMA          Ls        LS
+ASSIGNMA          Ls       IAT
+ASSIGNMA        GdLs      GDLS
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7.. 
-* ************************************* e+e- gamma **************************************
+* ************************************ e+e- gamma **************************************
 EMFCUT        -1.E-3     1.E-3        0.        2.  @LASTREG
 EMFCUT        -1.E-3     1.E-3        1.        3.  @LASTMAT          PROD-CUT
 * Turn on photonuclear reaction,maybe produce neutron
 PHOTONUC          1.                             3  @LASTMAT
 * Muon pair production by photon
 PHOTONUC       1111.                             3  @LASTMAT          MUMUPAIR
-* ************************************* muon ********************************************
+* ************************************ muon ********************************************
 * activate muon decay,alse for leptons and hadrons
 PHYSICS           1.                                                  DECAYS
 * ************************************* isotopes ****************************************
@@ -175,9 +177,10 @@ PHYSICS                                                               COALESCE
 PHYSICS        1000.     1000.     1000.     1000.     1000.     1000.PEATHRES
 * activate radioactive decays
 RADDECAY          2.       -1.        1.       0.00001000010        1.
-
-* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
-* *********************************** user routines *************************************
+*test
+*PART-THR   -0.000001       1.0       2.0       0.0       0.0       0.0
+*PART-THR   -0.000001      10.0      62.0       0.0       0.0       0.0
+* ********************************** user routines *************************************
 USRICALL
 USROCALL
 USERDUMP        100.                 0.0        1.
@@ -186,5 +189,5 @@ USERWEIG                                                 1.0
 * Set the random number seed
 RANDOMIZ          1.1235598764
 * Set the number of primary histories to be simulated in the run
-START        100000.
+START        1.
 STOP
