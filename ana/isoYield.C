@@ -57,11 +57,12 @@
         TH1D* hrAll=new TH1D("hrAll","rAll of neutron",300,0,300);
         TH1D* hzAll=new TH1D("hzAll","zAll of neutron",410,-800,3300);
         TH1D* NeuT2Admuon=new TH1D("NeuT2Admuon","time interval between neutron and previous admuon",500,0,500.e3);
-        TH1D* capDis=new TH1D("capDis","distance between neutron captured positon and muon track",1000,0,1000);
-        TH1D* capT2Admuon=new TH1D("capT2Admuon","time interval between neutron captured time and previous admuon",500,0,500.e3);
-        TH1D* capEng2=new TH1D("capEng2","energy of neutron",2000,0,20);
-        TH1D* NeuMultiplicity=new TH1D("NeuMultiplicity","neutron multiplicity for each ad muon",500,0,500);
-        TH1D* NeuMultiplicityAfterCut=new TH1D("NeuMultiplicityAfterCut","neutron multiplicity for each ad muon",500,0,500);
+
+        TH1F* capDis=new TH1F("capDis","distance between neutron captured positon and muon track",1000,0,1000);
+        TH1D* capT2muon=new TH1D("capT2muon","time interval between neutron captured time and mother muon",500,0,500.e-6);
+        TH1F* capEng2=new TH1F("capEng2","energy of neutron",24,6,12);
+        TH1F* NeuMultiplicity=new TH1F("NeuMultiplicity","neutron multiplicity for each ad muon",500,0,500);
+        TH1F* NeuMultiplicityAfterCut=new TH1F("NeuMultiplicityAfterCut","neutron multiplicity for each ad muon",500,0,500);
         TCanvas* c=new TCanvas("c","c",1200,900);
         c->Divide(3,3);
 
@@ -119,7 +120,7 @@
                 mt->SetBranchAddress("MoTrackLength",muMoTrackLength);
                 mt->SetBranchAddress("LsTrackLength",muLsTrackLength);
                 mt->SetBranchAddress("GdLsTrackLength",muGdLsTrackLength);
-                neut->SetBranchAddress("NumOfNeutron",&muNumOfNeutron);
+                mt->SetBranchAddress("NumOfNeutron",&muNumOfNeutron);
 
                 TTree* neut= (TTree*)f->Get("Neutron");
                 int neutnum=neut->GetEntries();
@@ -321,7 +322,7 @@
                                         (muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))+
                                         (muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX)));
                             capDis->Fill(disV);
-                            capT2Admuon->Fill(neuCapTime);
+                            capT2muon->Fill(neuCapTime/1.e9);
                             capEng2->Fill(neuCapGammaESum*1000);
                             }
                         }
@@ -667,7 +668,7 @@
         delete RvsCom;
         delete xi_th[im];
         delete NeuMultiplicity;
-        delete capT2Admuon;
+        delete capT2muon;
         delete capDis;
         delete capEng2;
         
