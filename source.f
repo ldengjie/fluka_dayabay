@@ -70,8 +70,8 @@ C           END IF
         CLOSE(89)
 * initial surface 
 *hall
-        OPoMin=[-1100,-800,-800]
-        OPoMax=[1100,800,3300]
+C        OPoMin=[-1100,-800,-800]
+C        OPoMax=[1100,800,3300]
 *rock+waterpool
 C        OPoMin=[-1100,-800,-800]
 C        OPoMax=[1100,800,800]
@@ -81,6 +81,9 @@ C        OPoMax=[800,500,500]
 *AD
 C        OPoMin=[-550,-250,-250]
 C        OPoMax=[550,250,250]
+*LS
+        OPoMin=[-500,-200,-200]
+        OPoMax=[500,200,200]
 *GDLS
 C        OPoMin=[-450,-150,-150]
 C        OPoMax=[450,150,150]

@@ -5,7 +5,7 @@
 #这次需要运行的run个数
 @ totalRun=2000
 #每个文件夹下run个数
-@ runNumInDir=10
+@ runNumInDir=20
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
