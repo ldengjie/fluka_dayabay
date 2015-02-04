@@ -5,17 +5,17 @@
     double GdMuonRate=15.*0.6;
     double density=0.8550;
     string isoName[7]={"H","He","Li","Be","B","C","N"};
-    int muSelList[3]={4,10,12};
-    double neuYield[3]={0.};
+    int muSelList[4]={4,5,10,12};
+    double neuYield[4]={0.};
     int anaDet=12;
     double re_adMuonLength=0.;
     int re_GdMuonNum=0;
-    double xi_spill[3]={0.};
-    double xi_Gd[3]={0.};
-    TH1D* xi_th[3];
-    double xi_time[3]={0.};
-    double xi_mu[3]={0.};
-    for( int im=0;im<3;im++  )
+    double xi_spill[4]={0.};
+    double xi_Gd[4]={0.};
+    TH1D* xi_th[4];
+    double xi_time[4]={0.};
+    double xi_mu[4]={0.};
+    for( int im=0;im<4;im++  )
     {
 
         xi_th[im]=new TH1D("CapTimeMinusInitTime","CapTimeMinusInitTime",2000,0,2.e6);
@@ -60,10 +60,10 @@
         //loop for counting
         for( int i=1; i<=rootNum; i++ )
         {
-            nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/%s/rootFile/fluSim_%06d.root",dataVer[0].c_str(),i);
+            nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
             //if( i%100==0 )
             //{
-            std::cout<<"filename : "<<nameStr<<endl;
+            //std::cout<<"filename : "<<nameStr<<endl;
             //} 
             TFile* f= new TFile(nameStr.c_str());
             if( f->IsZombie() )
@@ -177,7 +177,7 @@
                     {
                         muTrackLength[3][mi] =muAirTrackLength;
                         muTrackLength[4][mi] =muStoneTrackLength;
-                        muTrackLength[5][mi] =muIwsTrackLength;
+                        muTrackLength[5][mi] =muIwsTrackLength+muOwsTrackLength;
                         muTrackLength[6][mi] =muOwsTrackLength;
                         muTrackLength[7][mi] =muSstTrackLength[mi] ;
                         muTrackLength[8][mi] =muMoTrackLength[mi]  ;
@@ -263,7 +263,7 @@
                     {
                         muTrackLength[3][mi] =muAirTrackLength;
                         muTrackLength[4][mi] =muStoneTrackLength;
-                        muTrackLength[5][mi] =muIwsTrackLength;
+                        muTrackLength[5][mi] =muIwsTrackLength+muOwsTrackLength;
                         muTrackLength[6][mi] =muOwsTrackLength;
                         muTrackLength[7][mi]=muSstTrackLength[mi];
                         muTrackLength[8][mi]=muMoTrackLength[mi];
@@ -395,7 +395,7 @@
                     {
                         muTrackLength[3][mi] =muAirTrackLength;
                         muTrackLength[4][mi] =muStoneTrackLength;
-                        muTrackLength[5][mi] =muIwsTrackLength;
+                        muTrackLength[5][mi] =muIwsTrackLength+muOwsTrackLength;
                         muTrackLength[6][mi] =muOwsTrackLength;
                         muTrackLength[7][mi]=muSstTrackLength[mi];
                         muTrackLength[8][mi]=muMoTrackLength[mi];

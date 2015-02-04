@@ -328,7 +328,7 @@
                     {
                         double time2muon=eventBuf[i].time-spaAdMuonMap[eventBuf[i].det-1][eventBuf[i].EventID];
                         NeuLikeT2Admuon->Fill(time2muon);
-                        if( time2muon>=10.e3 && time2muon<=200.e3 )
+                        if( time2muon>=20.e3 && time2muon<=500.e3 )
                         {
                             signalNum++;
                             //cout<<" "<<endl;
