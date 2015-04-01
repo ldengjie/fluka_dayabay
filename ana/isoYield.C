@@ -60,16 +60,18 @@
         TH1D* NeuT2Admuon=new TH1D("NeuT2Admuon","time interval between neutron and previous admuon",500,0,500.e3);
 
         TH1F* capDis=new TH1F("capDis","distance between neutron captured positon and muon track",1000,0,1000);//cm
-        TH1D* capT2muon=new TH1D("capT2muon","time interval between neutron captured time and mother muon",500,0,500.e-6);//s
+        TH1D* capT2muon=new TH1D("capT2muon","time interval between neutron captured time and mother muon",2000,0,2000.e-6);//s
+        TH1D* cap7T2muon=new TH1D("cap7T2muon","time interval between neutron captured time on volume 7 and mother muon",2000,0,2000.e-6);//s
         TH1F* capEng2=new TH1F("capEng2","energy of neutron",24,6,12);//MeV
         TH1F* NeuMultiplicity=new TH1F("NeuMultiplicity","neutron multiplicity for each ad muon",500,0,500);
         TH1F* NeuMultiplicityAfterCut=new TH1F("NeuMultiplicityAfterCut","neutron multiplicity for each ad muon",500,0,500);
+        TH1F* NeuMultiplicityAfterCutAndCombine=new TH1F("NeuMultiplicityAfterCutAndCombine","neutron multiplicity for each ad muon",500,0,500);
         TCanvas* c=new TCanvas("c","c",1200,900);
         c->Divide(3,3);
 
 
         //loop for counting
-        for( int i=2001; i<=rootNum; i++ )
+        for( int i=3001; i<=rootNum; i++ )
         {
             nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
             //if( i%100==0 )
@@ -184,6 +186,7 @@
                 map<int,int> muIndex;
                 map<int,int> muNeuMul;
                 map<int,int> muNeuMulAfterCut;
+                map<int,int> muNeuMulAfterCutAndCombine;
                 for( int u=0 ; u<mtnum ; u++ )
                 {
                     mt->GetEntry(u);
@@ -222,6 +225,7 @@
                     {
                         muNeuMul.insert(std::pair<int,int>(muEventID*10+0+1,0));
                         muNeuMulAfterCut.insert(std::pair<int,int>(muEventID*10+0+1,0));
+                        muNeuMulAfterCutAndCombine.insert(std::pair<int,int>(muEventID*10+0+1,0));
                     }
                     for( int ai=0 ; ai<4 ; ai++ )
                     {
@@ -235,9 +239,16 @@
 
                 }
 
+                double lastNeuCapTime=0.;
+                int lastNeuEventID;
                 for( int r=0 ; r<neutnum ; r++ )
                 {
                     neut->GetEntry(r);
+                    if( neuEventID!=lastNeuEventID )
+                    {
+                        lastNeuCapTime=0.;
+                        lastNeuEventID=neuEventID;
+                    }
                     int a_initDet=neuInitLocalX>0?2:1;
                     if( neuInitLocalY>300 )
                     {
@@ -299,6 +310,11 @@
                             desMuInducedNeuNum++;
                             desMuInducedNeuInitVol[neuInitVolumeName]++;
                         }
+                        //captured on volume 7
+                        if( neuCapVolumeName==7 && muTrackLength[muonSel][capDet-1]>0 )
+                        {
+                            cap7T2muon->Fill(neuCapTime/1.e9);
+                        }
                         //captured in GDLS
                         if( neuCapVolumeName>= anaDet  && muTrackLength[muonSel][capDet-1]>0 )
                         {
@@ -314,6 +330,11 @@
                                     if( neuCapTime>=20.e3 && neuCapTime<=500.e3 )
                                     {
                                         muNeuMulAfterCut[neuEventID*10+1]++;
+                                        if(lastNeuCapTime==0. || neuCapTime-lastNeuCapTime>1.e3 )
+                                        {
+                                            muNeuMulAfterCutAndCombine[neuEventID*10+1]++;
+                                        }
+                                        lastNeuCapTime=neuCapTime;
                                     }
                                 }
                                 neuGdCapNum++;
@@ -436,6 +457,13 @@
                     if( it->second>0 )
                     {
                         NeuMultiplicityAfterCut->Fill(it->second);
+                    }
+                }
+                for( map<int,int>::iterator it=muNeuMulAfterCutAndCombine.begin() ; it!=muNeuMulAfterCutAndCombine.end() ; it++ )
+                {
+                    if( it->second>0 )
+                    {
+                        NeuMultiplicityAfterCutAndCombine->Fill(it->second);
                     }
                 }
                 
@@ -569,6 +597,9 @@
         int binMin=xi_th[im]->FindBin(20.e3);
         int binMax=xi_th[im]->FindBin(500.e3);
         xi_time[im]=(double)xi_th[im]->Integral(binMin,binMax)/xi_th[im]->GetEntries();
+        int binMin2=xi_th[im]->FindBin(10.e3);
+        int binMax2=xi_th[im]->FindBin(200.e3);
+        double xi_time2=(double)xi_th[im]->Integral(binMin2,binMax2)/xi_th[im]->GetEntries();
         xi_mu[im]=(double)GdMuonNum/LsMuonNum;
         cout<<"nameStr "<<nameStr<<endl;
         cout<<"anaDet  : "<<anaDet<<endl;
@@ -577,6 +608,7 @@
         cout<<"xi_spill  : "<<xi_spill[im]<<endl;
         cout<<"xi_Gd: "<<xi_Gd[im]<<endl;
         cout<<"xi_time: "<<xi_time[im]<<endl;
+        cout<<"xi_time2: "<<xi_time2<<endl;
         cout<<"xi_mu: "<<xi_mu[im]<<endl;
         double liveTime=GdMuonNum/(GdMuonRate*86400);
         cout<<"GdMuonNum : "<<GdMuonNum<<" liveTime : "<<liveTime<< " days"<<endl;
@@ -630,6 +662,7 @@
         outfile<<"xi_spill  : "<<xi_spill[im]<<endl;
         outfile<<"xi_Gd: "<<xi_Gd[im]<<endl;
         outfile<<"xi_time: "<<xi_time[im]<<endl;
+        outfile<<"xi_time2: "<<xi_time2<<endl;
         outfile<<"xi_mu: "<<xi_mu[im]<<endl;
         outfile<<"GdMuonNum : "<<GdMuonNum<<" liveTime : "<<liveTime<< " days"<<endl;
         outfile<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/GdMuonNum<<" per muon"<<endl;
@@ -680,7 +713,10 @@
         delete RvsCom;
         delete xi_th[im];
         delete NeuMultiplicity;
+        delete NeuMultiplicityAfterCutAndCombine;
+        delete NeuMultiplicityAfterCut;
         delete capT2muon;
+        delete cap7T2muon;
         delete capDis;
         delete capEng2;
         
