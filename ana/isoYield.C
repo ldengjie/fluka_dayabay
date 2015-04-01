@@ -40,6 +40,7 @@
         TFile* fout=new TFile(nameStr.c_str(),"recreate");
         xi_th[im]=new TH1D("CapTimeMinusInitTime","CapTimeMinusInitTime",2000,0,2.e6);
         TH1D* dis=new TH1D("dis","distance between neutron and muon track",1000,0,1000);
+        TH1D* capDisThroughTeleScopeRpc=new TH1D("capDisThroughTeleScopeRpc","distance between neutron and muon track",1000,0,1000);
         TH1D* eng=new TH1D("eng","energy of neutron",1000,0,1);
         TH1D* eng2=new TH1D("eng2","energy of neutron",2000,0,20);
         TH2D* xy=new TH2D("xy","xy of neutron",300,-600,600,800,-400,400);
@@ -58,11 +59,13 @@
         TH1D* hzAll=new TH1D("hzAll","zAll of neutron",410,-800,3300);
         TH1D* NeuT2Admuon=new TH1D("NeuT2Admuon","time interval between neutron and previous admuon",500,0,500.e3);
 
-        TH1F* capDis=new TH1F("capDis","distance between neutron captured positon and muon track",1000,0,1000);
-        TH1D* capT2muon=new TH1D("capT2muon","time interval between neutron captured time and mother muon",500,0,500.e-6);
-        TH1F* capEng2=new TH1F("capEng2","energy of neutron",24,6,12);
+        TH1F* capDis=new TH1F("capDis","distance between neutron captured positon and muon track",1000,0,1000);//cm
+        TH1D* capT2muon=new TH1D("capT2muon","time interval between neutron captured time and mother muon",2000,0,2000.e-6);//s
+        TH1D* cap7T2muon=new TH1D("cap7T2muon","time interval between neutron captured time on volume 7 and mother muon",2000,0,2000.e-6);//s
+        TH1F* capEng2=new TH1F("capEng2","energy of neutron",24,6,12);//MeV
         TH1F* NeuMultiplicity=new TH1F("NeuMultiplicity","neutron multiplicity for each ad muon",500,0,500);
         TH1F* NeuMultiplicityAfterCut=new TH1F("NeuMultiplicityAfterCut","neutron multiplicity for each ad muon",500,0,500);
+        TH1F* NeuMultiplicityAfterCutAndCombine=new TH1F("NeuMultiplicityAfterCutAndCombine","neutron multiplicity for each ad muon",500,0,500);
         TCanvas* c=new TCanvas("c","c",1200,900);
         c->Divide(3,3);
 
@@ -183,6 +186,7 @@
                 map<int,int> muIndex;
                 map<int,int> muNeuMul;
                 map<int,int> muNeuMulAfterCut;
+                map<int,int> muNeuMulAfterCutAndCombine;
                 for( int u=0 ; u<mtnum ; u++ )
                 {
                     mt->GetEntry(u);
@@ -221,6 +225,7 @@
                     {
                         muNeuMul.insert(std::pair<int,int>(muEventID*10+0+1,0));
                         muNeuMulAfterCut.insert(std::pair<int,int>(muEventID*10+0+1,0));
+                        muNeuMulAfterCutAndCombine.insert(std::pair<int,int>(muEventID*10+0+1,0));
                     }
                     for( int ai=0 ; ai<4 ; ai++ )
                     {
@@ -234,9 +239,16 @@
 
                 }
 
+                double lastNeuCapTime=0.;
+                int lastNeuEventID;
                 for( int r=0 ; r<neutnum ; r++ )
                 {
                     neut->GetEntry(r);
+                    if( neuEventID!=lastNeuEventID )
+                    {
+                        lastNeuCapTime=0.;
+                        lastNeuEventID=neuEventID;
+                    }
                     int a_initDet=neuInitLocalX>0?2:1;
                     if( neuInitLocalY>300 )
                     {
@@ -298,32 +310,52 @@
                             desMuInducedNeuNum++;
                             desMuInducedNeuInitVol[neuInitVolumeName]++;
                         }
+                        //captured on volume 7
+                        if( neuCapVolumeName==7 && muTrackLength[muonSel][capDet-1]>0 )
+                        {
+                            cap7T2muon->Fill(neuCapTime/1.e9);
+                        }
                         //captured in GDLS
                         if( neuCapVolumeName>= anaDet  && muTrackLength[muonSel][capDet-1]>0 )
                         {
-                            if( muNeuMul.find(neuEventID*10+1)!=muNeuMul.end() )
-                            {
-                                muNeuMul[neuEventID*10+1]++;
-                                if( neuCapTime>=20.e3 && neuCapTime<=500.e3 )
-                                {
-                                    muNeuMulAfterCut[neuEventID*10+1]++;
-                                }
-                            }
                             if( neuCapGammaESum>0.006 && neuCapGammaESum<0.012 && neuCapTime>10.e3 &&neuCapTime<200.e3)
                             {
                                 neuGdCapNumAfter++;
                             }
                             if( neuCapTargetName== 26)
                             {
+                                if( muNeuMul.find(neuEventID*10+1)!=muNeuMul.end() )
+                                {
+                                    muNeuMul[neuEventID*10+1]++;
+                                    if( neuCapTime>=20.e3 && neuCapTime<=500.e3 )
+                                    {
+                                        muNeuMulAfterCut[neuEventID*10+1]++;
+                                        if(lastNeuCapTime==0. || neuCapTime-lastNeuCapTime>1.e3 )
+                                        {
+                                            muNeuMulAfterCutAndCombine[neuEventID*10+1]++;
+                                        }
+                                        lastNeuCapTime=neuCapTime;
+                                    }
+                                }
                                 neuGdCapNum++;
                                 xi_th[im]->Fill(neuCapTime-neuInitTime);
                                 double disV=sqrt(
                                         (muInitLocalYCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalY-muInitLocalY))*(muInitLocalYCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalY-muInitLocalY))+
                                         (muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))+
                                         (muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX)));
-                            capDis->Fill(disV);
-                            capT2muon->Fill(neuCapTime/1.e9);
-                            capEng2->Fill(neuCapGammaESum*1000);
+                                capDis->Fill(disV);
+                                double teleScopeRpcZ=767;
+                                double teleScopeRpcX=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalXCos+neuInitLocalX;
+                                double teleScopeRpcY=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalYCos+neuInitLocalY;
+                                if( teleScopeRpcX>=-110&&teleScopeRpcX<=110 )
+                                {
+                                    if( (teleScopeRpcY>=490&&teleScopeRpcY<=710)||(teleScopeRpcY>=-710&&teleScopeRpcY<=490) )
+                                    {
+                                        capDisThroughTeleScopeRpc->Fill(disV);
+                                    }
+                                }
+                                capT2muon->Fill(neuCapTime/1.e9);
+                                capEng2->Fill(neuCapGammaESum*1000);
                             }
                         }
                         //initialized in GDLS
@@ -425,6 +457,13 @@
                     if( it->second>0 )
                     {
                         NeuMultiplicityAfterCut->Fill(it->second);
+                    }
+                }
+                for( map<int,int>::iterator it=muNeuMulAfterCutAndCombine.begin() ; it!=muNeuMulAfterCutAndCombine.end() ; it++ )
+                {
+                    if( it->second>0 )
+                    {
+                        NeuMultiplicityAfterCutAndCombine->Fill(it->second);
                     }
                 }
                 
@@ -559,6 +598,9 @@
         int binMin=xi_th[im]->FindBin(20.e3);
         int binMax=xi_th[im]->FindBin(500.e3);
         xi_time[im]=(double)xi_th[im]->Integral(binMin,binMax)/xi_th[im]->GetEntries();
+        int binMin2=xi_th[im]->FindBin(10.e3);
+        int binMax2=xi_th[im]->FindBin(200.e3);
+        double xi_time2=(double)xi_th[im]->Integral(binMin2,binMax2)/xi_th[im]->GetEntries();
         xi_mu[im]=(double)GdMuonNum/LsMuonNum;
         cout<<"nameStr "<<nameStr<<endl;
         cout<<"anaDet  : "<<anaDet<<endl;
@@ -567,6 +609,7 @@
         cout<<"xi_spill  : "<<xi_spill[im]<<endl;
         cout<<"xi_Gd: "<<xi_Gd[im]<<endl;
         cout<<"xi_time: "<<xi_time[im]<<endl;
+        cout<<"xi_time2: "<<xi_time2<<endl;
         cout<<"xi_mu: "<<xi_mu[im]<<endl;
         double liveTime=GdMuonNum/(GdMuonRate*86400);
         cout<<"GdMuonNum : "<<GdMuonNum<<" liveTime : "<<liveTime<< " days"<<endl;
@@ -620,6 +663,7 @@
         outfile<<"xi_spill  : "<<xi_spill[im]<<endl;
         outfile<<"xi_Gd: "<<xi_Gd[im]<<endl;
         outfile<<"xi_time: "<<xi_time[im]<<endl;
+        outfile<<"xi_time2: "<<xi_time2<<endl;
         outfile<<"xi_mu: "<<xi_mu[im]<<endl;
         outfile<<"GdMuonNum : "<<GdMuonNum<<" liveTime : "<<liveTime<< " days"<<endl;
         outfile<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/GdMuonNum<<" per muon"<<endl;
@@ -650,6 +694,7 @@
         outfile.close();
         fout->Write();
         delete dis;
+        delete capDisThroughTeleScopeRpc;
         delete eng;
         delete eng2;
         delete xy;
@@ -669,7 +714,10 @@
         delete RvsCom;
         delete xi_th[im];
         delete NeuMultiplicity;
+        delete NeuMultiplicityAfterCutAndCombine;
+        delete NeuMultiplicityAfterCut;
         delete capT2muon;
+        delete cap7T2muon;
         delete capDis;
         delete capEng2;
         
