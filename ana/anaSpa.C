@@ -17,6 +17,8 @@
         double quenchedDepE;
         double time;
         int det;
+        int flukaNum;
+        int spaNum;
         double InitVolume;
         double firstHitTime;
         //int capVol;
@@ -30,6 +32,8 @@
             dE=0.;
             quenchedDepE=0.;
             time=0.;
+            flukaNum=0;
+            spaNum=0;
             firstHitTime=0.;
         }
     };
@@ -44,6 +48,7 @@
     double gdlsLength=0.;
     int spaAdMuonNum=0;
     int signalNum=0;
+    int signalNumNo12=0;
     int showNum=0;
     int evtNum=0;
     int bkgNum=0;
@@ -58,7 +63,7 @@
     map<string,int> mimicMuonNum;
     map<string,int> adMuonNum;
     string nameStr;
-    for( int fi=2001 ; fi<=8000 ; fi++ )
+    for( int fi=3001 ; fi<=3102 ; fi++ )
     {
         struct timeval allStartTime,allFinishTime;
         double timeInterval=0.;
@@ -198,6 +203,8 @@
         double _dE=0.;
         double _quenchedDepE=0.;
         double _time=0.;
+        int _flukaNum=0;
+        int _spaNum=0;
         double lastTime[4]={0.};
         int _det=999;
         map<string,double> _com;
@@ -238,9 +245,13 @@
                 eventTmp.quenchedDepE=_quenchedDepE;
                 eventTmp.com=_com;
                 eventTmp.time=_time;
+                eventTmp.flukaNum=_flukaNum;
+                eventTmp.spaNum=_spaNum;
                 eventTmp.det=_det;
                 eventBuf.push_back(eventTmp);
                 _dE=0.;
+                _flukaNum=0;
+                _spaNum=0;
                 _quenchedDepE=0.;
                 _com.clear();
                 if( sEventID!=_eventID)
@@ -251,9 +262,11 @@
                     }
                 }
             }
-            if( _dE==0. )
+            //if( _dE==0. )
+            if( _flukaNum==0 && sFlukaNumber!=308&&sFlukaNumber!=211)
             {
                 _time=spaTime; 
+                _flukaNum=sFlukaNumber;
                 _x=sx;
                 _InitVolume=sInitvolume;
                 _y=sy;
@@ -262,6 +275,7 @@
             _det=detTmp;
             _eventID=sEventID;
             _dE+=sdE;
+            _spaNum++;
             _quenchedDepE+=squenchedDepE;
             nameStr=Form("%d-%d-%d-%d",sFlukaNumber,sEnergyDepositedType,sMotherFlukaNumber,sMotherInteractionType);
             if( _com.find(nameStr)!=_com.end() )
@@ -341,6 +355,10 @@
                         if( time2muon>=20.e3 && time2muon<=500.e3 )
                         {
                             signalNum++;
+                            if( eventBuf[i].InitVolume!=12 )
+                            {
+                                signalNumNo12++;
+                            }
                             //cout<<" "<<endl;
                             //cout<<"quenchedDepE  : "<<eventBuf[i].quenchedDepE<<endl;
                             bool showDetials = true;
@@ -394,12 +412,18 @@
                                 
                             }
 
-                            for( map<string,double>::iterator it=eventBuf[i].com.begin() ; it!=eventBuf[i].com.end() ; it++ )
+                            if( eventBuf[i].InitVolume!=12 )
                             {
-                                if( it->first!="3-0-8-300" && it->first!="3-22-8-300"&& it->first!="7-22-8-300"&&it->first!="4-0-8-300" && it->first!="4-22-8-300" )
+                                cout<<" "<<endl;
+                                cout<<eventBuf[i].EventID<<" : FlukaNum~"<<eventBuf[i].flukaNum <<" InitVolume~"<<eventBuf[i].InitVolume<<" "<<eventBuf[i].quenchedDepE*1000<<"MeV "<<eventBuf[i].time/1000.<<"us "<<eventBuf[i].x<<","<<eventBuf[i].y<<","<<eventBuf[i].z <<" ("<<eventBuf[i].spaNum <<")"<<endl;
+                                for( map<string,double>::iterator it=eventBuf[i].com.begin() ; it!=eventBuf[i].com.end() ; it++ )
                                 {
-                                    //FlukaNumber-EnergyDepositedType-MotherFlukaNumber-InteractionType
-                                    //cout<<eventBuf[i].EventID<<" : "<<it->first<<" ("<<it->second<<" "<<it->second/eventBuf[i].quenchedDepE<<") "<<eventBuf[i].time<<" "<<eventBuf[i].x<<","<<eventBuf[i].y<<","<<eventBuf[i].z <<endl;
+                                    if( it->first!="3-0-8-300" && it->first!="3-22-8-300"&& it->first!="7-22-8-300"&&it->first!="4-0-8-300" && it->first!="4-22-8-300" )
+                                    {
+                                        //FlukaNumber-EnergyDepositedType-MotherFlukaNumber-InteractionType
+                                        //cout<<eventBuf[i].EventID<<" : "<<it->first<<" ("<<it->second<<" "<<it->second/eventBuf[i].quenchedDepE<<") "<<eventBuf[i].time<<" "<<eventBuf[i].x<<","<<eventBuf[i].y<<","<<eventBuf[i].z <<endl;
+                                        cout<<"FlukaNumber-EnergyDepositedType-MotherFlukaNumber-InteractionType  : "<< it->second/eventBuf[i].quenchedDepE*100<<"% "<<it->first<<endl;
+                                    }
                                 }
                             }
 
@@ -426,7 +450,7 @@
 
         gettimeofday( &allFinishTime, NULL );
         timeInterval=allFinishTime.tv_sec-allStartTime.tv_sec+(allFinishTime.tv_usec-allStartTime.tv_usec)/1000000.;
-        cout<<"   "<<fi<<"   eventBuf/stnum  : "<<bufSize<<"/"<<stnum<<" "<<(double)bufSize/stnum<<" (Used time : "<<timeInterval<<" s = "<<(int)timeInterval/3600<<"h"<<(int)timeInterval%3600/60 <<"min"<<(int)timeInterval%3600%60 <<"s) ..."<<endl;
+        cout<<"   "<<fi<<"   eventBuf/stnum  : "<<bufSize<<"/"<<stnum<<" "<<(double)bufSize/stnum<<" signalNumNo12/signalNum:"<<signalNumNo12<<"/"<<signalNum<<" (Used time : "<<timeInterval<<" s = "<<(int)timeInterval/3600<<"h"<<(int)timeInterval%3600/60 <<"min"<<(int)timeInterval%3600%60 <<"s) ..."<<endl;
     }
     NeuLikeT2Admuon->Draw();
 
@@ -450,6 +474,7 @@
     cout<<"spaAdMuonNum  : "<<spaAdMuonNum<<endl;
     cout<<"evtNum  : "<<evtNum<<endl;
     cout<<"signalNum  : "<<signalNum<<endl;
+    cout<<"signalNumNo12  : "<<signalNumNo12<<endl;
     cout<<"showNum  : "<<showNum<<endl;
     cout<<"mimicSignalNum  : "<<mimicSignalNum<<endl;
     cout<<"bkgNum  : "<<bkgNum<<endl;
