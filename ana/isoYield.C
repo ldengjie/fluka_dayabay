@@ -1,5 +1,5 @@
 {
-    int rootNum=8000;
+    int rootNum=4000;
     string dataVer[4]={"PART10"};
     string nameStr;
     double GdMuonRate=21.*0.6;
@@ -84,8 +84,8 @@
 
         cout<<"loop  "<<endl;
         //loop for counting
-        //for( int i=3001; i<=rootNum; i++ )
-        for( int i=3001; i<=4000; i++ )
+        for( int i=3001; i<=rootNum; i++ )
+        //for( int i=3001; i<=8000; i++ )
         {
             nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
             //if( i%100==0 )
@@ -381,8 +381,8 @@
                                         double arrayRpcX=(arrayRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalXCos+neuInitLocalX;
                                         double arrayRpcY=(arrayRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalYCos+neuInitLocalY;
                                         double arrayRpcZAfterSmear=567;
-                                        double arrayRpcXAfterSmear=arrayRpcX+rand()/(double)RAND_MAX*40+(-20);
-                                        double arrayRpcYAfterSmear=arrayRpcY+rand()/(double)RAND_MAX*40+(-20);
+                                        double arrayRpcXAfterSmear=arrayRpcX+rand()/(double)RAND_MAX*26+(-13);
+                                        double arrayRpcYAfterSmear=arrayRpcY+rand()/(double)RAND_MAX*26+(-13);
                                         //double arrayRpcZAfterSmear=567;
                                         //double arrayRpcXAfterSmear=arrayRpcX;
                                         //double arrayRpcYAfterSmear=arrayRpcY;
