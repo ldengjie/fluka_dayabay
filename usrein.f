@@ -45,6 +45,7 @@
       NeuInitT=0 
       NeuInitE=0 
       NeuInitP=0 
+      NeuInitC=0 
       NeuCapP=10000000 
       NeuCapT=0 
       NeuGamaN=0 

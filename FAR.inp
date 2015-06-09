@@ -140,24 +140,24 @@ COMPOUND      -0.024    SODIUM    -0.045  POTASSIU                    Rock
 ASSIGNMA    BLCKHOLE   BLKHOLE
 ASSIGNMA      VACUUM    VACUUM
 ASSIGNMA         AIR       AIR
-**ASSIGNMA        Rock     STONE
-**ASSIGNMA       WATER       OWS
-**ASSIGNMA       WATER       IWS
-**ASSIGNMA       Steel       SST
-**ASSIGNMA          Mo        MO
-**ASSIGNMA     Acrylic       OAT
-**ASSIGNMA          Ls        LS
-**ASSIGNMA     Acrylic       IAT
-**ASSIGNMA        GdLs      GDLS
-ASSIGNMA          Ls     STONE
-ASSIGNMA          Ls       OWS
-ASSIGNMA          Ls       IWS
-ASSIGNMA          Ls       SST
-ASSIGNMA          Ls        MO
-ASSIGNMA          Ls       OAT
+ASSIGNMA        Rock     STONE
+ASSIGNMA       WATER       OWS
+ASSIGNMA       WATER       IWS
+ASSIGNMA       Steel       SST
+ASSIGNMA          Mo        MO
+ASSIGNMA     Acrylic       OAT
 ASSIGNMA          Ls        LS
-ASSIGNMA          Ls       IAT
+ASSIGNMA     Acrylic       IAT
 ASSIGNMA        GdLs      GDLS
+**ASSIGNMA          Ls     STONE
+**ASSIGNMA          Ls       OWS
+**ASSIGNMA          Ls       IWS
+**ASSIGNMA          Ls       SST
+**ASSIGNMA          Ls        MO
+**ASSIGNMA          Ls       OAT
+**ASSIGNMA          Ls        LS
+**ASSIGNMA          Ls       IAT
+**ASSIGNMA        GdLs      GDLS
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7.. 
 * ************************************ e+e- gamma **************************************
 EMFCUT        -1.E-3     1.E-3        0.        2.  @LASTREG
@@ -187,7 +187,7 @@ USERDUMP        100.                 0.0        1.
 USERDUMP      6.5E-3    1.5E-6    3.7E-3    1.5E-6                    UDQUENCH
 USERWEIG                                                 1.0
 * Set the random number seed
-RANDOMIZ          1.1235598764
+RANDOMIZ          1.1231098764
 * Set the number of primary histories to be simulated in the run
-START        10000.
+START        100000.
 STOP

@@ -380,8 +380,8 @@
                                         double arrayRpcX=(arrayRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalXCos+neuInitLocalX;
                                         double arrayRpcY=(arrayRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalYCos+neuInitLocalY;
                                         double arrayRpcZAfterSmear=567;
-                                        double arrayRpcXAfterSmear=arrayRpcX+rand()/(double)RAND_MAX*40+(-20);
-                                        double arrayRpcYAfterSmear=arrayRpcY+rand()/(double)RAND_MAX*40+(-20);
+                                        double arrayRpcXAfterSmear=arrayRpcX+rand()/(double)RAND_MAX*26+(-13);
+                                        double arrayRpcYAfterSmear=arrayRpcY+rand()/(double)RAND_MAX*26+(-13);
                                         //double arrayRpcZAfterSmear=567;
                                         //double arrayRpcXAfterSmear=arrayRpcX;
                                         //double arrayRpcYAfterSmear=arrayRpcY;

@@ -41,7 +41,7 @@ Double_t Spax,Spay,Spaz,SpadE,Spatime,SpaquenchedDepE=0;
 Int_t    SpaEventID,SpaFlukaNumber,SpaEnergyDepositedType,SpaMotherFlukaNumber,SpaMotherInteractionType,SpaVolume,SpaInitVolume=0;
 
 static TTree *NeuTree = 0;
-Double_t NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum,NeuMotherEnergy=0;
+Double_t NeuInitKineE,NeuInitTime,NeuInitLocalX,NeuInitLocalY,NeuInitLocalZ,NeuInitLocalXCos,NeuInitLocalYCos,NeuInitLocalZCos,NeuCapLocalX,NeuCapLocalY,NeuCapLocalZ,NeuCapTime,NeuCapGammaESum,NeuMotherEnergy=0;
 Int_t    NeuEventID,NeuCapGammaNum,NeuMotherFlukaNumber,NeuMotherInteractionType,NeuCapVolumeName,NeuCapTargetName,NeuInitVolumeName,NeuOriginVolumeNumber=0;
 
 //static Results *TheResults = 0;
@@ -120,6 +120,9 @@ extern "C" {
 	NeuTree->Branch("InitLocalX",&NeuInitLocalX,"InitLocalX/D");
 	NeuTree->Branch("InitLocalY",&NeuInitLocalY,"InitLocalY/D");
 	NeuTree->Branch("InitLocalZ",&NeuInitLocalZ,"InitLocalZ/D");
+	NeuTree->Branch("InitLocalXCos",&NeuInitLocalXCos,"InitLocalXCos/D");
+	NeuTree->Branch("InitLocalYCos",&NeuInitLocalYCos,"InitLocalYCos/D");
+	NeuTree->Branch("InitLocalZCos",&NeuInitLocalZCos,"InitLocalZCos/D");
 	NeuTree->Branch("CapLocalX",&NeuCapLocalX,"CapLocalX/D");
 	NeuTree->Branch("CapLocalY",&NeuCapLocalY,"CapLocalY/D");
 	NeuTree->Branch("CapLocalZ",&NeuCapLocalZ,"CapLocalZ/D");
@@ -267,13 +270,16 @@ extern "C" {
 #define fillneu FILLNEU
 #endif
 extern "C" {
-    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName,Int_t &m_NeuCapTargetName,Int_t &m_NeuInitVolumeName,Double_t &m_NeuMotherEnergy,Int_t &m_NeuOriginVolumeNumber)
+    void fillneu(Int_t    &m_NeuEventID,Double_t &m_NeuInitKineE,Double_t &m_NeuInitTime,Double_t &m_NeuInitLocalX,Double_t &m_NeuInitLocalY,Double_t &m_NeuInitLocalZ,Double_t &m_NeuInitLocalXCos,Double_t &m_NeuInitLocalYCos,Double_t &m_NeuInitLocalZCos,Double_t &m_NeuCapLocalX,Double_t &m_NeuCapLocalY,Double_t &m_NeuCapLocalZ,Double_t &m_NeuCapTime,Double_t &m_NeuCapGammaESum,Int_t &m_NeuCapGammaNum,Int_t &m_NeuMotherFlukaNumber,Int_t &m_NeuMotherInteractionType,Int_t &m_NeuCapVolumeName,Int_t &m_NeuCapTargetName,Int_t &m_NeuInitVolumeName,Double_t &m_NeuMotherEnergy,Int_t &m_NeuOriginVolumeNumber)
   {
 	NeuInitKineE              = m_NeuInitKineE;
 	NeuInitTime               = m_NeuInitTime;
 	NeuInitLocalX             = m_NeuInitLocalX;
 	NeuInitLocalY             = m_NeuInitLocalY;
 	NeuInitLocalZ             = m_NeuInitLocalZ;
+	NeuInitLocalXCos             = m_NeuInitLocalXCos;
+	NeuInitLocalYCos             = m_NeuInitLocalYCos;
+	NeuInitLocalZCos             = m_NeuInitLocalZCos;
 	NeuCapLocalX              = m_NeuCapLocalX;
 	NeuCapLocalY              = m_NeuCapLocalY;
 	NeuCapLocalZ              = m_NeuCapLocalZ;
