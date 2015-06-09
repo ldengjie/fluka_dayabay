@@ -30,7 +30,7 @@
       INCLUDE '(IMGDRAW)'
 
 *muon
-      NeuNum=0 
+      NeuNum=1 
       NeuNum2=0 
       IsoNum=0 
       MuInitT=0 

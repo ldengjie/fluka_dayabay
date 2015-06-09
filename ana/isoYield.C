@@ -1,6 +1,6 @@
 {
-    int rootNum=4000;
-    string dataVer[4]={"PART10"};
+    int rootNum=1000;
+    string dataVer[4]={"PART30"};
     string nameStr;
     double GdMuonRate=21.*0.6;
     double density=0.8550;
@@ -16,7 +16,7 @@
     double xi_time[4]={0.};
     double xi_mu[4]={0.};
     cout<<"begin "<<endl;
-    for( int im=1;im<2;im++  )
+    for( int im=0;im<1;im++  )
     {
         cout<<"im  : "<<im<<endl;
 
@@ -84,13 +84,14 @@
 
         cout<<"loop  "<<endl;
         //loop for counting
-        for( int i=3001; i<=rootNum; i++ )
+        for( int i=0001; i<=rootNum; i++ )
         //for( int i=3001; i<=8000; i++ )
         {
-            nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
+            //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
+            nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/rootFile/fluSim_%06d.root",dataVer[0].c_str(),i);
             //if( i%100==0 )
             //{
-            std::cout<<"filename : "<<nameStr<<endl;
+            //std::cout<<"filename : "<<nameStr<<endl;
             //} 
             TFile* f= new TFile(nameStr.c_str());
             if( f->IsZombie() )
@@ -147,6 +148,9 @@
                 double neuInitLocalX;
                 double neuInitLocalY;
                 double neuInitLocalZ;
+                double neuInitLocalXCos;
+                double neuInitLocalYCos;
+                double neuInitLocalZCos;
                 double neuCapLocalX;
                 double neuCapLocalY;
                 double neuCapLocalZ;
@@ -164,6 +168,9 @@
                 neut->SetBranchAddress("InitLocalX",&neuInitLocalX);
                 neut->SetBranchAddress("InitLocalY",&neuInitLocalY);
                 neut->SetBranchAddress("InitLocalZ",&neuInitLocalZ);
+                neut->SetBranchAddress("InitLocalXCos",&neuInitLocalXCos);
+                neut->SetBranchAddress("InitLocalYCos",&neuInitLocalYCos);
+                neut->SetBranchAddress("InitLocalZCos",&neuInitLocalZCos);
                 neut->SetBranchAddress("CapLocalX",&neuCapLocalX);
                 neut->SetBranchAddress("CapLocalY",&neuCapLocalY);
                 neut->SetBranchAddress("CapLocalZ",&neuCapLocalZ);
@@ -322,6 +329,8 @@
                         if( neuOriginVolumeNumber>=anaDet)
                         {
                             desMuInducedNeuNum++;
+                            //cout<<"neuInitKineE,neuInitLocalX,neuInitLocalY,neuInitLocalZ,neuInitLocalXCos,neuInitLocalYCos,neuInitLocalZCos : "<< neuInitKineE<<","<<neuInitLocalX<<","<<neuInitLocalY<<","<<neuInitLocalZ<<","<<neuInitLocalXCos<<","<<neuInitLocalYCos<<","<<neuInitLocalZCos<<endl;
+                            cout<<"  "<<neuInitKineE<<"    "<<neuInitLocalX<<"    "<<neuInitLocalY<<"    "<<neuInitLocalZ<<"    "<<neuInitLocalXCos<<"    "<<neuInitLocalYCos<<"    "<<neuInitLocalZCos<<endl;
                             desMuInducedNeuInitVol[neuInitVolumeName]++;
                         }
                         //captured on volume 7

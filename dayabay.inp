@@ -6,8 +6,8 @@ GLOBAL         1000.       -1.       0.0        1.        1.
 DEFAULTS                                                              PRECISIO
 * ************************************ sources *****************************************
 * Maxmium energy of muon is 8764.80967GeV
-BEAM         -8888.0                                                  MUON+
-*BEAM          -1.025                                                  NEUTRON
+*BEAM         -8888.0                                                  MUON+
+BEAM          -8888.                                                  NEUTRON
 *BEAMPOS         300.       0.0     9950.                              NEGATIVE
 * call source.f
 SOURCE
@@ -179,5 +179,6 @@ USERWEIG                                                 1.0
 * Set the random number seed
 RANDOMIZ          1.1231098764
 * Set the number of primary histories to be simulated in the run
-START        100000.
+*START         30900.
+START         9.
 STOP
