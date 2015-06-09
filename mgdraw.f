@@ -89,6 +89,7 @@ C      endif
          ELSE
             NeuInitE(ISPUSR(3))=ETRACK-AM(8)
          ENDIF 
+         NeuInitC(ISPUSR(3),1:3)=[CXTRCK,CYTRCK,CZTRCK]
         endif
        else
       WRITE(*,*) 'error:ISPUSR(3).eq.0'
@@ -234,6 +235,7 @@ C      endif
 C        WRITE(*,*) I,NeuInitE(I)
         call fillneu(NCASE,NeuInitE(I),NeuInitT(I)*1.e9,
      &NeuInitP(I,1),NeuInitP(I,2),NeuInitP(I,3),
+     &NeuInitC(I,1),NeuInitC(I,2),NeuInitC(I,3),
      &NeuCapP(I,1),NeuCapP(I,2),NeuCapP(I,3),
      &NeuCapT(I)*1.e9,NeuGamaE(I),NeuGamaN(I),
      &NeuMaID(I),NeuType(I),NeuCapVm(I),NeuCapTn(I),

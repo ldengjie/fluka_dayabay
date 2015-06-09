@@ -1,4 +1,4 @@
-*general
+* general
       CHARACTER*16 FILNAM
       CHARACTER*8 MRGNAM
       CHARACTER*8 NRGNAM
@@ -21,7 +21,8 @@
       PARAMETER ( MxNeuN = 100000)
       DOUBLE PRECISION,DIMENSION(MxNeuN) :: NeuInitT, NeuInitE
       DOUBLE PRECISION,DIMENSION(MxNeuN) ::NeuGamaE,NeuCapT,NeuMaE
-      DOUBLE PRECISION,DIMENSION(MxNeuN,3) ::NeuInitP,NeuCapP
+      DOUBLE PRECISION,DIMENSION(MxNeuN,3) ::NeuInitP,NeuCapP,
+     &NeuInitC
       INTEGER ,DIMENSION(MxNeuN)::NeuMaID,NeuType,NeuGamaN,
      &NeuCapVm,NeuCapTn,NeuInitVm,NeuDauVm
       DOUBLE PRECISION :: MaxNeuE
@@ -33,6 +34,7 @@
      &          DetInitP,
      &          USDP,DetLen,
      &          NeuInitT, NeuInitE,NeuInitP,NeuCapP,NeuGamaN,
+     &          NeuInitC,
      &          NeuCapT,NeuGamaE,NeuMaE,
      &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,NeuInitVm,
      &          NeuDauVm,IfDetIP,

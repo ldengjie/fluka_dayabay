@@ -20,6 +20,5 @@ foreach rootfile (`ls *.root`)
     mv $rootfile ../../rootFile/$newNamStr
     @ i = $i + 1
 end
-
 cd ..
-rm DATADIR -rf
+rmo DATADIR -rf

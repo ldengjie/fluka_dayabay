@@ -17,6 +17,8 @@
 #include "TROOT.h"
 #include "TBuffer.h"
 #include "TMemberInspector.h"
+#include "TInterpreter.h"
+#include "TVirtualMutex.h"
 #include "TError.h"
 
 #ifndef G__ROOT
@@ -73,7 +75,7 @@ namespace ROOT {
 } // end of namespace ROOT
 
 //______________________________________________________________________________
-TClass *Results::fgIsA = 0;  // static to hold class pointer
+atomic_TClass_ptr Results::fgIsA(0);  // static to hold class pointer
 
 //______________________________________________________________________________
 const char *Results::Class_Name()
@@ -94,15 +96,16 @@ int Results::ImplFileLine()
 }
 
 //______________________________________________________________________________
-void Results::Dictionary()
+TClass *Results::Dictionary()
 {
    fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::Results*)0x0)->GetClass();
+   return fgIsA;
 }
 
 //______________________________________________________________________________
 TClass *Results::Class()
 {
-   if (!fgIsA) fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::Results*)0x0)->GetClass();
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::Results*)0x0)->GetClass(); }
    return fgIsA;
 }
 
@@ -150,17 +153,25 @@ namespace {
 "/publicfs/dyb/data/userdata/lidj/flukaWork/LA/",
 0
     };
-    static const char* payloadCode = 
-"\n"
-"#ifndef G__VECTOR_HAS_CLASS_ITERATOR\n"
-"  #define G__VECTOR_HAS_CLASS_ITERATOR\n"
-"#endif\n"
-"\n"
-"#define _BACKWARD_BACKWARD_WARNING_H\n"
-"#include \"Results.h\"\n"
-"\n"
-"#undef  _BACKWARD_BACKWARD_WARNING_H\n"
-;
+    static const char* fwdDeclCode = 
+R"DICTFWDDCLS(
+#pragma clang diagnostic ignored "-Wkeyword-compat"
+#pragma clang diagnostic ignored "-Wignored-attributes"
+#pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
+extern int __Cling_Autoloading_Map;
+class __attribute__((annotate("$clingAutoload$Results.h")))  Results;
+)DICTFWDDCLS";
+    static const char* payloadCode = R"DICTPAYLOAD(
+
+#ifndef G__VECTOR_HAS_CLASS_ITERATOR
+  #define G__VECTOR_HAS_CLASS_ITERATOR 1
+#endif
+
+#define _BACKWARD_BACKWARD_WARNING_H
+#include "Results.h"
+
+#undef  _BACKWARD_BACKWARD_WARNING_H
+)DICTPAYLOAD";
     static const char* classesHeaders[]={
 "Results", payloadCode, "@",
 nullptr};
@@ -168,7 +179,7 @@ nullptr};
     static bool isInitialized = false;
     if (!isInitialized) {
       TROOT::RegisterModule("ResultsDict",
-        headers, includePaths, payloadCode,
+        headers, includePaths, payloadCode, fwdDeclCode,
         TriggerDictionaryInitialization_ResultsDict_Impl, {}, classesHeaders);
       isInitialized = true;
     }
