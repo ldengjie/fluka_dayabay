@@ -51,7 +51,7 @@ while( $i < $dirNum)
     echo  $n >NextSeedNum
     echo n: $n
     if ( $i == 1 ) then
-        cp fluka_$nowJobNum.sh $dataDir
+        cp fluka_LA_$nowJobNum.sh $dataDir
     endif
     popd
     echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_LA_$nowJobNum.sh >>../submit.sh.$j
