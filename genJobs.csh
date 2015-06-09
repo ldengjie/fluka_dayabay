@@ -63,5 +63,5 @@ cp $FLUWORK/*.inp bak
 cp $FLUWORK/*.f bak
 cp $FLUWORK/*.cpp bak
 cp $FLUWORK/*.h bak
-cp $FLUWORK/DayabayMuon bak
+cp $FLUWORK/LaMuon bak
 echo done!
