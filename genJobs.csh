@@ -3,13 +3,13 @@
 #已经运行过的run个数
 @ existedRun=000
 #这次需要运行的run个数
-@ totalRun=1000
+@ totalRun=1
 #每个文件夹下run个数
-@ runNumInDir=10
+@ runNumInDir=1
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
-set dataDir=$FLUWORK/data/PART30
+set dataDir=$FLUWORK/data/PART31
 
 if ( -e $dataDir ) then
     rm $dataDir/* -rf

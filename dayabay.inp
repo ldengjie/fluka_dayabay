@@ -180,5 +180,5 @@ USERWEIG                                                 1.0
 RANDOMIZ          1.1231098764
 * Set the number of primary histories to be simulated in the run
 *START         30900.
-START         9.
+START       200000.
 STOP

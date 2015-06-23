@@ -56,7 +56,7 @@
          NeuInitC(ISPUSR(3),1:3)=[CXTRCK,CYTRCK,CZTRCK]
         endif
        else
-      WRITE(*,*) 'error:ISPUSR(3).eq.0'
+C      WRITE(*,*) 'error:ISPUSR(3).eq.0'
        endif
       endif
       RETURN
@@ -97,6 +97,7 @@ C        WRITE(*,*) I,NeuInitE(I)
 
 *  +-------------------------------------------------------------------*
       ENTRY SODRAW
+        WRITE(*,*) 'SODRAW'
                 NeuInitE(1)=TKEFLK(1)
                 NeuInitP(1,1:3)=[XFLK(1),YFLK(1),ZFLK(1)]
                 NeuInitC(1,1:3)=[TXFLK(1),TYFLK(1),TZFLK(1)]

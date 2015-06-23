@@ -16,7 +16,7 @@
     double xi_time[4]={0.};
     double xi_mu[4]={0.};
     cout<<"begin "<<endl;
-    for( int im=0;im<1;im++  )
+    for( int im=1;im<2;im++  )
     {
         cout<<"im  : "<<im<<endl;
 
@@ -88,10 +88,10 @@
         //for( int i=3001; i<=8000; i++ )
         {
             //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
-            nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/rootFile/fluSim_%06d.root",dataVer[0].c_str(),i);
+            nameStr=Form("../data/%s/rootFile/fluSim_%06d.root",dataVer[0].c_str(),i);
             //if( i%100==0 )
             //{
-            //std::cout<<"filename : "<<nameStr<<endl;
+            std::cout<<"filename : "<<nameStr<<endl;
             //} 
             TFile* f= new TFile(nameStr.c_str());
             if( f->IsZombie() )
@@ -326,12 +326,22 @@
                     }
                     if( muTrackLength[muonSel][0]>0||  muTrackLength[muonSel][1]>0|| muTrackLength[muonSel][2]>0|| muTrackLength[muonSel][3]>0)
                     {
+                        int desMuInducedNeu=0;
                         if( neuOriginVolumeNumber>=anaDet)
                         {
                             desMuInducedNeuNum++;
-                            //cout<<"neuInitKineE,neuInitLocalX,neuInitLocalY,neuInitLocalZ,neuInitLocalXCos,neuInitLocalYCos,neuInitLocalZCos : "<< neuInitKineE<<","<<neuInitLocalX<<","<<neuInitLocalY<<","<<neuInitLocalZ<<","<<neuInitLocalXCos<<","<<neuInitLocalYCos<<","<<neuInitLocalZCos<<endl;
-                            cout<<"  "<<neuInitKineE<<"    "<<neuInitLocalX<<"    "<<neuInitLocalY<<"    "<<neuInitLocalZ<<"    "<<neuInitLocalXCos<<"    "<<neuInitLocalYCos<<"    "<<neuInitLocalZCos<<endl;
+                            desMuInducedNeu=1;
                             desMuInducedNeuInitVol[neuInitVolumeName]++;
+                        }
+                        double teleScopeRpcZ=767;
+                        double teleScopeRpcX=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalXCos+neuInitLocalX;
+                        double teleScopeRpcY=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalYCos+neuInitLocalY;
+                        if( teleScopeRpcX>=-110&&teleScopeRpcX<=110 )
+                        {
+                            if( (teleScopeRpcY>=490&&teleScopeRpcY<=710)||(teleScopeRpcY>=-710&&teleScopeRpcY<=490) )
+                            {
+                                cout<<"  "<<neuInitKineE<<" "<<neuInitLocalX<<" "<<neuInitLocalY<<" "<<neuInitLocalZ<<" "<<neuInitLocalXCos<<" "<<neuInitLocalYCos<<" "<<neuInitLocalZCos<<" "<<desMuInducedNeu<<" "<<muInitLocalX<<" "<<muInitLocalY<<" "<<muInitLocalZ<<" "<<muInitLocalXCos<<" "<<muInitLocalYCos<<" "<<muInitLocalZCos <<endl;
+                            }
                         }
                         //captured on volume 7
                         if( neuCapVolumeName==7 && muTrackLength[muonSel][capDet-1]>0 )
@@ -375,9 +385,9 @@
                                         (muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))+
                                         (muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX)));
                                 capDis->Fill(disV);
-                                double teleScopeRpcZ=767;
-                                double teleScopeRpcX=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalXCos+neuInitLocalX;
-                                double teleScopeRpcY=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalYCos+neuInitLocalY;
+                                //double teleScopeRpcZ=767;
+                                //double teleScopeRpcX=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalXCos+neuInitLocalX;
+                                //double teleScopeRpcY=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalYCos+neuInitLocalY;
                                 if( teleScopeRpcX>=-110&&teleScopeRpcX<=110 )
                                 {
                                     if( (teleScopeRpcY>=490&&teleScopeRpcY<=710)||(teleScopeRpcY>=-710&&teleScopeRpcY<=490) )

@@ -36,7 +36,7 @@
       LOGICAL LFIRST
       DATA LFIRST / .TRUE. /
 *
-      PARAMETER(NLINES = 30990,MaxP=5)
+      PARAMETER(NLINES = 340000,MaxP=5)
       DIMENSION Enrgy(NLINES), PosX(NLINES), PosY(NLINES),PosZ(NLINES),
      &CosX(NLINES), CosY(NLINES),CosZ(NLINES)
       SAVE LFIRST, Enrgy,PosX,PosY,PosZ,CosX,CosY,CosZ
@@ -57,8 +57,8 @@
         DO I = 1, NLINES
            READ(88,*) Enrgy(I),PosX(I),PosY(I),PosZ(I),
      &CosX(I),CosY(I),CosZ(I)
-      WRITE(*,*) Enrgy(I),PosX(I),PosY(I),PosZ(I),
-     &CosX(I),CosY(I),CosZ(I)
+C      WRITE(*,*) Enrgy(I),PosX(I),PosY(I),PosZ(I),
+C     &CosX(I),CosY(I),CosZ(I)
         END DO
         CLOSE(88)
       END IF
