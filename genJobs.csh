@@ -3,13 +3,13 @@
 #已经运行过的run个数
 @ existedRun=000
 #这次需要运行的run个数
-@ totalRun=1
+@ totalRun=300
 #每个文件夹下run个数
 @ runNumInDir=1
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
-set dataDir=$FLUWORK/data/PART31
+set dataDir=$FLUWORK/data/PART33
 
 if ( -e $dataDir ) then
     rm $dataDir/* -rf
@@ -34,7 +34,7 @@ while( $i < $dirNum)
     echo $dirNamStr
     mkdir -p $dirNamStr
     pushd $dirNamStr 
-    sed -e "s#1231098764#${newseed}#g" $FLUWORK/dayabay.inp>dayabay.inp
+#sed -e "s#1231098764#${newseed}#g" $FLUWORK/dayabay.inp>dayabay.inp
     set nowDir=`pwd`
     if (  $runNumInDir % 10 == 0 ) then
         @ n = 1 

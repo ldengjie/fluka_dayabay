@@ -35,6 +35,8 @@
 ********************************************************************
       LOGICAL LFIRST
       DATA LFIRST / .TRUE. /
+      DATA IFrac / 0 /
+      DATA NexIFrac / 0 /
 *
       PARAMETER(NLINES = 340000,MaxP=5)
       DIMENSION Enrgy(NLINES), PosX(NLINES), PosY(NLINES),PosZ(NLINES),
@@ -61,7 +63,16 @@ C      WRITE(*,*) Enrgy(I),PosX(I),PosY(I),PosZ(I),
 C     &CosX(I),CosY(I),CosZ(I)
         END DO
         CLOSE(88)
+        OPEN(UNIT=89,FILE="../NeuEAddFrac",STATUS="OLD")
+           READ(89,*) IFrac 
+        CLOSE(89)
+        WRITE(*,*) "IFrac:",IFrac
+        NexIFrac=IFrac+0.01
+        OPEN(UNIT=99,FILE="../NeuEAddFrac",STATUS="REPLACE")
+        WRITE(99,*) NexIFrac
+        CLOSE(99)
       END IF
+C      Enrgy(1)=1
 *  |
 *  +-------------------------------------------------------------------*
 *  Push one source particle to the stack. Note that you could as well
@@ -142,7 +153,7 @@ C     &CosX(I),CosY(I),CosZ(I)
       AKNSHR (NPFLKA) = -TWOTWO
 
 * Kinetic energy of the particle (GeV)
-      TKEFLK (NPFLKA) = Enrgy(NPFLKA)
+      TKEFLK (NPFLKA) = Enrgy(NPFLKA)*IFrac
 * Particle momentum
       PMOFLK (NPFLKA) = SQRT ( TKEFLK (NPFLKA) * ( TKEFLK (NPFLKA)
      &                       + TWOTWO * AM (IONID) ) )

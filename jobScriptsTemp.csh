@@ -21,4 +21,4 @@ foreach rootfile (`ls *.root`)
     @ i = $i + 1
 end
 cd ..
-rmo DATADIR -rf
+#rmo DATADIR -rf
