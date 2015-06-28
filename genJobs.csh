@@ -34,8 +34,8 @@ while( $i < $dirNum)
     echo $dirNamStr
     mkdir -p $dirNamStr
     pushd $dirNamStr 
-#sed -e "s#1231098764#${newseed}#g" $FLUWORK/LA.inp>LA.inp
-    sed -e "s#1231098764#1231098764#g" $FLUWORK/LA.inp>LA.inp
+#sed -e "s#1231098764#${newseed}#g" $FLUWORK/FAR.inp>FAR.inp
+    sed -e "s#1231098764#1231098764#g" $FLUWORK/FAR.inp>FAR.inp
     set nowDir=`pwd`
     if (  $runNumInDir % 10 == 0 ) then
         @ n = 1 
@@ -64,5 +64,5 @@ cp $FLUWORK/*.inp bak
 cp $FLUWORK/*.f bak
 cp $FLUWORK/*.cpp bak
 cp $FLUWORK/*.h bak
-cp $FLUWORK/LaMuon bak
+cp $FLUWORK/FarMuon bak
 echo done!

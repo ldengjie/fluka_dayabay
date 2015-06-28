@@ -21,7 +21,7 @@
         struct timeval allStartTime,allFinishTime;
         double timeInterval=0.;
         gettimeofday( &allStartTime, NULL );
-        nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/PART10/rootFile/fluSim_%06d_sort.root",fi);
+        nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/FAR/data/PART10/rootFile/fluSim_%06d_sort.root",fi);
         //cout<<"nameStr  : "<<nameStr<<endl;
         TFile* f= new TFile(nameStr.c_str());
         if( f->IsZombie() )

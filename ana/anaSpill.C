@@ -29,8 +29,8 @@
     for( int fi=001 ; fi<=2; fi++ )
     {
         TH1F* capDis=new TH1F("capDis","distance between neutron captured positon and muon track",41,40,450);//cm
-        //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/PART34/rootFile/fluSim_%06d.root",fi);
-        nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/LA%03d_sim.root",fi);
+        //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/FAR/data/PART34/rootFile/fluSim_%06d.root",fi);
+        nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/FAR/FAR%03d_sim.root",fi);
         //cout<<"nameStr  : "<<nameStr<<endl;
         int capNum=0;
         TFile* f= new TFile(nameStr.c_str());

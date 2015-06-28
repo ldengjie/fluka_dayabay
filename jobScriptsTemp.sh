@@ -16,7 +16,7 @@ export FLUWORK=WORKPATH
 export LD_LIBRARY_PATH=${FLUWORK}:$LD_LIBRARY_PATH
 
 cd DATADIR
-rfluka -e $FLUWORK/LaMuon -N0 -M10 LA 
+rfluka -e $FLUWORK/FarMuon -N0 -M10 FAR 
 
 startRunNum=STARTRUNNUM
 
