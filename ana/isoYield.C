@@ -87,7 +87,7 @@
         for( int i=0001; i<=rootNum; i++ )
         //for( int i=3001; i<=8000; i++ )
         {
-            //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
+            //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/LA/data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
             nameStr=Form("../data/%s/rootFile/fluSim_%06d.root",dataVer[0].c_str(),i);
             //if( i%100==0 )
             //{

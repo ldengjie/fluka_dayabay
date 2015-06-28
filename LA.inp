@@ -6,9 +6,7 @@ GLOBAL         1000.       -1.       0.0        1.        1.
 DEFAULTS                                                              PRECISIO
 * ************************************ sources *****************************************
 * Maxmium energy of muon is 8764.80967GeV
-*BEAM         -8888.0                                                  MUON+
 BEAM          -8888.                                                  NEUTRON
-*BEAMPOS         300.       0.0     9950.                              NEGATIVE
 * call source.f
 SOURCE
 * ************************************ geometry ****************************************
@@ -20,7 +18,7 @@ SPH blkHole    0.0 0.0 0.0 100000.0
 SPH vacuum     0.0 0.0 0.0 30000.0
 RPP hall1      -2800. -1066. -800. 700. 500. 900.
 RPP hall2      -1068. 1610. -800. 700. 500. 3000.
-RPP hall3      1590. 2723. -800. 700. 500. 1210.
+RPP hall3      1590. 2230. -800. 700. 500. 3000.
 RPP hall4      -1150. 1050. -2000. -790. 500. 900.
 RPP stone6     -750. -300. -1800. -800. 500. 900.
 RPP stone7     100. 550. -1800. -800. 500. 900.
@@ -49,7 +47,7 @@ RCC ad2rcc2    -300. 0.0 -156.5 0.0 0.0 312. 156.
 RCC ad2rcc1    -300. 0.0 -155. 0.0 0.0 310. 155.
 RPP stone1     -3100. -766. -1100. 1000. 200. 1200.
 RPP stone2     -1368. 1910. -1100. 1000. 200. 3300.
-RPP stone3     1290. 3023. -1100. 1000. 200. 1510.
+RPP stone3     1290. 2530.  -1100. 1000. 200. 3300.
 RPP stone4     -1450. 1350. -2300. -490. 200. 1200.
 RPP stone5     -1100. 1100. -800. 800. -800. 810.
 END
@@ -179,6 +177,5 @@ USERWEIG                                                 1.0
 * Set the random number seed
 RANDOMIZ          1.1231098764
 * Set the number of primary histories to be simulated in the run
-*START         30900.
 START       200000.
 STOP
