@@ -1,4 +1,4 @@
-*=== Source of muons at dayabay     
+*=== Source of muons at LA     
 *=== Auther  : lidengjie@ihep.ac.cn 
 *=== Created : Thursday Aug 14 2014 
 *
@@ -56,7 +56,7 @@
          LUSSRC = .TRUE.
 *     *** User initialization ***
         OPEN(UNIT=88,FILE="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaW
-     &ork/dayabay/neutronGen.DYB",STATUS="OLD")
+     &ork/LA/neutronGen.LA",STATUS="OLD")
         DO I = 1, NLINES
            READ(88,*) Enrgy(I),PosX(I),PosY(I),PosZ(I),
      &CosX(I),CosY(I),CosZ(I)
@@ -65,7 +65,7 @@ C     &CosX(I),CosY(I),CosZ(I)
         END DO
         CLOSE(88)
         OPEN(UNIT=89,FILE="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaW
-     &ork/dayabay/NeuEAddFrac",STATUS="OLD")
+     &ork/LA/NeuEAddFrac",STATUS="OLD")
            READ(89,*) AFrac 
         CLOSE(89)
         WRITE(*,*) "AFrac:",AFrac
@@ -73,7 +73,7 @@ C     &CosX(I),CosY(I),CosZ(I)
 C        ANexFrac=AFrac + 1
 C        ANexFrac=AFrac + 1./100
         OPEN(UNIT=99,FILE="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaW
-     &ork/dayabay/NeuEAddFrac",STATUS="REPLACE")
+     &ork/LA/NeuEAddFrac",STATUS="REPLACE")
         WRITE(99,*) ANexFrac
         CLOSE(99)
         WRITE(*,*) "ANexFrac:",ANexFrac

@@ -16,7 +16,7 @@ export FLUWORK=WORKPATH
 export LD_LIBRARY_PATH=${FLUWORK}:$LD_LIBRARY_PATH
 
 cd DATADIR
-rfluka -e $FLUWORK/DayabayMuon -N0 -M10 dayabay 
+rfluka -e $FLUWORK/LaMuon -N0 -M10 LA 
 
 startRunNum=STARTRUNNUM
 
