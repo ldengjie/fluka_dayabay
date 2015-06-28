@@ -334,8 +334,8 @@
                             desMuInducedNeuInitVol[neuInitVolumeName]++;
                         }
                         double teleScopeRpcZ=767;
-                        double teleScopeRpcX=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalXCos+neuInitLocalX;
-                        double teleScopeRpcY=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalYCos+neuInitLocalY;
+                        double teleScopeRpcX=(teleScopeRpcZ-muInitLocalZ)/muInitLocalZCos*muInitLocalXCos+muInitLocalX;
+                        double teleScopeRpcY=(teleScopeRpcZ-muInitLocalZ)/muInitLocalZCos*muInitLocalYCos+muInitLocalY;
                         if( teleScopeRpcX>=-110&&teleScopeRpcX<=110 )
                         {
                             if( (teleScopeRpcY>=490&&teleScopeRpcY<=710)||(teleScopeRpcY>=-710&&teleScopeRpcY<=490) )

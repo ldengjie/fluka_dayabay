@@ -97,7 +97,7 @@ C        WRITE(*,*) I,NeuInitE(I)
 
 *  +-------------------------------------------------------------------*
       ENTRY SODRAW
-        WRITE(*,*) 'SODRAW'
+C        WRITE(*,*) 'SODRAW',TKEFLK(1)
                 NeuInitE(1)=TKEFLK(1)
                 NeuInitP(1,1:3)=[XFLK(1),YFLK(1),ZFLK(1)]
                 NeuInitC(1,1:3)=[TXFLK(1),TYFLK(1),TZFLK(1)]
@@ -145,29 +145,34 @@ C      endif
       if(JTRACK.eq.8 .and. ICODE.eq.300)then
           OnlyGamm=0
           DO IP = 1, NP 
-             if(KPART(IP).ne.7) then
-                 OnlyGamm=0
-                 exit
-             else
-                 OnlyGamm=OnlyGamm+1
-             endif
+          if(KPART(IP).ne.7) then
+              OnlyGamm=0
+              exit
+          else
+              OnlyGamm=OnlyGamm+1
+          endif
           END DO 
           if(OnlyGamm.ge.1) then
-            if(ISPUSR(3).ne.0) then
-              NeuGamaE(ISPUSR(3))=0
-              NeuGamaN(ISPUSR(3))=0
-             DO IP = 1, NP 
-                 if(KPART(IP).eq.7) then
-                     NeuGamaN(ISPUSR(3))=NeuGamaN(ISPUSR(3))+1
-                     NeuGamaE(ISPUSR(3))=NeuGamaE(ISPUSR(3))+TKI (IP)
-                     NeuCapT(ISPUSR(3))=AGESEC(IP)+ATRACK !usually AGESEC(IP)==0
-                     NeuCapP(ISPUSR(3),1:3)=[XSCO,YSCO,ZSCO]
-                     NeuCapVm(ISPUSR(3))=MREG
-                     NeuCapTn(ISPUSR(3))=MMTRCK
-                 endif
-             END DO 
-C             WRITE(*,*) 'Neutron captured on :',MMTRCK
-            endif
+              if(ISPUSR(3).ne.0) then
+                  NeuID=ISPUSR(3)
+              else
+                  NeuID=1
+              endif
+C              WRITE(*,*) 'OnlyGamm',NeuID,LOFLK(1)
+              NeuGamaE(NeuID)=0
+              NeuGamaN(NeuID)=0
+              DO IP = 1, NP 
+              if(KPART(IP).eq.7) then
+                  NeuGamaN(NeuID)=NeuGamaN(NeuID)+1
+                  NeuGamaE(NeuID)=NeuGamaE(NeuID)+TKI (IP)
+                  NeuCapT(NeuID)=AGESEC(IP)+ATRACK !usually AGESEC(IP)==0
+                  NeuCapP(NeuID,1:3)=[XSCO,YSCO,ZSCO]
+                  NeuCapVm(NeuID)=MREG
+                  NeuCapTn(NeuID)=MMTRCK
+              endif
+              END DO 
+C              WRITE(*,*) 'Neutron captured on :',MMTRCK,
+C     &NeuCapP(NeuID,1),NeuCapP(NeuID,2),NeuCapP(NeuID,3)
           endif
       endif
       RETURN

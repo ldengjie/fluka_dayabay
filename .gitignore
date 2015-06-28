@@ -6,6 +6,7 @@
 !*.C
 !*.h
 !*.csh
+!*.sh
 !.gitignore
 !Makefile
 !(IMGDRAW)

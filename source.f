@@ -35,13 +35,14 @@
 ********************************************************************
       LOGICAL LFIRST
       DATA LFIRST / .TRUE. /
-      DATA IFrac / 0 /
-      DATA NexIFrac / 0 /
+      DATA AFrac / 0 /
+      DATA ANexFrac / 0 /
+      DATA ISrsNum / 0 /
 *
       PARAMETER(NLINES = 340000,MaxP=5)
       DIMENSION Enrgy(NLINES), PosX(NLINES), PosY(NLINES),PosZ(NLINES),
      &CosX(NLINES), CosY(NLINES),CosZ(NLINES)
-      SAVE LFIRST, Enrgy,PosX,PosY,PosZ,CosX,CosY,CosZ
+      SAVE ISrsNum,LFIRST, Enrgy,PosX,PosY,PosZ,CosX,CosY,CosZ
 *
 *======================================================================*
       NOMORE = 0
@@ -63,16 +64,22 @@ C      WRITE(*,*) Enrgy(I),PosX(I),PosY(I),PosZ(I),
 C     &CosX(I),CosY(I),CosZ(I)
         END DO
         CLOSE(88)
-        OPEN(UNIT=89,FILE="../NeuEAddFrac",STATUS="OLD")
-           READ(89,*) IFrac 
+        OPEN(UNIT=89,FILE="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaW
+     &ork/dayabay/NeuEAddFrac",STATUS="OLD")
+           READ(89,*) AFrac 
         CLOSE(89)
-        WRITE(*,*) "IFrac:",IFrac
-        NexIFrac=IFrac+0.01
-        OPEN(UNIT=99,FILE="../NeuEAddFrac",STATUS="REPLACE")
-        WRITE(99,*) NexIFrac
+        WRITE(*,*) "AFrac:",AFrac
+        ANexFrac=AFrac+0.01
+C        ANexFrac=AFrac + 1
+C        ANexFrac=AFrac + 1./100
+        OPEN(UNIT=99,FILE="/afs/ihep.ac.cn/users/l/lidj/largedata/flukaW
+     &ork/dayabay/NeuEAddFrac",STATUS="REPLACE")
+        WRITE(99,*) ANexFrac
         CLOSE(99)
+        WRITE(*,*) "ANexFrac:",ANexFrac
       END IF
-C      Enrgy(1)=1
+       ISrsNum = ISrsNum + 1
+      Enrgy(1)=1
 *  |
 *  +-------------------------------------------------------------------*
 *  Push one source particle to the stack. Note that you could as well
@@ -153,20 +160,22 @@ C      Enrgy(1)=1
       AKNSHR (NPFLKA) = -TWOTWO
 
 * Kinetic energy of the particle (GeV)
-      TKEFLK (NPFLKA) = Enrgy(NPFLKA)*IFrac
+
+C      WRITE(*,*) "Enrgy(ISrsNum):",ISrsNum,Enrgy(ISrsNum)
+      TKEFLK (NPFLKA) = Enrgy(ISrsNum)*AFrac
 * Particle momentum
       PMOFLK (NPFLKA) = SQRT ( TKEFLK (NPFLKA) * ( TKEFLK (NPFLKA)
      &                       + TWOTWO * AM (IONID) ) )
 * Cosines (tx,ty,tz)
-      TXFLK  (NPFLKA) =CosX(NPFLKA) 
-      TYFLK  (NPFLKA) =CosY(NPFLKA)
-      TZFLK  (NPFLKA) =CosZ(NPFLKA)
+      TXFLK  (NPFLKA) =CosX(ISrsNum) 
+      TYFLK  (NPFLKA) =CosY(ISrsNum)
+      TZFLK  (NPFLKA) =CosZ(ISrsNum)
 C      TZFLK  (NPFLKA) = -SQRT ( ONEONE - TXFLK (NPFLKA)**2
 C     &                       - TYFLK (NPFLKA)**2 ) !==ProVec(3)
 * Particle coordinates
-      XFLK   (NPFLKA) =PosX(NPFLKA)
-      YFLK   (NPFLKA) =PosY(NPFLKA)
-      ZFLK   (NPFLKA) =PosZ(NPFLKA)
+      XFLK   (NPFLKA) =PosX(ISrsNum)
+      YFLK   (NPFLKA) =PosY(ISrsNum)
+      ZFLK   (NPFLKA) =PosZ(ISrsNum)
 *==
 *  Polarization cosines:
       TXPOL  (NPFLKA) = -TWOTWO

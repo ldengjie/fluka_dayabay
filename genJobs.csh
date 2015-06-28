@@ -1,15 +1,15 @@
 #!/brn/tcsh
 
 #已经运行过的run个数
-@ existedRun=000
+@ existedRun=0
 #这次需要运行的run个数
-@ totalRun=300
+@ totalRun=1000
 #每个文件夹下run个数
 @ runNumInDir=1
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
-set dataDir=$FLUWORK/data/PART33
+set dataDir=$FLUWORK/data/PART34
 
 if ( -e $dataDir ) then
     rm $dataDir/* -rf
@@ -35,6 +35,7 @@ while( $i < $dirNum)
     mkdir -p $dirNamStr
     pushd $dirNamStr 
 #sed -e "s#1231098764#${newseed}#g" $FLUWORK/dayabay.inp>dayabay.inp
+    sed -e "s#1231098764#1231098764#g" $FLUWORK/dayabay.inp>dayabay.inp
     set nowDir=`pwd`
     if (  $runNumInDir % 10 == 0 ) then
         @ n = 1 
@@ -54,7 +55,7 @@ while( $i < $dirNum)
         cp fluka_$nowJobNum.sh $dataDir
     endif
     popd
-    echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_$nowJobNum.sh >>../submit.sh.$j
+    echo qsub -q dybshortq jobScripts/$dirNamStr/fluka_$nowJobNum.sh >>../submit.sh.$j
 end
 cd $dataDir 
 echo doing backup 
