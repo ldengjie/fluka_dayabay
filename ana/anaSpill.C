@@ -25,12 +25,11 @@
     infile.close();
     std::cout<<"done "<<endl;
     string nameStr;
-    //for( int fi=001 ; fi<=1000 ; fi++ )
-    for( int fi=001 ; fi<=2; fi++ )
+    for( int fi=134 ; fi<=134 ; fi++ )
+    //for( int fi=001 ; fi<=2; fi++ )
     {
-        TH1F* capDis=new TH1F("capDis","distance between neutron captured positon and muon track",41,40,450);//cm
-        //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/PART34/rootFile/fluSim_%06d.root",fi);
-        nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/dayabay%03d_sim.root",fi);
+        nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/PART34/rootFile/fluSim_%06d.root",fi);
+        //nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/dayabay%03d_sim.root",fi);
         //cout<<"nameStr  : "<<nameStr<<endl;
         int capNum=0;
         TFile* f= new TFile(nameStr.c_str());
@@ -40,6 +39,7 @@
             delete f;
             continue;
         }
+        TH1F* capDis=new TH1F("capDis","distance between neutron captured positon and muon track",41,40,450);//cm
         TTree* neut= (TTree*)f->Get("Neutron");
         int neutnum=neut->GetEntries();
         Int_t neuEventID;
@@ -89,7 +89,6 @@
             if( ni==0 )
             {
                 NeuEFrac=neuInitKineE;
-                //cout<<" NeuEFrac  : "<<NeuEFrac <<endl;
                 continue;
             }
     //0 neuInitKineE,1 neuInitLocalX,2 neuInitLocalY,3 neuInitLocalZ,4 neuInitLocalXCos,5 neuInitLocalYCos,6 neuInitLocalZCos,7 desMuInducedNeu,8 muInitLocalX,9 muInitLocalY,10 muInitLocalZ,11 muInitLocalXCos,12 muInitLocalYCos,13 muInitLocalZCos
@@ -100,27 +99,50 @@
                         (neuInf[ni][12]*(neuCapLocalZ-neuInf[ni][10])-neuInf[ni][13]*(neuCapLocalY-neuInf[ni][9]))*(neuInf[ni][12]*(neuCapLocalZ-neuInf[ni][10])-neuInf[ni][13]*(neuCapLocalY-neuInf[ni][9]))+
                         (neuInf[ni][11]*(neuCapLocalZ-neuInf[ni][10])-neuInf[ni][13]*(neuCapLocalX-neuInf[ni][8]))*(neuInf[ni][11]*(neuCapLocalZ-neuInf[ni][10])-neuInf[ni][13]*(neuCapLocalX-neuInf[ni][8]))+
                         (neuInf[ni][11]*(neuCapLocalY-neuInf[ni][9])-neuInf[ni][12]*(neuCapLocalX-neuInf[ni][8]))*(neuInf[ni][11]*(neuCapLocalY-neuInf[ni][9])-neuInf[ni][12]*(neuCapLocalX-neuInf[ni][8])));
-                //cout<<"neuCapLocalX  : "<<neuCapLocalX<<endl;
-                //cout<<"neuCapLocalY  : "<<neuCapLocalY<<endl;
-                //cout<<"neuCapLocalZ  : "<<neuCapLocalZ<<endl;
-                //for( int nii=8 ; nii<=13 ; nii++ )
-                //{
-                //cout<<"neuInf[ni]  : "<<neuInf[ni][nii]<<endl;
-                //}
-                //cout<<"disV  : "<<disV<<endl;
-                //
-                //if( disV>0 )
-                //{
-                //cout<<"disV  : "<<disV<<endl;
-                //}
                 capDis->Fill(disV);
             }
         }
-        //capDis->Draw();
+        if(abs( NeuEFrac -1)<0.001)
+        {
+            double xl[1000]={0.};
+            double yl[1000]={0.};
+            double xh[1000]={0.};
+            double yh[1000]={0.};
+            for( int ci=1 ; ci<=41 ; ci++ )
+            {
+               xl[ci-1]=capDis->GetBinLowEdge(ci)-10;
+               yl[ci-1]=capDis->GetBinContent(ci)-sqrt(capDis->GetBinContent(ci));
+               xh[ci-1]=capDis->GetBinLowEdge(ci+1)+10;
+               yh[ci-1]=capDis->GetBinContent(ci)+sqrt(capDis->GetBinContent(ci));
+            }
+            TGraph* gl=new TGraph(41,xl,yl);
+            TGraph* gh=new TGraph(41,xh,yh);
+            gl->Fit("expo","q");
+            gh->Fit("expo","q");
+            TF1* fl=gl->GetFunction("expo");
+            TF1* fh=gh->GetFunction("expo");
+            double p1l=fl->GetParameter(1);
+            double p1h=fh->GetParameter(1);
+            cout<<"Find  "<<"p1l~p1h  : "<<p1l<<"~"<<p1h<<endl;
+            //delete fl;
+            //delete fh;
+            //delete gl;
+            //delete gh;
+            
+        }else
+        {
+            cout<<"+ NeuEFrac  : "<<NeuEFrac<<endl;
+        }
+        capDis->Draw();
         capDis->Fit("expo","q");
         TF1 *tf=capDis->GetFunction("expo");
         double par0=tf->GetParameter(0);
         double par1=tf->GetParameter(1);
         cout<< " "<<NeuEFrac<<" ~ "<<par1<<" ("<<fi<<")"<<" Xi_spill  ~ "<<capNum<<"/"<<inducedNeuNum<<" "<<(double)capNum/inducedNeuNum<<endl;
+        //f->Close();
+        //delete tf;
+        //delete capDis;
+        //delete neut;
+        //delete f;
     }
 }

@@ -6,9 +6,7 @@ GLOBAL         1000.       -1.       0.0        1.        1.
 DEFAULTS                                                              PRECISIO
 * ************************************ sources *****************************************
 * Maxmium energy of muon is 8764.80967GeV
-*BEAM         -8888.0                                                  MUON+
 BEAM          -8888.                                                  NEUTRON
-*BEAMPOS         300.       0.0     9950.                              NEGATIVE
 * call source.f
 SOURCE
 * ************************************ geometry ****************************************
