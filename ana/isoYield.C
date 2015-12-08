@@ -1,5 +1,5 @@
 {
-    int rootNum=4000;
+    int rootNum=2000;
     string dataVer[4]={"PART10"};
     string nameStr;
     double GdMuonRate=21.*0.6;
@@ -16,7 +16,7 @@
     double xi_time[4]={0.};
     double xi_mu[4]={0.};
     cout<<"begin "<<endl;
-    for( int im=1;im<2;im++  )
+    for( int im=0;im<4;im++  )
     {
         cout<<"im  : "<<im<<endl;
 
@@ -25,6 +25,7 @@
         double adMuonLength=0.;
         int LsMuonNum=0;
         int neuNum=0;
+        int neuNum_all=0;
         int neuGdCapNum=0;
         int neuGdCapNumAfter=0;
         int neuNum2=0;
@@ -84,10 +85,9 @@
 
         cout<<"loop  "<<endl;
         //loop for counting
-        for( int i=3001; i<=rootNum; i++ )
-        //for( int i=3001; i<=8000; i++ )
+        for( int i=3001; i<=3000+rootNum; i++ )
         {
-            nameStr=Form("/afs/ihep.ac.cn/users/l/lidj/largedata/flukaWork/dayabay/data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
+            nameStr=Form("../data/%s/rootFile/fluSim_%06d_sort.root",dataVer[0].c_str(),i);
             //if( i%100==0 )
             //{
             std::cout<<"filename : "<<nameStr<<endl;
@@ -147,6 +147,9 @@
                 double neuInitLocalX;
                 double neuInitLocalY;
                 double neuInitLocalZ;
+                double neuInitLocalXCos;
+                double neuInitLocalYCos;
+                double neuInitLocalZCos;
                 double neuCapLocalX;
                 double neuCapLocalY;
                 double neuCapLocalZ;
@@ -164,6 +167,9 @@
                 neut->SetBranchAddress("InitLocalX",&neuInitLocalX);
                 neut->SetBranchAddress("InitLocalY",&neuInitLocalY);
                 neut->SetBranchAddress("InitLocalZ",&neuInitLocalZ);
+                neut->SetBranchAddress("InitLocalXCos",&neuInitLocalXCos);
+                neut->SetBranchAddress("InitLocalYCos",&neuInitLocalYCos);
+                neut->SetBranchAddress("InitLocalZCos",&neuInitLocalZCos);
                 neut->SetBranchAddress("CapLocalX",&neuCapLocalX);
                 neut->SetBranchAddress("CapLocalY",&neuCapLocalY);
                 neut->SetBranchAddress("CapLocalZ",&neuCapLocalZ);
@@ -258,6 +264,10 @@
                 for( int r=0 ; r<neutnum ; r++ )
                 {
                     neut->GetEntry(r);
+                    if( neuInitVolumeName>= anaDet)
+                    { 
+                        neuNum_all++;
+                    }
                     if( neuEventID!=lastNeuEventID )
                     {
                         lastNeuCapTime=0.;
@@ -319,10 +329,22 @@
                     }
                     if( muTrackLength[muonSel][0]>0||  muTrackLength[muonSel][1]>0|| muTrackLength[muonSel][2]>0|| muTrackLength[muonSel][3]>0)
                     {
+                        int desMuInducedNeu=0;
                         if( neuOriginVolumeNumber>=anaDet)
                         {
                             desMuInducedNeuNum++;
+                            desMuInducedNeu=1;
                             desMuInducedNeuInitVol[neuInitVolumeName]++;
+                        }
+                        double teleScopeRpcZ=767;
+                        double teleScopeRpcX=(teleScopeRpcZ-muInitLocalZ)/muInitLocalZCos*muInitLocalXCos+muInitLocalX;
+                        double teleScopeRpcY=(teleScopeRpcZ-muInitLocalZ)/muInitLocalZCos*muInitLocalYCos+muInitLocalY;
+                        if( teleScopeRpcX>=-110&&teleScopeRpcX<=110 )
+                        {
+                            if( (teleScopeRpcY>=490&&teleScopeRpcY<=710)||(teleScopeRpcY>=-710&&teleScopeRpcY<=490) )
+                            {
+                                //cout<<"  "<<neuInitKineE<<" "<<neuInitLocalX<<" "<<neuInitLocalY<<" "<<neuInitLocalZ<<" "<<neuInitLocalXCos<<" "<<neuInitLocalYCos<<" "<<neuInitLocalZCos<<" "<<desMuInducedNeu<<" "<<muInitLocalX<<" "<<muInitLocalY<<" "<<muInitLocalZ<<" "<<muInitLocalXCos<<" "<<muInitLocalYCos<<" "<<muInitLocalZCos <<endl;
+                            }
                         }
                         //captured on volume 7
                         if( neuCapVolumeName==7 && muTrackLength[muonSel][capDet-1]>0 )
@@ -366,9 +388,9 @@
                                         (muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalZ-muInitLocalZ)-muInitLocalZCos*(neuCapLocalX-muInitLocalX))+
                                         (muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX))*(muInitLocalXCos*(neuCapLocalY-muInitLocalY)-muInitLocalYCos*(neuCapLocalX-muInitLocalX)));
                                 capDis->Fill(disV);
-                                double teleScopeRpcZ=767;
-                                double teleScopeRpcX=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalXCos+neuInitLocalX;
-                                double teleScopeRpcY=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalYCos+neuInitLocalY;
+                                //double teleScopeRpcZ=767;
+                                //double teleScopeRpcX=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalXCos+neuInitLocalX;
+                                //double teleScopeRpcY=(teleScopeRpcZ-neuInitLocalZ)/muInitLocalZCos*muInitLocalYCos+neuInitLocalY;
                                 if( teleScopeRpcX>=-110&&teleScopeRpcX<=110 )
                                 {
                                     if( (teleScopeRpcY>=490&&teleScopeRpcY<=710)||(teleScopeRpcY>=-710&&teleScopeRpcY<=490) )
@@ -421,7 +443,7 @@
                             neuNum++;
                             if( neuMotherInteractionType==300 )
                             {
-                                cout<<"MotherInteractionType  : "<<neuMotherInteractionType<<endl;
+                                //cout<<"MotherInteractionType  : "<<neuMotherInteractionType<<endl;
                                 neuNum2++;
                             }
                             double disV=sqrt(
@@ -671,6 +693,8 @@
         cout<<"adMuonLength : "<<adMuonLength<<"   "<<adMuonLength/GdMuonNum<<" per muon"<<endl;
         cout<<"neuGdCapNum: "<<neuGdCapNum<<endl;
         cout<<"neuGdCapNumAfter: "<<neuGdCapNumAfter<<endl;
+        cout<<"neuNum_all: "<<neuNum_all<<endl;
+        cout<<"xi_geo=neuNum/neuNum_all : "<<(double)neuNum/neuNum_all<<endl;
         cout<<"capNeuNum  : "<<neuNum-neuNumOut+neuNumIn<<"="<<neuNum<<"-"<<neuNumOut<<"("<<(double)neuNumOut/neuNum*100 <<"%)+"<<neuNumIn<<"("<<(double)neuNumIn/neuNum*100 <<"%)"<<endl;
         cout<<"InitNeuNum : "<<neuNum<<"+-"<<sqrt(neuNum)<<"   "<<(double)neuNum/GdMuonNum <<" per muon" <<"   neuYield : "<<neuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<neuNum/liveTime<<" /day = "<<neuNum/liveTime/86400<<" Hz"<<endl;
         cout<<"desMuInducedNeuNum from GDLS : "<<desMuInducedNeuNum<<"+-"<<sqrt(desMuInducedNeuNum)<<"   "<<(double)desMuInducedNeuNum/GdMuonNum <<" per muon" <<"   neuYield : "<<desMuInducedNeuNum/adMuonLength/density*1.e5<<"e-05"<<" neuRate: "<<desMuInducedNeuNum/liveTime<<" /day = "<<desMuInducedNeuNum/liveTime/86400<<" Hz"<<endl;
