@@ -9,7 +9,8 @@
       INTEGER USDVol,USDDauVm
 *muon
       PARAMETER ( MaxDetN = 1000)
-      INTEGER NeuNum,IsoNum,MuCharge,IEMPTY,MuFinalV,NeuNum2,NeuCount
+      INTEGER NeuNum,IsoNum,MuCharge,IEMPTY,MuFinalV,NeuNum2,
+     &NeuCount,NowGen,MuId
       DOUBLE PRECISION :: MuInitT, MuInitE
       DOUBLE PRECISION,DIMENSION(MaxDetN,4) ::DetLen
       DOUBLE PRECISION,DIMENSION(3) ::MuInitP,MuInitTP,MuFinalP
@@ -39,5 +40,5 @@
      &          NeuMaID,NeuType,NeuCapVm,NeuCapTn,MaxNeuE,NeuInitVm,
      &          NeuDauVm,IfDetIP,
      &          FILNAM,MRGNAM,NRGNAM,NextSeedNum,NowVol,USDVol,USDDauVm,
-     &          NeuNum2,NeuCount,MuFinalV,IEMPTY
+     &          NeuNum2,NeuCount,NowGen,MuId,MuFinalV,IEMPTY
       SAVE / IMGDRAW /

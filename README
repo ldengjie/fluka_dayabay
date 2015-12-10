@@ -180,6 +180,23 @@ tip:
     1. L24 L31 L165 保持一致 1234898764,改变第5位+1
     2. L167,100000最佳，30分钟左右一个run
 
+    3. 长时间不允许，可能需要重新下载更新版本，重新安装，重新编译DayabayMuon
+        3.1 download
+        wget --no-check-certificate --http-user=fuid-7563 --http-passwd=5891200 https://www.fluka.org/packages/fluka2011.2c-linux-gfor64bitAA.tar.gz
+        3.2  
+        mkdir fluka
+        cd fluka
+        tar zxvf ../fluka2011.2b-linux-gfor64bitAA.tar.gz
+        3.3
+        setenv FLUPRO $PWD
+        setenv FLUFOR gfortran
+        或
+        export FLUPRO=$PWD
+        export FLUFOR=gfortran
+        3.4
+        make
+        3.5 .run
+        $FLUPRO/flutil/rfluka -N0 -M5 example
 ***************************************************************************
 
 DYB data:

@@ -96,7 +96,7 @@ C      endif
        endif
       endif
 * get muon final volume and position
-      if(LTRACK.eq.1) then
+      if(LTRACK.eq.NowGen .and. JTRACK.EQ.MuId) then
          MuFinalV=MREG
          MuFinalP(1:3)=[XTRACK(NTRACK),YTRACK(NTRACK),ZTRACK(NTRACK)]
       endif
@@ -104,7 +104,7 @@ C      endif
 
 *  +-------------------------------------------------------------------*
       ENTRY BXDRAW ( ICODE, MREG, NEWREG, XSCO, YSCO, ZSCO )
-      if(LTRACK.eq.1) then
+      if(LTRACK.eq.NowGen .and. JTRACK.EQ.MuId) then
 C      CALL GEOR2N ( MREG,MRGNAM,IERR1)
 C      CALL GEOR2N ( NEWREG,NRGNAM,IERR2)
 C              WRITE(*,*) MRGNAM,'->',NRGNAM,XSCO, YSCO, ZSCO
@@ -194,12 +194,12 @@ C     &       .ne.0) then
      &(MuFinalP(2)-DetInitP(MuFinalV,2))+
      &(MuFinalP(3)-DetInitP(MuFinalV,3))*
      &(MuFinalP(3)-DetInitP(MuFinalV,3)))
-C          WRITE(*,*) 'fix',MuFinalV
           DetInitP(MuFinalV,1:3)=0
           IfDetIP(MuFinalV)=0
           endif
       endif 
-C      WRITE(*,*) 'MuFinalV',MuFinalV
+C          WRITE(*,*) 'MuFinalV,X,Y,Z',MuFinalV,MuFinalP(1),
+C     &MuFinalP(2),MuFinalP(3)
 C      DO i=1,15
 C         if(DetLen(i).ne.0) WRITE(*,*) I,DetLen(i)
 C      ENDDO
@@ -212,7 +212,8 @@ C      endif
      &MuInitTP(1),MuInitTP(2),MuInitTP(3),DetLen(3,1),DetLen(4,1),
      &DetLen(5,1),DetLen(6,1),DetLen(7,1:4),DetLen(8,1:4),
      &DetLen(9,1:4),DetLen(10,1:4),
-     &DetLen(11,1:4),DetLen(12,1:4),NeuNum,IsoNum)
+     &DetLen(11,1:4),DetLen(12,1:4),NeuNum,IsoNum,
+     &MuFinalP(1),MuFinalP(2),MuFinalP(3),MuFinalV)
 *neutron
 C      if(NeuNum.gt.0 .or. NeuNum2.gt.0) then
 C        WRITE(*,*) '>>>EEDRAW(',NCASE,') NeuNum:',NeuNum,
@@ -292,6 +293,7 @@ C      endif
          MuCharge=-1
       endif
       EvtID=NCASE
+      MuId=ILOFLK(1)
 CC Z
 C      if(ZFLK(1).ge.3300)then
 C          D2P=MuInitP+MuInitTP*(ZFLK(1)-3300)/(-MuInitTP(3))
@@ -367,7 +369,7 @@ C      WRITE(*,*) 'SODRAW',NCASE
 C      if(JTRACK.eq.7) then
 C          WRITE(*,*) 'gamma Reaction Type',ICODE
 C      endif
-      if(LTRACK.eq.1) then 
+      if(LTRACK.eq.NowGen .and. JTRACK.EQ.MuId) then
          ISPUSR(6)=MREG
       endif
       NowVol=MREG
@@ -485,11 +487,13 @@ C             WRITE(*,*) 'Neutron captured on :',MMTRCK
       endif
 
 *Michel electron
-      if((JTRACK.eq.10 .or. JTRACK.eq.11) .and. ICODE.eq.102) then
+      if(JTRACK.eq.MuId .and. ICODE.eq.102) then
           DO IP = 1, NP 
-             if(KPART(IP).eq.3) then
+C             WRITE(*,*) '102:',MREG,XSCO,YSCO,ZSCO,KPART(IP),TKI(IP)
+             if(KPART(IP).eq.3 .or. KPART(IP).eq.4) then
       call fillmi(NCASE,TKI(IP),(AGESEC(IP)+ATRACK)*1.e9,
      &XSCO,YSCO,ZSCO,MREG)
+C             WRITE(*,*) 'fillmi :',LTRACK,MREG,XSCO,YSCO,ZSCO
              endif
           END DO 
           
@@ -514,6 +518,30 @@ C                WRITE(*,*) '    ',KPART(I)
 C         enddo
 C          endif
 C      endif
+
+      if(LTRACK.eq.NowGen .and. JTRACK.EQ.MuId) then
+C          WRITE(*,*) '   NowGen,ETRACK,ICODE,MREG,X,Y,Z',NowGen,ETRACK,
+C     &ICODE,MREG,XSCO, YSCO, ZSCO 
+          if(ICODE.eq.101)  then
+C                WRITE (*,*) '== ICODE(',JTRACK,') : ',ICODE
+C                WRITE(*,*) '*GENSTK'
+                DO IP = 1, NP 
+                    if(KPART(IP).eq.MuId) then
+                        NowGen=NowGen+1
+                        exit
+                    endif
+C                    WRITE(*,*) '+>',KPART(IP),ICODE,TKI (IP)
+                END DO 
+C                WRITE(*,*) '*FHEAVY'
+C                DO IP = 1,NPHEAV 
+C                    WRITE(*,*) '=>',KHEAVY(IP),TKHEAV(IP),AGHEAV(IP),
+C     &                         ICHEAV(KHEAVY(IP)),IBHEAV(KHEAVY(IP)),
+C     &                         ANHEAV(KHEAVY(IP))
+C                END DO 
+C                WRITE(*,*) '*RESNUC'
+C                WRITE(*,*) ICESTR,IBESTR,'->',ICRES,IBRES,AMNRES,AMMRES
+          endif
+      endif
 
       RETURN
 *=== End of subrutine Mgdraw ==========================================*

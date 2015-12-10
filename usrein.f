@@ -31,6 +31,8 @@
 
 *muon
       NeuNum=0 
+      NowGen=1
+      MuId=0
       NeuNum2=0 
       IsoNum=0 
       MuInitT=0 

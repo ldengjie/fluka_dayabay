@@ -3,13 +3,13 @@
 #已经运行过的run个数
 @ existedRun=000
 #这次需要运行的run个数
-@ totalRun=1000
+@ totalRun=20000
 #每个文件夹下run个数
-@ runNumInDir=10
+@ runNumInDir=20
 #脚本生成位置和数据存放位置
 
 set FLUWORK=`pwd` 
-set dataDir=$FLUWORK/data/PART30
+set dataDir=$FLUWORK/data/PART55
 
 if ( -e $dataDir ) then
     rm $dataDir/* -rf
@@ -54,7 +54,7 @@ while( $i < $dirNum)
         cp fluka_$nowJobNum.sh $dataDir
     endif
     popd
-    echo qsub -q dyb64q jobScripts/$dirNamStr/fluka_$nowJobNum.sh >>../submit.sh.$j
+    echo qsub -q dybshortq jobScripts/$dirNamStr/fluka_$nowJobNum.sh >>../submit.sh.$j
 end
 cd $dataDir 
 echo doing backup 
